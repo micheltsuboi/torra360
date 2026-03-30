@@ -42,14 +42,17 @@ export default async function CustosPage() {
           <div key={pkg.id} className="glass-panel overflow-hidden flex flex-col border-t-4 border-[--primary]">
              <div className="p-4 border-b border-[--card-border] flex justify-between items-start card-texture-header">
                 <div>
-                   <form action={updateExpensePackage} className="flex items-center gap-2">
+                   <form action={updateExpensePackage} className="flex items-center gap-2 group/title">
                       <input type="hidden" name="id" value={pkg.id} />
-                      <input 
-                        name="name" 
-                        defaultValue={pkg.name} 
-                        className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-0 focus:border-b border-[--primary]/30 min-w-[100px]"
-                      />
-                      <button type="submit" className="action-icon-btn opacity-40">
+                      <div className="relative flex items-center">
+                        <input 
+                          name="name" 
+                          defaultValue={pkg.name} 
+                          className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-0 focus:border-b border-[--primary]/30 min-w-[120px] pr-6"
+                        />
+                        <Pencil className="action-icon absolute right-0 opacity-40 pointer-events-none group-focus-within/title:hidden" />
+                      </div>
+                      <button type="submit" className="action-icon-btn opacity-0 group-focus-within/title:opacity-100 text-[--success]">
                          <Check className="action-icon" />
                       </button>
                    </form>
