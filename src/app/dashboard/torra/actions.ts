@@ -54,7 +54,7 @@ export async function createRoastBatch(formData: FormData) {
 
   if (insertError) {
     console.error('Error creating roast batch:', insertError)
-    return { error: insertError.message }
+    return
   }
 
   // 2. Dar baixa no Café Verde
@@ -68,6 +68,4 @@ export async function createRoastBatch(formData: FormData) {
 
   revalidatePath('/dashboard/torra')
   revalidatePath('/dashboard/estoque')
-  
-  return { success: true }
 }

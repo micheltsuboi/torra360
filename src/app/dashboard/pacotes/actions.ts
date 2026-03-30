@@ -43,7 +43,7 @@ export async function createPackages(formData: FormData) {
 
   if (error) {
     console.error('Error packaging:', error)
-    return { error: error.message }
+    return
   }
 
   // Aqui é mock, como o controle de quanto o loge ja foi embalado requer update:
@@ -51,5 +51,4 @@ export async function createPackages(formData: FormData) {
   // um lote de torra foi inteiramente embalado naquele formulário.
 
   revalidatePath('/dashboard/pacotes')
-  return { success: true }
 }

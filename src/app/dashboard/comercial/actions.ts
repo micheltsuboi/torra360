@@ -18,7 +18,6 @@ export async function createProduct(formData: FormData) {
 
   await supabase.from('products').insert({ name, type, default_price })
   revalidatePath('/dashboard/comercial')
-  return { success: true }
 }
 
 // ====== VENDAS ======
@@ -38,7 +37,6 @@ export async function createSale(formData: FormData) {
 
   await supabase.from('sales').insert({ product_id, date, client_name, quantity, unit_price })
   revalidatePath('/dashboard/comercial')
-  return { success: true }
 }
 
 // ====== DESPESAS ======
@@ -57,5 +55,4 @@ export async function createExpense(formData: FormData) {
 
   await supabase.from('expenses').insert({ category, date, amount, notes })
   revalidatePath('/dashboard/comercial')
-  return { success: true }
 }

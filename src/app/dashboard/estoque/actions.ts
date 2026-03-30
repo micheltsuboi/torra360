@@ -45,9 +45,8 @@ export async function createGreenCoffeeLot(formData: FormData) {
 
   if (error) {
     console.error('Error creating lot:', error)
-    return { error: error.message }
+    return
   }
 
   revalidatePath('/dashboard/estoque')
-  return { success: true }
 }
