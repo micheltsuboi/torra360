@@ -12,7 +12,7 @@ export default function LoginPage({
       
       <div className="relative z-10 w-full max-w-md p-8 glass-panel">
         <div className="text-center mb-10">
-          <h1 className="text-4xl title-glow font-serif text-[--primary] mb-2">AURA ROAST</h1>
+          <h1 className="text-4xl title-glow font-serif text-[--primary] mb-2">TORRA 360</h1>
           <p className="text-[--secondary-text] text-sm">Acesse seu painel de torrefação</p>
         </div>
 

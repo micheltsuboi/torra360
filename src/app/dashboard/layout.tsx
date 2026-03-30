@@ -24,7 +24,7 @@ export default async function DashboardLayout({
             {/* Logo Icon Placeholder */}
             ✨
           </div>
-          <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">Aura Roast</span>
+          <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">Torra 360</span>
         </div>
 
         <nav className="flex-1 w-full flex flex-col gap-4 items-center lg:items-start text-[--secondary-text]">
