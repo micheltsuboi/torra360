@@ -17,22 +17,22 @@ export default async function CustosPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {/* Adicionar Novo Pacote */}
-        <div className="glass-panel p-6 border-dashed border-2 border-[--card-border] flex flex-col items-center justify-center text-center group hover:border-[--primary] transition-colors cursor-pointer min-h-[200px]">
-          <form action={createExpensePackage} className="w-full flex flex-col items-center gap-4">
-             <div className="w-12 h-12 rounded-full bg-[--primary]/10 flex items-center justify-center text-[--primary] mb-2 group-hover:scale-110 transition-transform">
-                <Plus className="w-6 h-6" />
+        <div className="glass-panel p-6 flex flex-col items-center justify-center text-center group transition-colors min-h-[220px]">
+          <form action={createExpensePackage} className="w-full flex flex-col items-center gap-6">
+             <div className="w-14 h-14 rounded-full bg-[--primary]/10 border border-[--primary]/20 flex items-center justify-center text-[--primary] mb-2 group-hover:scale-110 transition-transform">
+                <Package className="w-6 h-6" />
              </div>
              <div className="w-full">
                <input 
                  name="name" 
                  type="text" 
-                 placeholder="Nome do Pacote (ex: Embalagem 250g)" 
+                 placeholder="Nome do Novo Pacote..." 
                  required 
-                 className="text-center bg-transparent border-b border-[--card-border] focus:border-[--primary] rounded-none px-0"
+                 className="text-center bg-transparent border-b border-[--card-border] focus:border-[--primary] rounded-none px-0 mb-2"
                />
              </div>
-             <button type="submit" className="text-xs uppercase tracking-widest text-[--primary] font-bold hover:underline">
-               Criar Novo Pacote
+             <button type="submit" className="primary-btn w-full !text-xs !py-2 uppercase tracking-widest">
+               Criar Pacote
              </button>
           </form>
         </div>
@@ -42,12 +42,12 @@ export default async function CustosPage() {
           <div key={pkg.id} className="glass-panel overflow-hidden flex flex-col border-t-4 border-[--primary]">
              <div className="p-4 border-b border-[--card-border] flex justify-between items-start card-texture-header">
                 <div>
-                   <h3 className="font-serif text-lg text-[--foreground]">{pkg.name}</h3>
-                   <span className="text-xs text-[--secondary-text]">Criado em {new Date(pkg.created_at).toLocaleDateString()}</span>
+                   <h3 className="font-serif text-lg text-[--primary]">{pkg.name}</h3>
+                   <span className="text-xs text-[--secondary-text]">Custos Fixos de Produção</span>
                 </div>
                 <form action={deleteExpensePackage}>
                    <input type="hidden" name="id" value={pkg.id} />
-                   <button type="submit" className="text-[--danger] hover:opacity-70 p-1">
+                   <button type="submit" className="text-[--danger] hover:opacity-70 p-1 bg-transparent border-0 cursor-pointer">
                       <Trash2 className="w-4 h-4" />
                    </button>
                 </form>
@@ -63,7 +63,7 @@ export default async function CustosPage() {
                            <form action={removeExpenseItem}>
                               <input type="hidden" name="id" value={item.id} />
                               <input type="hidden" name="package_id" value={pkg.id} />
-                              <button type="submit" className="opacity-0 group-hover/item:opacity-100 text-[--danger] transition-opacity">
+                              <button type="submit" className="opacity-0 group-hover/item:opacity-100 text-[--danger] transition-opacity bg-transparent border-0 cursor-pointer">
                                 <Trash2 className="w-3 h-3" />
                               </button>
                            </form>
@@ -93,9 +93,9 @@ export default async function CustosPage() {
                      step="0.01" 
                      placeholder="R$" 
                      required 
-                     className="bg-black/20 text-xs p-1 h-8 w-20 text-right"
+                     className="bg-black/20 text-xs p-1 h-8 w-16 text-right"
                    />
-                   <button type="submit" className="bg-[--primary] text-white rounded p-1 h-8 w-8 flex items-center justify-center hover:opacity-80">
+                   <button type="submit" className="primary-btn !p-1 !h-8 !w-8 flex items-center justify-center">
                       <Plus className="w-4 h-4" />
                    </button>
                 </form>

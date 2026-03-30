@@ -125,13 +125,13 @@ export default async function PacotesPage() {
                           <td className="p-4 text-right border-l border-[--card-border]/20 text-[--success]">R$ {(p.retail_price || 0).toFixed(2)}</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 font-bold text-[--success]">R$ {totalEstimado}</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-1 h-full">
-                            <span className="p-1.5 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer mt-1" title="Edição em breve">
-                               <Pencil className="w-3.5 h-3.5" />
+                            <span className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer mt-1 bg-transparent border-0" title="Edição em breve">
+                               <Pencil className="w-3 h-3" />
                             </span>
                             <form action={deletePackage} className="mt-1">
                                <input type="hidden" name="id" value={p.id} />
-                               <button type="submit" className="p-1.5 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
-                                  <Trash2 className="w-3.5 h-3.5" />
+                               <button type="submit" className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--danger] opacity-80 bg-transparent border-0 cursor-pointer">
+                                  <Trash2 className="w-3 h-3" />
                                </button>
                             </form>
                           </td>
