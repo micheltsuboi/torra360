@@ -40,11 +40,11 @@ export default async function ParametrosPage() {
       <div className="flex flex-col gap-4">
         {/* Fornecedores */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
             Fornecedores
             <ChevronIcon />
           </summary>
-          <div className="p-6 border-t border-[--card-border]">
+          <div className="p-4 border-t border-[--card-border]">
             <form action={createProvider} className="flex gap-2 mb-6">
               <input 
                 name="name" 
@@ -76,11 +76,11 @@ export default async function ParametrosPage() {
 
         {/* Origens */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
             Origens
             <ChevronIcon />
           </summary>
-          <div className="p-6 border-t border-[--card-border]">
+          <div className="p-4 border-t border-[--card-border]">
             <form action={createOrigin} className="flex gap-2 mb-6">
               <input 
                 name="name" 
@@ -112,11 +112,11 @@ export default async function ParametrosPage() {
 
         {/* Tipos de Café */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
             Tipos de Café
             <ChevronIcon />
           </summary>
-          <div className="p-6 border-t border-[--card-border]">
+          <div className="p-4 border-t border-[--card-border]">
             <form action={createCoffeeType} className="flex gap-2 mb-6">
               <input 
                 name="name" 
@@ -148,11 +148,11 @@ export default async function ParametrosPage() {
 
         {/* Níveis de Qualidade */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
             Níveis de Qualidade
             <ChevronIcon />
           </summary>
-          <div className="p-6 border-t border-[--card-border]">
+          <div className="p-4 border-t border-[--card-border]">
             <form action={createQualityLevel} className="flex gap-2 mb-6">
               <input 
                 name="name" 

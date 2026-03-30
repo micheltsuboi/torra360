@@ -35,7 +35,7 @@ export default async function DashboardLayout({
           <div className="w-8 h-8 rounded-full border border-[--primary] flex items-center justify-center text-[--primary] shrink-0">
             <Coffee className="w-4 h-4" />
           </div>
-          <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">AURA ROAST</span>
+          <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">Torra 360</span>
         </div>
 
         <nav className="flex-1 w-full flex flex-col gap-4 items-center lg:items-start text-[--secondary-text]">
