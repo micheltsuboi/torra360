@@ -90,12 +90,12 @@ input:focus, select:focus {
 }
 
 button.primary-btn {
-  background: linear-gradient(135deg, var(--primary), #9B784F);
-  color: #111;
-  border: none;
+  background: linear-gradient(135deg, #678E6C, #4A6E4F);
+  color: #F3EAE0;
+  border: 1px solid rgba(255,255,255,0.05);
   padding: 10px 20px;
   border-radius: 6px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
@@ -104,6 +104,31 @@ button.primary-btn {
 button.primary-btn:hover {
   filter: brightness(1.1);
   transform: translateY(-1px);
+}
+
+button.danger-btn {
+  background: linear-gradient(135deg, #8A3D35, #632C26);
+  color: #F3EAE0;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+button.danger-btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.card-texture-header {
+  background: 
+    linear-gradient(135deg, rgba(65, 50, 40, 0.85), rgba(40, 30, 25, 0.95)),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+  background-size: cover;
+  border-bottom: 2px solid rgba(195, 153, 103, 0.3) !important;
 }
 
 button.secondary-btn {

@@ -40,7 +40,7 @@ export default async function ParametrosPage() {
       <div className="flex flex-col gap-4">
         {/* Fornecedores */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
             Fornecedores
             <ChevronIcon />
           </summary>
@@ -63,7 +63,7 @@ export default async function ParametrosPage() {
                     <span className="text-sm truncate w-full pr-2" title={item.name}>{item.name}</span>
                     <form action={deleteProvider}>
                       <input type="hidden" name="id" value={item.id} />
-                      <button type="submit" className="text-[--danger] text-xs hover:underline whitespace-nowrap">Remover</button>
+                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
                     </form>
                   </div>
                 ))
@@ -76,7 +76,7 @@ export default async function ParametrosPage() {
 
         {/* Origens */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
             Origens
             <ChevronIcon />
           </summary>
@@ -99,7 +99,7 @@ export default async function ParametrosPage() {
                     <span className="text-sm truncate w-full pr-2" title={item.name}>{item.name}</span>
                     <form action={deleteOrigin}>
                       <input type="hidden" name="id" value={item.id} />
-                      <button type="submit" className="text-[--danger] text-xs hover:underline whitespace-nowrap">Remover</button>
+                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
                     </form>
                   </div>
                 ))
@@ -112,7 +112,7 @@ export default async function ParametrosPage() {
 
         {/* Tipos de Café */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
             Tipos de Café
             <ChevronIcon />
           </summary>
@@ -135,7 +135,7 @@ export default async function ParametrosPage() {
                     <span className="text-sm truncate w-full pr-2" title={ct.name}>{ct.name}</span>
                     <form action={deleteCoffeeType}>
                       <input type="hidden" name="id" value={ct.id} />
-                      <button type="submit" className="text-[--danger] text-xs hover:underline whitespace-nowrap">Remover</button>
+                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
                     </form>
                   </div>
                 ))
@@ -148,7 +148,7 @@ export default async function ParametrosPage() {
 
         {/* Níveis de Qualidade */}
         <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-          <summary className="cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
+          <summary className="card-texture-header cursor-pointer list-none font-serif text-xl text-[--primary] p-6 flex justify-between items-center bg-black/10 hover:bg-black/20 transition-colors">
             Níveis de Qualidade
             <ChevronIcon />
           </summary>
