@@ -62,3 +62,63 @@ export async function deleteQualityLevel(formData: FormData) {
   revalidatePath('/dashboard/parametros')
   revalidatePath('/dashboard/estoque')
 }
+
+export async function getProviders() {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from('providers').select('*').order('name')
+  if (error) {
+    console.error('Error fetching providers:', error)
+    return []
+  }
+  return data
+}
+
+export async function createProvider(formData: FormData) {
+  const name = formData.get('name') as string
+  if (!name) return
+
+  const supabase = await createClient()
+  await supabase.from('providers').insert({ name })
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
+export async function deleteProvider(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('providers').delete().eq('id', id)
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
+export async function getOrigins() {
+  const supabase = await createClient()
+  const { data, error } = await supabase.from('origins').select('*').order('name')
+  if (error) {
+    console.error('Error fetching origins:', error)
+    return []
+  }
+  return data
+}
+
+export async function createOrigin(formData: FormData) {
+  const name = formData.get('name') as string
+  if (!name) return
+
+  const supabase = await createClient()
+  await supabase.from('origins').insert({ name })
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
+export async function deleteOrigin(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('origins').delete().eq('id', id)
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
