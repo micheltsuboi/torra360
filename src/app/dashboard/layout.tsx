@@ -53,6 +53,11 @@ export default async function DashboardLayout({
             <span className="text-xl">💰</span>
             <span className="hidden lg:block text-sm">Comercial</span>
           </a>
+          {/* Parâmetros */}
+          <a href="/dashboard/parametros" className="flex items-center gap-3 p-3 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
+            <span className="text-xl">⚙️</span>
+            <span className="hidden lg:block text-sm">Parâmetros</span>
+          </a>
         </nav>
 
         {/* User Profile / Logout */}

@@ -1,7 +1,10 @@
 import { getGreenCoffeeLots, createGreenCoffeeLot } from './actions'
+import { getCoffeeTypes, getQualityLevels } from '../parametros/actions'
 
 export default async function EstoquePage() {
   const lots = await getGreenCoffeeLots()
+  const coffeeTypes = await getCoffeeTypes()
+  const qualityLevels = await getQualityLevels()
 
   return (
     <div className="flex flex-col gap-8">
@@ -50,18 +53,25 @@ export default async function EstoquePage() {
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-[--secondary-text] uppercase">Tipo Café</label>
                 <select name="coffee_type" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
-                  <option value="Arábica">Arábica</option>
-                  <option value="Robusta">Robusta/Conilon</option>
-                  <option value="Blend">Blend</option>
+                  {coffeeTypes.length > 0 ? (
+                    coffeeTypes.map((ct: any) => (
+                      <option key={ct.id} value={ct.name}>{ct.name}</option>
+                    ))
+                  ) : (
+                    <option value="">(Cadastre em Parâmetros)</option>
+                  )}
                 </select>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-[--secondary-text] uppercase">Qualidade</label>
                 <select name="quality_level" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
-                  <option value="Especial">Especial</option>
-                  <option value="Gourmet">Gourmet</option>
-                  <option value="Superior">Superior</option>
-                  <option value="Tradicional">Tradicional</option>
+                  {qualityLevels.length > 0 ? (
+                    qualityLevels.map((ql: any) => (
+                      <option key={ql.id} value={ql.name}>{ql.name}</option>
+                    ))
+                  ) : (
+                    <option value="">(Cadastre em Parâmetros)</option>
+                  )}
                 </select>
               </div>
             </div>
