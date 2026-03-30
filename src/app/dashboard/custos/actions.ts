@@ -74,6 +74,25 @@ export async function addExpenseItem(formData: FormData) {
   revalidatePath('/dashboard/custos')
 }
 
+export async function updateExpenseItem(formData: FormData) {
+  const id = formData.get('id') as string
+  const package_id = formData.get('package_id') as string
+  const name = formData.get('name') as string
+  const cost = parseFloat(formData.get('cost') as string) || 0
+
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  await supabase.from('expense_package_items').update({ name, cost }).eq('id', id)
+
+  // Recalcular total
+  const { data: items } = await supabase.from('expense_package_items').select('cost').eq('package_id', package_id)
+  const total = items?.reduce((acc, curr) => acc + Number(curr.cost), 0) || 0
+  await supabase.from('expense_packages').update({ total_cost: total }).eq('id', package_id)
+
+  revalidatePath('/dashboard/custos')
+}
+
 export async function removeExpenseItem(formData: FormData) {
   const id = formData.get('id') as string
   const package_id = formData.get('package_id') as string

@@ -1,4 +1,4 @@
-import { getExpensePackages, createExpensePackage, deleteExpensePackage, addExpenseItem, removeExpenseItem, updateExpensePackage } from './actions'
+import { getExpensePackages, createExpensePackage, deleteExpensePackage, addExpenseItem, removeExpenseItem, updateExpensePackage, updateExpenseItem } from './actions'
 import { Plus, Trash2, Package, Pencil, Check } from 'lucide-react'
 
 export default async function CustosPage() {
@@ -44,13 +44,13 @@ export default async function CustosPage() {
                 <div>
                    <form action={updateExpensePackage} className="flex items-center gap-2 group/title">
                       <input type="hidden" name="id" value={pkg.id} />
-                      <div className="relative flex items-center">
+                      <div className="relative flex items-center group/input">
                         <input 
                           name="name" 
                           defaultValue={pkg.name} 
-                          className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-0 focus:border-b border-[--primary]/30 min-w-[120px] pr-6"
+                          className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-1 ring-[--primary]/20 rounded px-1 focus:border-b border-[--primary]/30 min-w-[120px] pr-6 transition-all"
                         />
-                        <Pencil className="action-icon absolute right-0 opacity-40 pointer-events-none group-focus-within/title:hidden" />
+                        <Pencil className="action-icon absolute right-1 opacity-60 text-[--primary] pointer-events-none group-focus-within/input:hidden" />
                       </div>
                       <button type="submit" className="action-icon-btn opacity-0 group-focus-within/title:opacity-100 text-[--success]">
                          <Check className="action-icon" />
