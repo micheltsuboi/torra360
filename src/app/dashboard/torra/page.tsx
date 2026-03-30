@@ -90,13 +90,13 @@ export default async function TorraPage() {
                           </td>
                           <td className="p-4 text-center border-l border-[--card-border]/20 text-[--danger]">{r.shrinkage_pct ? r.shrinkage_pct.toFixed(1) : '-'}%</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
-                            <span className="text-[--primary] opacity-60 hover:opacity-100 cursor-pointer bg-transparent border-0 flex items-center justify-center p-0" title="Edição em breve">
-                               <Pencil className="w-[12px] h-[12px]" />
+                            <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
+                               <Pencil className="w-[11px] h-[11px]" />
                             </span>
-                            <form action={deleteRoastBatch} className="flex items-center justify-center">
+                            <form action={deleteRoastBatch}>
                                <input type="hidden" name="id" value={r.id} />
-                               <button type="submit" className="text-[--danger] opacity-60 hover:opacity-100 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
-                                  <Trash2 className="w-[12px] h-[12px]" />
+                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
+                                  <Trash2 className="w-[11px] h-[11px]" />
                                </button>
                             </form>
                           </td>

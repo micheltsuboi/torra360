@@ -148,13 +148,13 @@ export default async function EstoquePage() {
                           <td className="p-4 text-[--secondary-text] text-xs">{lot.origin}</td>
                           <td className="p-4 text-[--secondary-text] text-xs">{lot.coffee_type} / {lot.quality_level}</td>
                           <td className="p-4 text-right flex items-center justify-end gap-3">
-                            <span className="text-[--primary] opacity-60 hover:opacity-100 cursor-pointer bg-transparent border-0 flex items-center justify-center p-0" title="Edição em breve">
-                              <Pencil className="w-[12px] h-[12px]" />
+                            <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
+                              <Pencil className="w-[11px] h-[11px]" />
                             </span>
-                            <form action={deleteGreenCoffeeLot} className="flex items-center justify-center">
+                            <form action={deleteGreenCoffeeLot}>
                                <input type="hidden" name="id" value={lot.id} />
-                               <button type="submit" className="text-[--danger] opacity-60 hover:opacity-100 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
-                                 <Trash2 className="w-[12px] h-[12px]" />
+                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
+                                 <Trash2 className="w-[11px] h-[11px]" />
                                </button>
                             </form>
                           </td>

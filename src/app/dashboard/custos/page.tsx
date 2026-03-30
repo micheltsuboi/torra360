@@ -1,5 +1,5 @@
-import { getExpensePackages, createExpensePackage, deleteExpensePackage, addExpenseItem, removeExpenseItem } from './actions'
-import { Trash2, Plus, Package } from 'lucide-react'
+import { getExpensePackages, createExpensePackage, deleteExpensePackage, addExpenseItem, removeExpenseItem, updateExpensePackage } from './actions'
+import { Plus, Trash2, Package, Pencil, Check } from 'lucide-react'
 
 export default async function CustosPage() {
   const packages = await getExpensePackages()
@@ -42,13 +42,23 @@ export default async function CustosPage() {
           <div key={pkg.id} className="glass-panel overflow-hidden flex flex-col border-t-4 border-[--primary]">
              <div className="p-4 border-b border-[--card-border] flex justify-between items-start card-texture-header">
                 <div>
-                   <h3 className="font-serif text-lg text-[--primary]">{pkg.name}</h3>
+                   <form action={updateExpensePackage} className="flex items-center gap-2">
+                      <input type="hidden" name="id" value={pkg.id} />
+                      <input 
+                        name="name" 
+                        defaultValue={pkg.name} 
+                        className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-0 focus:border-b border-[--primary]/30 min-w-[100px]"
+                      />
+                      <button type="submit" className="action-icon-btn opacity-40">
+                         <Check className="w-[10px] h-[10px]" />
+                      </button>
+                   </form>
                    <span className="text-xs text-[--secondary-text]">Custos Fixos de Produção</span>
                 </div>
                 <form action={deleteExpensePackage}>
                    <input type="hidden" name="id" value={pkg.id} />
-                   <button type="submit" className="text-[--danger] hover:opacity-70 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
-                      <Trash2 className="w-[14px] h-[14px]" />
+                   <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
+                      <Trash2 className="w-[13px] h-[13px]" />
                    </button>
                 </form>
              </div>
@@ -63,8 +73,8 @@ export default async function CustosPage() {
                            <form action={removeExpenseItem}>
                               <input type="hidden" name="id" value={item.id} />
                               <input type="hidden" name="package_id" value={pkg.id} />
-                              <button type="submit" className="opacity-0 group-hover/item:opacity-100 text-[--danger] transition-opacity !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
-                                <Trash2 className="w-[12px] h-[12px]" />
+                              <button type="submit" className="action-icon-btn opacity-0 group-hover/item:opacity-100 text-[--danger]">
+                                <Trash2 className="w-[11px] h-[11px]" />
                               </button>
                            </form>
                         </div>

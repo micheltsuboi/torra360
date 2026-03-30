@@ -152,6 +152,29 @@ button.secondary-btn:hover {
   border-color: var(--card-border);
 }
 
+.action-icon-btn {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  color: inherit;
+  transition: all 0.2s ease;
+}
+
+.action-icon-btn:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
 /* 
 ======================================================
   MICRO UTILITY CSS FRAMEWORK (Remediation para o Look)
