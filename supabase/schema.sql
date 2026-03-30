@@ -167,3 +167,25 @@ select
   (r.qty_before_kg * (case when gc.total_qty_kg > 0 then gc.total_cost / gc.total_qty_kg else 0 end)) + (r.qty_after_kg * 4) as total_torra_cost
 from public.roast_batches r
 join public.green_coffee gc on r.green_coffee_id = gc.id;
+
+-- 9. Tabela: coffee_types
+create table if not exists public.coffee_types (
+  id uuid default uuid_generate_v4() primary key,
+  tenant_id uuid references public.tenants not null default public.get_tenant_id(),
+  name text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.coffee_types enable row level security;
+create policy "CoffeeTypes All" on public.coffee_types for all using (tenant_id = public.get_tenant_id());
+
+-- 10. Tabela: quality_levels
+create table if not exists public.quality_levels (
+  id uuid default uuid_generate_v4() primary key,
+  tenant_id uuid references public.tenants not null default public.get_tenant_id(),
+  name text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+alter table public.quality_levels enable row level security;
+create policy "QualityLevels All" on public.quality_levels for all using (tenant_id = public.get_tenant_id());
