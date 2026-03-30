@@ -3,43 +3,88 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
-// ====== PRODUTOS ======
-export async function getProducts() {
+// ====== BUSCA DE DADOS PRO PDV ======
+export async function getPDVData() {
   const supabase = await createClient()
-  const { data } = await supabase.from('products').select('*').order('name')
+  
+  // Clientes
+  const { data: clients } = await supabase.from('clients').select('id, name, cpf').order('name')
+  
+  // Produtos (Pacotes Gerados)
+  const { data: products } = await supabase
+    .from('packaging_batches')
+    .select('id, bean_format, package_size_g, retail_price, quantity_units, roast_batch:roast_batch_id(green_coffee(name))')
+    .gt('quantity_units', 0) // Só mostra pacotes criados
+    .order('created_at', { ascending: false })
+
+  return {
+    clients: clients || [],
+    products: products || []
+  }
+}
+
+// ====== SALVAR VENDA PDV ======
+export async function createPDVSale(payload: any) {
+  const supabase = await createClient()
+  
+  const { client_id, total_amount, discount_amount, final_amount, payment_method, items } = payload
+
+  // Inserir Transacao Principal
+  const { data: saleData, error: saleError } = await supabase.from('sale_transactions').insert({
+    client_id: client_id || null,
+    total_amount,
+    discount_amount,
+    final_amount,
+    payment_method
+  }).select('id').single()
+
+  if (saleError || !saleData) {
+    console.error('Error creating sale:', saleError)
+    return { success: false, error: saleError }
+  }
+
+  // Inserir Itens do Carrinho
+  const saleItems = items.map((item: any) => ({
+    sale_id: saleData.id,
+    packaging_batch_id: item.id,
+    quantity: item.qty,
+    unit_price: item.price,
+    total_price: item.qty * item.price
+  }))
+
+  const { error: itemsError } = await supabase.from('sale_items').insert(saleItems)
+
+  if (itemsError) {
+    console.error('Error inserting sale items:', itemsError)
+  }
+
+  // Atualizar Estoque de Pacotes (reduzir quantity_units)
+  for (const item of items) {
+    const { data: pkg } = await supabase.from('packaging_batches').select('quantity_units').eq('id', item.id).single()
+    if (pkg) {
+      await supabase.from('packaging_batches').update({
+        quantity_units: Math.max(0, pkg.quantity_units - item.qty)
+      }).eq('id', item.id)
+    }
+  }
+
+  revalidatePath('/dashboard/comercial')
+  revalidatePath('/dashboard/pacotes')
+  return { success: true }
+}
+
+// ====== HISTÓRICO ======
+export async function getSalesHistory() {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('sale_transactions')
+    .select('*, client:client_id(name), sale_items(*, pkg:packaging_batch_id(bean_format, package_size_g, roast_batch(green_coffee(name))))')
+    .order('created_at', { ascending: false })
+  
   return data || []
 }
 
-export async function createProduct(formData: FormData) {
-  const supabase = await createClient()
-  const name = formData.get('name') as string
-  const type = formData.get('type') as string
-  const default_price = parseFloat(formData.get('default_price') as string)
-
-  await supabase.from('products').insert({ name, type, default_price })
-  revalidatePath('/dashboard/comercial')
-}
-
-// ====== VENDAS ======
-export async function getSales() {
-  const supabase = await createClient()
-  const { data } = await supabase.from('sales').select('*, product:product_id(name)').order('date', { ascending: false })
-  return data || []
-}
-
-export async function createSale(formData: FormData) {
-  const supabase = await createClient()
-  const product_id = formData.get('product_id') as string
-  const date = formData.get('date') as string
-  const client_name = formData.get('client_name') as string
-  const quantity = parseInt(formData.get('quantity') as string)
-  const unit_price = parseFloat(formData.get('unit_price') as string)
-
-  await supabase.from('sales').insert({ product_id, date, client_name, quantity, unit_price })
-  revalidatePath('/dashboard/comercial')
-}
-
-// ====== DESPESAS ======
+// ====== DESPESAS MANTIDAS ======
 export async function getExpenses() {
   const supabase = await createClient()
   const { data } = await supabase.from('expenses').select('*').order('date', { ascending: false })

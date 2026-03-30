@@ -1,4 +1,4 @@
-import { getAvailableGreenLots, getRoastBatches, createRoastBatch } from './actions'
+import { getRoastBatches, getAvailableGreenLots, createRoastBatch, deleteRoastBatch } from './actions'
 
 export default async function TorraPage() {
   const greenLots = await getAvailableGreenLots()
@@ -68,8 +68,8 @@ export default async function TorraPage() {
                      <th className="p-4 font-medium">Data</th>
                      <th className="p-4 font-medium">Lote Base</th>
                      <th className="p-4 font-medium text-right">Rendimento</th>
-                     <th className="p-4 font-medium text-right">Torrado (kg)</th>
-                     <th className="p-4 font-medium text-right">Custo / kg</th>
+                     <th className="p-4 font-medium text-center border-l border-[--card-border]/20">Quebra (%)</th>
+                     <th className="p-4 font-medium text-right border-l border-[--card-border]/20">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -78,9 +78,6 @@ export default async function TorraPage() {
                       // Se os calculos não virem da view por erro, vamos fazer manual aqui:
                       const yieldPerc = r.yield_percentage || (r.qty_after_kg / r.qty_before_kg * 100);
                       
-                      // Custo per kg é mais complexo pra mockar aq sem o custo do verde real, assumindo valores da view:
-                      const costPerKg = r.cost_per_kg_roasted || ((r.total_torra_cost) / r.qty_after_kg);
-
                       return (
                         <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
                           <td className="p-4 text-[--secondary-text]">{new Date(r.date).toLocaleDateString()}</td>
@@ -90,8 +87,14 @@ export default async function TorraPage() {
                                {yieldPerc > 80 ? '🔥' : '⚠️'} {yieldPerc?.toFixed(1)}%
                              </div>
                           </td>
-                          <td className="p-4 text-right">{r.qty_after_kg} kg</td>
-                          <td className="p-4 text-right">R$ {costPerKg > 0 ? costPerKg.toFixed(2) : 'N/A'}</td>
+                          <td className="p-4 text-center border-l border-[--card-border]/20 text-[--danger]">{r.shrinkage_pct ? r.shrinkage_pct.toFixed(1) : '-'}%</td>
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
+                            <span className="text-[--primary] text-xs opacity-50 cursor-pointer pt-3" title="Edição em breve">Editar</span>
+                            <form action={deleteRoastBatch} className="pt-3">
+                               <input type="hidden" name="id" value={r.id} />
+                               <button type="submit" className="text-[--danger] hover:underline text-xs">Remover</button>
+                            </form>
+                          </td>
                         </tr>
                       );
                     })

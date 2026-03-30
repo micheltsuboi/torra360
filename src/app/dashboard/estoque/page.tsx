@@ -1,4 +1,4 @@
-import { getGreenCoffeeLots, createGreenCoffeeLot } from './actions'
+import { getGreenCoffeeLots, createGreenCoffeeLot, deleteGreenCoffeeLot } from './actions'
 import { getCoffeeTypes, getQualityLevels, getProviders, getOrigins } from '../parametros/actions'
 
 export default async function EstoquePage() {
@@ -127,6 +127,7 @@ export default async function EstoquePage() {
                     <th className="p-4 font-medium text-right">Custo/kg</th>
                     <th className="p-4 font-medium">Origem</th>
                     <th className="p-4 font-medium">Tipo</th>
+                    <th className="p-4 font-medium text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -145,6 +146,13 @@ export default async function EstoquePage() {
                           <td className="p-4 text-right">R$ {costPerKg}</td>
                           <td className="p-4 text-[--secondary-text] text-xs">{lot.origin}</td>
                           <td className="p-4 text-[--secondary-text] text-xs">{lot.coffee_type} / {lot.quality_level}</td>
+                          <td className="p-4 text-right flex items-center justify-end gap-3 mt-1">
+                            <span className="text-[--primary] text-xs opacity-50 cursor-pointer" title="Edição em breve">Editar</span>
+                            <form action={deleteGreenCoffeeLot}>
+                               <input type="hidden" name="id" value={lot.id} />
+                               <button type="submit" className="text-[--danger] hover:underline text-xs">Remover</button>
+                            </form>
+                          </td>
                         </tr>
                       );
                     })

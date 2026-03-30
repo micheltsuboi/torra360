@@ -1,4 +1,4 @@
-import { getRoastBatchesAvailable, getPackages, createPackages } from './actions'
+import { getRoastBatchesAvailable, getPackages, createPackages, deletePackage } from './actions'
 
 export default async function PacotesPage() {
   const roasts = await getRoastBatchesAvailable()
@@ -89,6 +89,7 @@ export default async function PacotesPage() {
                      <th className="p-4 font-medium text-center border-l border-[--card-border]/20">Qtd (Unds)</th>
                      <th className="p-4 font-medium text-right border-l border-[--card-border]/20">Venda Unit. (R$)</th>
                      <th className="p-4 font-medium text-right border-l border-[--card-border]/20">Venda Total Est.</th>
+                     <th className="p-4 font-medium text-right border-l border-[--card-border]/20">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
@@ -108,6 +109,13 @@ export default async function PacotesPage() {
                           <td className="p-4 text-center border-l border-[--card-border]/20 font-bold">{p.quantity_units || '0'} unds</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 text-[--success]">R$ {(p.retail_price || 0).toFixed(2)}</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 font-bold text-[--success]">R$ {totalEstimado}</td>
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
+                            <span className="text-[--primary] text-xs opacity-50 cursor-pointer pt-3" title="Edição em breve">Editar</span>
+                            <form action={deletePackage} className="pt-3">
+                               <input type="hidden" name="id" value={p.id} />
+                               <button type="submit" className="text-[--danger] hover:underline text-xs">Remover</button>
+                            </form>
+                          </td>
                         </tr>
                       );
                     })

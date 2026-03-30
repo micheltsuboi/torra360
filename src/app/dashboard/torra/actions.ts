@@ -69,3 +69,13 @@ export async function createRoastBatch(formData: FormData) {
   revalidatePath('/dashboard/torra')
   revalidatePath('/dashboard/estoque')
 }
+
+export async function deleteRoastBatch(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('roast_batches').delete().eq('id', id)
+  
+  revalidatePath('/dashboard/torra')
+}

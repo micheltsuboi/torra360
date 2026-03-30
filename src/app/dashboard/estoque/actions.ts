@@ -50,3 +50,13 @@ export async function createGreenCoffeeLot(formData: FormData) {
 
   revalidatePath('/dashboard/estoque')
 }
+
+export async function deleteGreenCoffeeLot(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('green_coffee').delete().eq('id', id)
+  
+  revalidatePath('/dashboard/estoque')
+}

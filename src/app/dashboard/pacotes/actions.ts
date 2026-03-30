@@ -55,3 +55,13 @@ export async function createPackages(formData: FormData) {
 
   revalidatePath('/dashboard/pacotes')
 }
+
+export async function deletePackage(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('packaging_batches').delete().eq('id', id)
+  
+  revalidatePath('/dashboard/pacotes')
+}
