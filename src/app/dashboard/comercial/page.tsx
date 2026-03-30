@@ -59,8 +59,8 @@ export default async function ComercialPage() {
                         <td className="p-3 text-right">
                            <form action={deleteSale}>
                               <input type="hidden" name="id" value={s.id} />
-                              <button type="submit" className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
-                                 <Trash2 className="w-4 h-4" />
+                              <button type="submit" className="p-1.5 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
                            </form>
                         </td>
