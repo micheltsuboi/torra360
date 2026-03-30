@@ -22,7 +22,7 @@ export default async function ComercialPage() {
       </div>
 
       {/* Históricos Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-fit mt-10">
+      <div className="grid grid-cols-1 gap-8 h-fit mt-10">
         
         {/* Histórico Vendas */}
         <div className="glass-panel overflow-hidden h-fit">
@@ -32,7 +32,7 @@ export default async function ComercialPage() {
            <div className="overflow-x-auto max-h-[400px]">
               <table className="w-full text-left border-collapse">
                  <thead className="bg-[#1a1512] sticky top-0">
-                    <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]">
+                    <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--border]">
                        <th className="p-3">Data/Cliente</th>
                        <th className="p-3">Itens</th>
                        <th className="p-3">Pgto</th>
@@ -72,8 +72,6 @@ export default async function ComercialPage() {
                  </tbody>
               </table>
            </div>
-        </div>
-
         </div>
 
       </div>
