@@ -223,11 +223,11 @@ button.secondary-btn:hover {
 .bg-black { background-color: #000; }
 .bg-\[\-\-background\] { background-color: var(--background); }
 .bg-\[\-\-card-bg\] { background-color: var(--card-bg); }
-.bg-\[\-\-primary\]\\/10 { background-color: rgba(195, 153, 103, 0.1); }
-.bg-\[\-\-danger\]\\/10 { background-color: rgba(128, 61, 61, 0.1); }
-.bg-\[\-\-success\]\\/20 { background-color: rgba(103, 142, 108, 0.2); }
-.bg-black\\/20 { background-color: rgba(0,0,0,0.2); }
-.bg-black\\/40 { background-color: rgba(0,0,0,0.4); }
+.bg-\[\-\-primary\]\/10 { background-color: rgba(195, 153, 103, 0.1); }
+.bg-\[\-\-danger\]\/10 { background-color: rgba(128, 61, 61, 0.1); }
+.bg-\[\-\-success\]\/20 { background-color: rgba(103, 142, 108, 0.2); }
+.bg-black\/20 { background-color: rgba(0,0,0,0.2); }
+.bg-black\/40 { background-color: rgba(0,0,0,0.4); }
 
 .text-\[\-\-foreground\] { color: var(--foreground); }
 .text-\[\-\-secondary-text\] { color: var(--secondary-text); }
