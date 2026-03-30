@@ -29,6 +29,16 @@ export async function createExpensePackage(formData: FormData) {
   return data
 }
 
+export async function updateExpensePackage(formData: FormData) {
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  await supabase.from('expense_packages').update({ name }).eq('id', id)
+  revalidatePath('/dashboard/custos')
+}
+
 export async function deleteExpensePackage(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
