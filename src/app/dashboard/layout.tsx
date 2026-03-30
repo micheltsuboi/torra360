@@ -27,10 +27,10 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-[--background]">
+    <div className="flex h-screen overflow-hidden">
       
       {/* Sidebar Lateral */}
-      <aside className="w-20 lg:w-64 border-r border-[--card-border] flex flex-col items-center lg:items-start p-4 bg-[--card-bg] backdrop-blur-md relative z-20">
+      <aside className="w-20 lg:w-64 flex flex-col items-center lg:items-start p-4 bg-black/10 backdrop-blur-sm relative z-20">
         <div className="flex items-center gap-3 w-full mb-10 mt-2 cursor-pointer">
           <div className="w-8 h-8 rounded-full border border-[--primary] flex items-center justify-center text-[--primary] shrink-0">
             <Coffee className="w-4 h-4" />
