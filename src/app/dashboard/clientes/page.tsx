@@ -48,14 +48,14 @@ export default async function ClientesPage() {
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
                         <td className="p-4 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-4 flex items-center justify-end gap-3">
+                        <td className="p-4 flex items-center justify-end gap-2">
                           <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
-                            <Pencil className="w-[11px] h-[11px]" />
+                            <Pencil className="action-icon" />
                           </span>
                           <form action={deleteClientRecord}>
                             <input type="hidden" name="id" value={client.id} />
                             <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                              <Trash2 className="w-[11px] h-[11px]" />
+                              <Trash2 className="action-icon" />
                             </button>
                           </form>
                         </td>

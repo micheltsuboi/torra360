@@ -57,10 +57,10 @@ export default async function ComercialPage() {
                         <td className="p-3 text-xs text-[--secondary-text] uppercase">{s.payment_method}</td>
                         <td className="p-3 text-right text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
                         <td className="p-3 text-right">
-                           <form action={deleteSale} className="flex items-center justify-end">
+                           <form action={deleteSale} className="flex items-center justify-end gap-2">
                               <input type="hidden" name="id" value={s.id} />
                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                                 <Trash2 className="w-[11px] h-[11px]" />
+                                 <Trash2 className="action-icon" />
                               </button>
                            </form>
                         </td>

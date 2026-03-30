@@ -168,11 +168,18 @@ button.secondary-btn:hover {
   outline: none !important;
   color: inherit;
   transition: all 0.2s ease;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .action-icon-btn:hover {
   opacity: 1 !important;
-  transform: scale(1.1);
+  transform: scale(1.15);
+}
+
+.action-icon {
+  width: 9px !important;
+  height: 9px !important;
 }
 
 /* 

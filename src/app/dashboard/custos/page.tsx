@@ -50,7 +50,7 @@ export default async function CustosPage() {
                         className="font-serif text-lg text-[--primary] bg-transparent border-0 p-0 w-fit focus:ring-0 focus:border-b border-[--primary]/30 min-w-[100px]"
                       />
                       <button type="submit" className="action-icon-btn opacity-40">
-                         <Check className="w-[10px] h-[10px]" />
+                         <Check className="action-icon" />
                       </button>
                    </form>
                    <span className="text-xs text-[--secondary-text]">Custos Fixos de Produção</span>
@@ -58,7 +58,7 @@ export default async function CustosPage() {
                 <form action={deleteExpensePackage}>
                    <input type="hidden" name="id" value={pkg.id} />
                    <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                      <Trash2 className="w-[13px] h-[13px]" />
+                      <Trash2 className="action-icon" />
                    </button>
                 </form>
              </div>
@@ -74,7 +74,7 @@ export default async function CustosPage() {
                               <input type="hidden" name="id" value={item.id} />
                               <input type="hidden" name="package_id" value={pkg.id} />
                               <button type="submit" className="action-icon-btn opacity-0 group-hover/item:opacity-100 text-[--danger]">
-                                <Trash2 className="w-[11px] h-[11px]" />
+                                <Trash2 className="action-icon" />
                               </button>
                            </form>
                         </div>

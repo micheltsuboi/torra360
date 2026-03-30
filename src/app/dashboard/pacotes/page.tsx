@@ -124,14 +124,14 @@ export default async function PacotesPage() {
                           <td className="p-4 text-center border-l border-[--card-border]/20 font-bold">{p.quantity_units || '0'} unds</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 text-[--success]">R$ {(p.retail_price || 0).toFixed(2)}</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 font-bold text-[--success]">R$ {totalEstimado}</td>
-                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-2 h-full">
                             <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
-                               <Pencil className="w-[11px] h-[11px]" />
+                               <Pencil className="action-icon" />
                             </span>
                             <form action={deletePackage}>
                                <input type="hidden" name="id" value={p.id} />
                                <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                                  <Trash2 className="w-[11px] h-[11px]" />
+                                  <Trash2 className="action-icon" />
                                </button>
                             </form>
                           </td>
