@@ -47,8 +47,8 @@ export default async function CustosPage() {
                 </div>
                 <form action={deleteExpensePackage}>
                    <input type="hidden" name="id" value={pkg.id} />
-                   <button type="submit" className="text-[--danger] hover:opacity-70 p-1 bg-transparent border-0 cursor-pointer">
-                      <Trash2 className="w-4 h-4" />
+                   <button type="submit" className="text-[--danger] hover:opacity-70 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
+                      <Trash2 className="w-[14px] h-[14px]" />
                    </button>
                 </form>
              </div>
@@ -63,8 +63,8 @@ export default async function CustosPage() {
                            <form action={removeExpenseItem}>
                               <input type="hidden" name="id" value={item.id} />
                               <input type="hidden" name="package_id" value={pkg.id} />
-                              <button type="submit" className="opacity-0 group-hover/item:opacity-100 text-[--danger] transition-opacity bg-transparent border-0 cursor-pointer">
-                                <Trash2 className="w-3 h-3" />
+                              <button type="submit" className="opacity-0 group-hover/item:opacity-100 text-[--danger] transition-opacity !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
+                                <Trash2 className="w-[12px] h-[12px]" />
                               </button>
                            </form>
                         </div>

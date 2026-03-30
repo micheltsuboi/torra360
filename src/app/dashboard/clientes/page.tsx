@@ -48,14 +48,14 @@ export default async function ClientesPage() {
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
                         <td className="p-4 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-4 flex items-center justify-end gap-1">
-                          <span className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer bg-transparent border-0" title="Edição em breve">
-                            <Pencil className="w-3 h-3" />
+                        <td className="p-4 flex items-center justify-end gap-3">
+                          <span className="text-[--primary] opacity-60 hover:opacity-100 cursor-pointer bg-transparent border-0 flex items-center justify-center p-0" title="Edição em breve">
+                            <Pencil className="w-[12px] h-[12px]" />
                           </span>
-                          <form action={deleteClientRecord}>
+                          <form action={deleteClientRecord} className="flex items-center justify-center">
                             <input type="hidden" name="id" value={client.id} />
-                            <button type="submit" className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--danger] opacity-80 bg-transparent border-0 cursor-pointer">
-                              <Trash2 className="w-3 h-3" />
+                            <button type="submit" className="text-[--danger] opacity-60 hover:opacity-100 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
+                              <Trash2 className="w-[12px] h-[12px]" />
                             </button>
                           </form>
                         </td>

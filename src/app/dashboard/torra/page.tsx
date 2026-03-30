@@ -89,14 +89,14 @@ export default async function TorraPage() {
                              </div>
                           </td>
                           <td className="p-4 text-center border-l border-[--card-border]/20 text-[--danger]">{r.shrinkage_pct ? r.shrinkage_pct.toFixed(1) : '-'}%</td>
-                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-1 h-full">
-                            <span className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer mt-1 bg-transparent border-0" title="Edição em breve">
-                               <Pencil className="w-3 h-3" />
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
+                            <span className="text-[--primary] opacity-60 hover:opacity-100 cursor-pointer bg-transparent border-0 flex items-center justify-center p-0" title="Edição em breve">
+                               <Pencil className="w-[12px] h-[12px]" />
                             </span>
-                            <form action={deleteRoastBatch} className="mt-1">
+                            <form action={deleteRoastBatch} className="flex items-center justify-center">
                                <input type="hidden" name="id" value={r.id} />
-                               <button type="submit" className="p-1 px-1.5 rounded-md hover:bg-white/5 text-[--danger] opacity-80 bg-transparent border-0 cursor-pointer">
-                                  <Trash2 className="w-3 h-3" />
+                               <button type="submit" className="text-[--danger] opacity-60 hover:opacity-100 !bg-transparent !border-0 !p-0 cursor-pointer flex items-center justify-center">
+                                  <Trash2 className="w-[12px] h-[12px]" />
                                </button>
                             </form>
                           </td>
