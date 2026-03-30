@@ -27,12 +27,16 @@ export async function login(formData: FormData) {
 export async function signup(formData: FormData) {
   const supabase = await createClient()
 
+  const full_name = formData.get('name') as string
+  const company_name = formData.get('company') as string
+
   const data = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
       data: {
-        full_name: formData.get('name') as string,
+        full_name,
+        company_name,
       }
     }
   }
@@ -40,7 +44,7 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp(data)
 
   if (error) {
-    redirect('/login?error=There was an error signing up')
+    redirect('/signup?error=There was an error signing up')
   }
 
   revalidatePath('/', 'layout')

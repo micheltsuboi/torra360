@@ -49,9 +49,9 @@ export default function LoginPage({
             <button formAction={login} className="primary-btn w-full">
               Entrar
             </button>
-            <button formAction={signup} className="secondary-btn w-full">
+            <a href="/signup" className="secondary-btn w-full text-center">
               Criar uma conta
-            </button>
+            </a>
           </div>
         </form>
       </div>
