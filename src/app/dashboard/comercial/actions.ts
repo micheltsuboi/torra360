@@ -101,3 +101,14 @@ export async function createExpense(formData: FormData) {
   await supabase.from('expenses').insert({ category, date, amount, notes })
   revalidatePath('/dashboard/comercial')
 }
+
+export async function deleteSale(formData: FormData) {
+  const id = formData.get('id') as string
+  if (!id) return
+
+  const supabase = await createClient()
+  await supabase.from('sale_transactions').delete().eq('id', id)
+  
+  revalidatePath('/dashboard/comercial')
+  revalidatePath('/dashboard/pacotes') // estoque pode ter voltado
+}

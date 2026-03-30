@@ -1,11 +1,10 @@
-import { getPDVData, getSalesHistory, getExpenses, createExpense } from './actions'
+import { getPDVData, getSalesHistory, deleteSale } from './actions'
 import PDVComponent from './PDVComponent'
 import { Trash2 } from 'lucide-react'
 
 export default async function ComercialPage() {
   const { clients, products } = await getPDVData()
   const salesHistory = await getSalesHistory()
-  const expenses = await getExpenses()
 
   return (
     <div className="flex flex-col gap-8">
@@ -58,9 +57,12 @@ export default async function ComercialPage() {
                         <td className="p-3 text-xs text-[--secondary-text] uppercase">{s.payment_method}</td>
                         <td className="p-3 text-right text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
                         <td className="p-3 text-right">
-                           <button className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
-                              <Trash2 className="w-4 h-4" />
-                           </button>
+                           <form action={deleteSale}>
+                              <input type="hidden" name="id" value={s.id} />
+                              <button type="submit" className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                                 <Trash2 className="w-4 h-4" />
+                              </button>
+                           </form>
                         </td>
                       </tr>
                     ))}
@@ -72,63 +74,6 @@ export default async function ComercialPage() {
            </div>
         </div>
 
-        {/* Despesas */}
-        <div className="flex flex-col gap-6">
-          {/* Adicionar Despesa */}
-          <div className="glass-panel p-6">
-            <h2 className="font-serif mb-4 text-[--danger]">Lançar Despesa</h2>
-            <form action={createExpense} className="flex gap-3 items-end">
-               <div className="flex flex-col gap-1 w-full">
-                  <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} />
-               </div>
-               <div className="flex flex-col gap-1 w-full">
-                  <select name="category" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                     <option value="Embalagem">Embalagens</option>
-                     <option value="Serviços">Serviços / Gás</option>
-                     <option value="Impostos">Impostos</option>
-                     <option value="Outros">Outros</option>
-                  </select>
-               </div>
-               <div className="flex flex-col gap-1 w-full">
-                  <input name="amount" type="number" step="0.01" placeholder="R$ 100,00" required />
-               </div>
-               <div className="flex flex-col gap-1 w-full hidden">
-                  <input name="notes" type="text" placeholder="Obs..." />
-               </div>
-               <button type="submit" className="danger-btn py-2 text-sm h-[40px] px-8">Salvar</button>
-            </form>
-          </div>
-
-          <div className="glass-panel overflow-hidden h-fit">
-             <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40">
-                <h2 className="font-serif">Relatório de Despesas</h2>
-             </div>
-             <div className="overflow-x-auto max-h-[250px]">
-                <table className="w-full text-left border-collapse">
-                   <thead className="bg-[#1a1512] sticky top-0">
-                      <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]">
-                         <th className="p-3">Data</th>
-                         <th className="p-3">Categoria</th>
-                         <th className="p-3">Obsevação</th>
-                         <th className="p-3 text-right">Valor</th>
-                      </tr>
-                   </thead>
-                   <tbody className="text-sm">
-                      {expenses.map((e: any) => (
-                        <tr key={e.id} className="border-b border-[--card-border]/50 hover:bg-white/5">
-                          <td className="p-3 text-[--secondary-text]">{new Date(e.date).toLocaleDateString()}</td>
-                          <td className="p-3 text-[#AC9D91]">{e.category}</td>
-                          <td className="p-3 text-xs">{e.notes}</td>
-                          <td className="p-3 text-right text-[--danger] font-bold">R$ {e.amount.toFixed(2)}</td>
-                        </tr>
-                      ))}
-                      {expenses.length === 0 && (
-                        <tr><td colSpan={4} className="p-6 text-center text-sm text-[--secondary-text]">Nenhuma despesa registrada.</td></tr>
-                      )}
-                   </tbody>
-                </table>
-             </div>
-          </div>
         </div>
 
       </div>
