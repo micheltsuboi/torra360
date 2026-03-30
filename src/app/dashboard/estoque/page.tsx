@@ -1,10 +1,12 @@
 import { getGreenCoffeeLots, createGreenCoffeeLot } from './actions'
-import { getCoffeeTypes, getQualityLevels } from '../parametros/actions'
+import { getCoffeeTypes, getQualityLevels, getProviders, getOrigins } from '../parametros/actions'
 
 export default async function EstoquePage() {
   const lots = await getGreenCoffeeLots()
   const coffeeTypes = await getCoffeeTypes()
   const qualityLevels = await getQualityLevels()
+  const providers = await getProviders()
+  const origins = await getOrigins()
 
   return (
     <div className="flex flex-col gap-8">
@@ -41,11 +43,29 @@ export default async function EstoquePage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-[--secondary-text] uppercase">Fornecedor</label>
-                <input name="provider" type="text" placeholder="Fazenda X" />
+                <select name="provider" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
+                  <option value="">Selecione...</option>
+                  {providers && providers.length > 0 ? (
+                    providers.map((p: any) => (
+                      <option key={p.id} value={p.name}>{p.name}</option>
+                    ))
+                  ) : (
+                     <option value="" disabled>(Cadastre em Parâmetros)</option>
+                  )}
+                </select>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="text-xs text-[--secondary-text] uppercase">Origem</label>
-                <input name="origin" type="text" placeholder="Sul de Minas" />
+                <select name="origin" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
+                  <option value="">Selecione...</option>
+                  {origins && origins.length > 0 ? (
+                    origins.map((o: any) => (
+                      <option key={o.id} value={o.name}>{o.name}</option>
+                    ))
+                  ) : (
+                     <option value="" disabled>(Cadastre em Parâmetros)</option>
+                  )}
+                </select>
               </div>
             </div>
 
