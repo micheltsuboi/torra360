@@ -32,16 +32,18 @@ export async function createPackages(formData: FormData) {
   
   const bean_format = formData.get('bean_format') as string
   const package_size_g = parseInt(formData.get('package_size_g') as string) || 0
-  const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
   const quantity_units = parseInt(formData.get('quantity_units') as string) || 0
+  const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
+  const expense_package_id = formData.get('expense_package_id') as string || null
 
   const { error } = await supabase.from('packaging_batches').insert({
     roast_batch_id,
     date,
     bean_format,
     package_size_g,
+    quantity_units,
     retail_price,
-    quantity_units
+    expense_package_id
   })
 
   if (error) {

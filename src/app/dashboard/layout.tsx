@@ -12,7 +12,8 @@ import {
   Flame,
   ChevronDown,
   LayoutDashboard,
-  Users
+  Users,
+  Coins
 } from 'lucide-react'
 
 export default async function DashboardLayout({
@@ -69,6 +70,11 @@ export default async function DashboardLayout({
           <a href="/dashboard/clientes" className="flex items-center gap-4 p-3 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
             <Users className="w-5 h-5 opacity-80" />
             <span className="hidden lg:block text-sm font-medium">Clientes</span>
+          </a>
+          {/* Custos */}
+          <a href="/dashboard/custos" className="flex items-center gap-4 p-3 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
+            <Coins className="w-5 h-5 opacity-80" />
+            <span className="hidden lg:block text-sm font-medium">Custos</span>
           </a>
           {/* Parâmetros */}
           <a href="/dashboard/parametros" className="flex items-center gap-4 p-3 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">

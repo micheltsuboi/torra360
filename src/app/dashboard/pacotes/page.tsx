@@ -1,8 +1,11 @@
 import { getRoastBatchesAvailable, getPackages, createPackages, deletePackage } from './actions'
+import { getExpensePackages } from '../custos/actions'
+import { Pencil, Trash2 } from 'lucide-react'
 
 export default async function PacotesPage() {
   const roasts = await getRoastBatchesAvailable()
   const packages = await getPackages()
+  const expensePackages = await getExpensePackages()
 
   return (
     <div className="flex flex-col gap-8">
@@ -55,15 +58,19 @@ export default async function PacotesPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Qtd de Pacotes</label>
-                <input name="quantity_units" type="number" min="1" placeholder="Ex: 50" required />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Valor de Venda (R$)</label>
-                <input name="retail_price" type="number" step="0.01" min="0" placeholder="Ex: 45.90" required />
-              </div>
+            </div>
+
+            <div className="flex flex-col gap-1 mt-2">
+              <label className="text-xs text-[--secondary-text] uppercase">Pacote de Despesas (Custo)</label>
+              <select name="expense_package_id" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
+                <option value="">Nenhum custo adicional</option>
+                {expensePackages.map((ep: any) => (
+                  <option key={ep.id} value={ep.id}>
+                    {ep.name} (R$ {ep.total_cost.toFixed(2)})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div className="mt-4 pt-4 border-t border-[--card-border] text-xs text-[--secondary-text]">
@@ -109,11 +116,15 @@ export default async function PacotesPage() {
                           <td className="p-4 text-center border-l border-[--card-border]/20 font-bold">{p.quantity_units || '0'} unds</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 text-[--success]">R$ {(p.retail_price || 0).toFixed(2)}</td>
                           <td className="p-4 text-right border-l border-[--card-border]/20 font-bold text-[--success]">R$ {totalEstimado}</td>
-                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
-                            <span className="text-[--primary] text-xs opacity-50 cursor-pointer pt-3" title="Edição em breve">Editar</span>
-                            <form action={deletePackage} className="pt-3">
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-2 h-full">
+                            <span className="p-2 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer mt-1" title="Edição em breve">
+                               <Pencil className="w-4 h-4" />
+                            </span>
+                            <form action={deletePackage} className="mt-1">
                                <input type="hidden" name="id" value={p.id} />
-                               <button type="submit" className="text-[--danger] hover:underline text-xs">Remover</button>
+                               <button type="submit" className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                                  <Trash2 className="w-4 h-4" />
+                               </button>
                             </form>
                           </td>
                         </tr>

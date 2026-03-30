@@ -1,5 +1,6 @@
 import { getClients, deleteClientRecord } from './actions'
 import ClientForm from './ClientForm'
+import { Pencil, Trash2 } from 'lucide-react'
 
 export default async function ClientesPage() {
   const clients = await getClients()
@@ -47,11 +48,14 @@ export default async function ClientesPage() {
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
                         <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
                         <td className="p-4 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-4">
+                        <td className="p-4 flex items-center justify-end gap-2">
+                          <span className="p-2 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer" title="Edição em breve">
+                            <Pencil className="w-4 h-4" />
+                          </span>
                           <form action={deleteClientRecord}>
                             <input type="hidden" name="id" value={client.id} />
-                            <button type="submit" className="danger-btn py-1 px-3 text-xs whitespace-nowrap">
-                              Remover
+                            <button type="submit" className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                              <Trash2 className="w-4 h-4" />
                             </button>
                           </form>
                         </td>

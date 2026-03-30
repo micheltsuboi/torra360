@@ -1,4 +1,5 @@
 import { getRoastBatches, getAvailableGreenLots, createRoastBatch, deleteRoastBatch } from './actions'
+import { Pencil, Trash2 } from 'lucide-react'
 
 export default async function TorraPage() {
   const greenLots = await getAvailableGreenLots()
@@ -88,11 +89,15 @@ export default async function TorraPage() {
                              </div>
                           </td>
                           <td className="p-4 text-center border-l border-[--card-border]/20 text-[--danger]">{r.shrinkage_pct ? r.shrinkage_pct.toFixed(1) : '-'}%</td>
-                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-3 h-full">
-                            <span className="text-[--primary] text-xs opacity-50 cursor-pointer pt-3" title="Edição em breve">Editar</span>
-                            <form action={deleteRoastBatch} className="pt-3">
+                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-2 h-full">
+                            <span className="p-2 rounded-md hover:bg-white/5 text-[--primary] opacity-80 cursor-pointer mt-1" title="Edição em breve">
+                               <Pencil className="w-4 h-4" />
+                            </span>
+                            <form action={deleteRoastBatch} className="mt-1">
                                <input type="hidden" name="id" value={r.id} />
-                               <button type="submit" className="text-[--danger] hover:underline text-xs">Remover</button>
+                               <button type="submit" className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                                  <Trash2 className="w-4 h-4" />
+                               </button>
                             </form>
                           </td>
                         </tr>

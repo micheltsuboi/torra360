@@ -1,5 +1,6 @@
 import { getPDVData, getSalesHistory, getExpenses, createExpense } from './actions'
 import PDVComponent from './PDVComponent'
+import { Trash2 } from 'lucide-react'
 
 export default async function ComercialPage() {
   const { clients, products } = await getPDVData()
@@ -36,8 +37,8 @@ export default async function ComercialPage() {
                        <th className="p-3">Data/Cliente</th>
                        <th className="p-3">Itens</th>
                        <th className="p-3">Pgto</th>
-                       <th className="p-3 text-right">Desconto</th>
                        <th className="p-3 text-right">Total Final</th>
+                       <th className="p-3 text-right">Ações</th>
                     </tr>
                  </thead>
                  <tbody className="text-sm">
@@ -55,8 +56,12 @@ export default async function ComercialPage() {
                            ))}
                         </td>
                         <td className="p-3 text-xs text-[--secondary-text] uppercase">{s.payment_method}</td>
-                        <td className="p-3 text-right text-xs text-[--danger]">{s.discount_amount > 0 ? `- R$ ${s.discount_amount.toFixed(2)}` : '-'}</td>
                         <td className="p-3 text-right text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
+                        <td className="p-3 text-right">
+                           <button className="p-2 rounded-md hover:bg-white/5 text-[--danger] opacity-80">
+                              <Trash2 className="w-4 h-4" />
+                           </button>
+                        </td>
                       </tr>
                     ))}
                     {salesHistory.length === 0 && (
