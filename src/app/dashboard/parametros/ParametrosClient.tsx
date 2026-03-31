@@ -35,7 +35,7 @@ export default function ParametrosClient({
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
       {sections.map((section) => (
         <div key={section.id} className="glass-panel overflow-hidden border-t-2 border-[--primary]/30 flex flex-col shadow-lg">
-          <div className="p-4 border-b border-[--card-border] bg-black/40 flex justify-between items-center wood-texture">
+          <div className="p-2 border-b border-[--card-border] bg-black/40 flex justify-between items-center wood-texture">
             <div className="flex items-center gap-2">
               <section.icon className="w-5 h-5 text-[--primary]" />
               <h2 className="font-serif text-lg text-[--primary]">{section.title}</h2>
@@ -48,15 +48,15 @@ export default function ParametrosClient({
             </button>
           </div>
 
-          <div className="p-4 flex flex-col gap-2 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/5">
+          <div className="p-2 flex flex-col gap-2 max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/5">
             {section.data.length > 0 ? (
               section.data.map((item: any) => (
-                <div key={item.id} className="flex justify-between items-center p-3 rounded-xl bg-white/5 border border-white/5 group hover:bg-white/10 transition-colors">
+                <div key={item.id} className="flex justify-between items-center p-2 px-3 rounded-lg bg-white/5 border border-white/5 group hover:bg-white/10 transition-colors">
                   <span className="text-sm font-medium text-[--foreground] opacity-80 group-hover:opacity-100 transition-opacity">{item.name}</span>
                   <form action={section.deleteAction}>
                     <input type="hidden" name="id" value={item.id} />
-                    <button type="submit" className="text-[--danger] p-1.5 hover:bg-[--danger]/10 rounded-full transition-all opacity-0 group-hover:opacity-100">
-                      <Trash2 className="w-4 h-4" />
+                    <button type="submit" className="action-icon-btn text-[--danger] opacity-0 group-hover:opacity-100">
+                      <Trash2 className="action-icon" />
                     </button>
                   </form>
                 </div>

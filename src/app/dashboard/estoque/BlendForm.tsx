@@ -83,17 +83,17 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
           />
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <label className="data-label">Composição dos Grãos</label>
           
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-2">
             {components.map((comp, index) => {
               const percentage = totalQty > 0 ? ((comp.qty / totalQty) * 100).toFixed(1) : '0'
               const selectedLot = lots.find(l => l.id === comp.lotId)
               
               return (
-                <div key={index} className="flex flex-col gap-3 p-4 rounded-xl bg-black/40 border border-[--card-border]/30 relative transition-all hover:bg-black/60 shadow-xl group">
-                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div key={index} className="flex flex-col gap-2 p-2 rounded-xl bg-black/40 border border-[--card-border]/30 relative transition-all hover:bg-black/60 shadow-xl group">
+                  <div className="flex flex-col md:flex-row gap-2 items-center">
                     
                     {/* Select Lote */}
                     <div className="flex-1 w-full">
@@ -113,7 +113,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                     </div>
 
                     {/* Quantidade e Controles */}
-                    <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="flex items-center gap-2 w-full md:w-auto">
                       <div className="flex items-center gap-2">
                         <button 
                           type="button"
@@ -145,7 +145,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                         </button>
                       </div>
 
-                      <div className="min-w-[60px] text-right font-mono text-[--primary] text-sm font-bold bg-[--primary]/10 px-2 py-1 rounded">
+                      <div className="min-w-[60px]   font-mono text-[--primary] text-sm font-bold bg-[--primary]/10 px-2 py-1 rounded">
                         {percentage}%
                       </div>
 
@@ -197,7 +197,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
         </div>
 
         {message && (
-          <p className={`text-center text-sm font-medium mt-2 p-3 rounded bg-white/5 border border-white/5 ${message.type === 'error' ? 'text-[--danger]' : 'text-[--success]'}`}>
+          <p className={`text-center text-sm font-medium mt-2 p-2 rounded bg-white/5 border border-white/5 ${message.type === 'error' ? 'text-[--danger]' : 'text-[--success]'}`}>
             {message.text}
           </p>
         )}

@@ -38,8 +38,8 @@ export default function ClientForm() {
   }
 
   return (
-    <form action={createClientRecord} className="flex flex-col gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <form action={createClientRecord} className="flex flex-col gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="flex flex-col gap-1">
           <label className="text-xs text-[--secondary-text] capitalize">Nome *</label>
           <input name="name" type="text" placeholder="Nome Completo" required />
@@ -50,7 +50,7 @@ export default function ClientForm() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="flex flex-col gap-1">
           <label className="text-xs text-[--secondary-text] capitalize">Telefone</label>
           <input name="phone" type="tel" value={phone} onChange={handlePhoneChange} placeholder="(11) 99999-9999" />
@@ -66,7 +66,7 @@ export default function ClientForm() {
         <input name="address" type="text" placeholder="Rua, Número, Complemento, Bairro - CEP" />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="flex flex-col gap-1">
           <label className="text-xs text-[--secondary-text] capitalize">Cidade</label>
           <input name="city" type="text" placeholder="Ex: São Paulo" />

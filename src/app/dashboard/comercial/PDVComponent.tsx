@@ -79,16 +79,16 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full h-full">
       {/* Esquerda: Catálogo de Produtos para Venda */}
       <div className="glass-panel overflow-hidden flex flex-col h-full max-h-[600px]">
-        <div className="p-4 border-b border-[--card-border] card-texture-header">
+        <div className="p-2 border-b border-[--card-border] card-texture-header">
            <h2 className="font-serif text-[--primary]">Vitrine de Produtos</h2>
         </div>
-        <div className="p-4 overflow-y-auto">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="p-2 overflow-y-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
             {products.map((p) => (
               <div 
                 key={p.id} 
                 onClick={() => addToCart(p)}
-                className="bg-black/20 border border-[--card-border] p-3 rounded-lg cursor-pointer hover:border-[--primary] transition-colors relative group"
+                className="bg-black/20 border border-[--card-border] p-2 rounded-lg cursor-pointer hover:border-[--primary] transition-colors relative group"
               >
                 <div className="text-xs text-[--secondary-text] mb-1">{p.bean_format} • {p.package_size_g}g</div>
                 <div className="font-medium text-sm leading-tight text-[--foreground] h-10 line-clamp-2">
@@ -110,7 +110,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
 
       {/* Direita: Carrinho e Checkout */}
       <div className="glass-panel overflow-hidden flex flex-col h-full bg-[#1a1411]">
-        <div className="p-4 border-b border-[--card-border] flex justify-between items-center card-texture-header">
+        <div className="p-2 border-b border-[--card-border] flex justify-between items-center card-texture-header">
            <h2 className="font-serif text-[--foreground] flex items-center gap-2">
              <ShoppingCart className="w-5 h-5 text-[--primary]" />
              Balcão / Carrinho
@@ -118,7 +118,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
         </div>
         
         {/* Lista Carrinho */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 min-h-[300px] scrollbar-thin scrollbar-thumb-[--primary]/20">
+        <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-2 min-h-[300px] scrollbar-thin scrollbar-thumb-[--primary]/20">
           {cart.map(item => (
             <div key={item.id} className="flex items-center justify-between border-b border-white/5 pb-4 group/cartitem">
               <div className="flex flex-col flex-1 pr-4">
@@ -126,8 +126,8 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
                 <span className="text-xs font-bold text-[--primary] opacity-80">R$ {item.price.toFixed(2)} / unid</span>
               </div>
               
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-3 bg-black/40 p-1.5 rounded-full border border-white/5 shadow-inner">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 bg-black/40 p-1.5 rounded-full border border-white/5 shadow-inner">
                   <button 
                     onClick={() => updateQty(item.id, -1)} 
                     className="qty-btn-premium w-7 h-7 flex items-center justify-center text-[--foreground] hover:bg-[--danger]/20 hover:text-[--danger]"
@@ -156,7 +156,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             </div>
           ))}
           {cart.length === 0 && (
-            <div className="m-auto text-center flex flex-col items-center gap-4 py-10">
+            <div className="m-auto text-center flex flex-col items-center gap-2 py-10">
               <ShoppingCart className="w-12 h-12 text-[--primary] opacity-10" />
               <p className="text-xs text-[--secondary-text] leading-relaxed max-w-[150px] opacity-40">
                 O carrinho está vazio. Selecione produtos na vitrine ao lado.
@@ -166,7 +166,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
         </div>
 
         {/* Resumo Checkout */}
-        <div className="p-4 border-t border-[--card-border] bg-black/40 flex flex-col gap-3">
+        <div className="p-2 border-t border-[--card-border] bg-black/40 flex flex-col gap-2">
           
           <div className="flex gap-2 items-center">
             <User className="w-4 h-4 text-[--secondary-text]" />
@@ -193,14 +193,14 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
               type="number" 
               value={discountInput || ''} 
               onChange={e => setDiscountInput(parseFloat(e.target.value) || 0)} 
-              className="bg-black/20 text-sm p-1 border border-[--card-border] rounded w-20 text-right focus:border-[--primary] outline-none" 
+              className="bg-black/20 text-sm p-1 border border-[--card-border] rounded w-20   focus:border-[--primary] outline-none" 
               placeholder="0.00"
             />
           </div>
 
           <div className="flex justify-between items-center text-sm pt-2">
             <span className="text-[--secondary-text]">Método Pgto:</span>
-            <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="bg-transparent text-sm p-1 py-0 font-bold border-0 text-[--primary] text-right outline-none cursor-pointer focus:ring-0">
+            <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="bg-transparent text-sm p-1 py-0 font-bold border-0 text-[--primary]   outline-none cursor-pointer focus:ring-0">
                <option value="Pix" className="bg-[#110D0B]">Pix</option>
                <option value="Crédito" className="bg-[#110D0B]">Cartão de Crédito</option>
                <option value="Débito" className="bg-[#110D0B]">Cartão de Débito</option>
@@ -213,7 +213,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
               <span>Subtotal: R$ {subtotal.toFixed(2)}</span>
               {discountAmount > 0 && <span className="text-[--danger] text-xs">Desconto: - R$ {discountAmount.toFixed(2)}</span>}
             </div>
-            <div className="text-right">
+            <div className=" ">
               <span className="text-xs text-[--secondary-text] block">Total</span>
               <span className="text-2xl font-bold text-[--success]">R$ {total.toFixed(2)}</span>
             </div>

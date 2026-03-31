@@ -40,7 +40,7 @@ export default function CustosHeader() {
             />
           </div>
 
-          <div className="p-4 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
+          <div className="p-2 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
              <span className="text-[--primary]">💡 Estratégia:</span> Crie pacotes que agrupam todos os custos indiretos 
              (embalagem, etiquetas, lacres, fretes) para que o sistema possa calcular a margem de lucro real de cada produto final.
           </div>

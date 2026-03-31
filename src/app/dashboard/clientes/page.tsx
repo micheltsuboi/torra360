@@ -24,31 +24,31 @@ export default async function ClientesPage() {
         </div>
 
         {/* Listagem de Clientes */}
-        <div className="xl:col-span-2 flex flex-col gap-4">
+        <div className="xl:col-span-2 flex flex-col gap-2">
           <div className="glass-panel overflow-hidden">
-             <div className="p-4 border-b border-[--card-border] card-texture-header">
+             <div className="p-2 border-b border-[--card-border] card-texture-header">
               <h2 className="font-serif">Listagem de Clientes</h2>
              </div>
              <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full   border-collapse">
                 <thead>
                   <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--card-border]">
-                    <th className="p-4 font-medium">Nome</th>
-                    <th className="p-4 font-medium">Documento</th>
-                    <th className="p-4 font-medium">Contato</th>
-                    <th className="p-4 font-medium">Local</th>
-                    <th className="p-4 font-medium">Ações</th>
+                    <th className="p-2 font-medium">Nome</th>
+                    <th className="p-2 font-medium">Documento</th>
+                    <th className="p-2 font-medium">Contato</th>
+                    <th className="p-2 font-medium">Local</th>
+                    <th className="p-2 font-medium">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   {clients && clients.length > 0 ? (
                     clients.map((client: any) => (
                       <tr key={client.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
-                        <td className="p-4 font-medium text-[--primary]">{client.name}</td>
-                        <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
-                        <td className="p-4 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
-                        <td className="p-4 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-4 flex items-center justify-end gap-2">
+                        <td className="p-2 font-medium text-[--primary]">{client.name}</td>
+                        <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
+                        <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
+                        <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
+                        <td className="p-2 flex items-center justify-end gap-2">
                           <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
                             <Pencil className="action-icon" />
                           </span>

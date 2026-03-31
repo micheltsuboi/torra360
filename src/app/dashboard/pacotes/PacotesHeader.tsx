@@ -104,7 +104,7 @@ export default function PacotesHeader({ roasts, expensePackages }: PacotesHeader
             </select>
           </div>
 
-          <div className="p-4 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
+          <div className="p-2 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
              <span className="text-[--primary]">📊 Inteligência:</span> O sistema deduzirá automaticamente o peso do lote torrado selecionado 
              e calculará o custo unitário por pacote baseado no café verde + custos operacionais.
           </div>

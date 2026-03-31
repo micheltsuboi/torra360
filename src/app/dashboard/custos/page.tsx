@@ -22,7 +22,7 @@ export default async function CustosPage() {
         {/* Listagem de Pacotes */}
         {packages.map((pkg: any) => (
           <div key={pkg.id} className="glass-panel overflow-hidden flex flex-col border-t-4 border-[--primary] shadow-xl hover:shadow-2xl transition-all duration-300">
-             <div className="p-4 border-b border-[--card-border] flex justify-between items-start card-texture-header bg-black/40">
+             <div className="p-2 border-b border-[--card-border] flex justify-between items-start card-texture-header bg-black/40">
                 <div className="flex-1">
                    <form action={updateExpensePackage} className="flex items-center gap-2 group/title">
                       <input type="hidden" name="id" value={pkg.id} />
@@ -48,11 +48,11 @@ export default async function CustosPage() {
                 </form>
              </div>
 
-             <div className="p-6 flex-1 flex flex-col gap-4">
+             <div className="p-6 flex-1 flex flex-col gap-2">
                 <div className="flex flex-col gap-1">
                    {pkg.expense_package_items?.map((item: any) => (
                      <div key={item.id} className="flex justify-between items-center text-sm group/item border-b border-white/5 pb-2 last:border-0 hover:bg-white/5 transition-colors px-2 rounded-lg py-2">
-                        <form action={updateExpenseItem} className="flex-1 flex justify-between items-center gap-4">
+                        <form action={updateExpenseItem} className="flex-1 flex justify-between items-center gap-2">
                            <input type="hidden" name="id" value={item.id} />
                            <input type="hidden" name="package_id" value={pkg.id} />
                            
@@ -70,7 +70,7 @@ export default async function CustosPage() {
                                   type="number" 
                                   step="0.01" 
                                   defaultValue={item.cost} 
-                                  className="font-mono text-base text-[--foreground] bg-transparent border-0 p-1 w-20 text-right focus:ring-2 ring-[--primary]/20 rounded-lg focus:bg-black/60 transition-all font-bold"
+                                  className="font-mono text-base text-[--foreground] bg-transparent border-0 p-1 w-20   focus:ring-2 ring-[--primary]/20 rounded-lg focus:bg-black/60 transition-all font-bold"
                                 />
                               </div>
 
@@ -98,14 +98,14 @@ export default async function CustosPage() {
                 </div>
 
                 {/* Form para novo item */}
-                <form action={addExpenseItem} className="mt-4 pt-6 border-t border-[--card-border]/50 flex gap-3">
+                <form action={addExpenseItem} className="mt-4 pt-6 border-t border-[--card-border]/50 flex gap-2">
                    <input type="hidden" name="package_id" value={pkg.id} />
                    <input 
                      name="name" 
                      type="text" 
                      placeholder="Item..." 
                      required 
-                     className="bg-black/60 text-sm p-3 flex-1 rounded-xl border border-white/5 focus:border-[--primary]/50 transition-all"
+                     className="bg-black/60 text-sm p-2 flex-1 rounded-xl border border-white/5 focus:border-[--primary]/50 transition-all"
                    />
                    <div className="relative flex items-center w-28">
                      <span className="absolute left-3 text-[10px] text-[--secondary-text] font-bold opacity-40">R$</span>
@@ -115,7 +115,7 @@ export default async function CustosPage() {
                        step="0.01" 
                        placeholder="0,00" 
                        required 
-                       className="bg-black/60 text-sm p-3 pl-8 w-full rounded-xl border border-white/5 focus:border-[--primary]/50 transition-all text-right font-mono font-bold"
+                       className="bg-black/60 text-sm p-2 pl-8 w-full rounded-xl border border-white/5 focus:border-[--primary]/50 transition-all   font-mono font-bold"
                      />
                    </div>
                    <button type="submit" className="golden-btn !p-0 !w-12 !h-12 flex items-center justify-center rounded-xl shadow-lg hover:scale-110 active:scale-95 transition-all">

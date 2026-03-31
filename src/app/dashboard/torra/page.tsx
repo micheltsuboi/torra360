@@ -21,21 +21,21 @@ export default async function TorraPage() {
       <TorraHeader greenLots={greenLots} />
 
       {/* Histórico / Relatório de Torra */}
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-2 mt-4">
         <div className="glass-panel overflow-hidden border-t-4 border-[--primary]/30 shadow-2xl">
-           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
+           <div className="p-2 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
             <h2 className="font-serif text-[--primary] text-xl">Histórico de Produção Recente</h2>
            </div>
            
            <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
-            <table className="w-full text-left border-collapse min-w-[700px]">
+            <table className="w-full   border-collapse min-w-[700px]">
               <thead>
                 <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                   <th className="p-4 font-bold border-r border-white/5">Data da Torra</th>
-                   <th className="p-4 font-bold">Lote Base (Café Verde)</th>
-                   <th className="p-4 font-bold text-center">Rendimento Final</th>
-                   <th className="p-4 font-bold text-center border-l border-white/5">Quebra (%)</th>
-                   <th className="p-4 font-bold text-right border-l border-white/5">Ações</th>
+                   <th className="p-2 font-bold border-r border-white/5">Data da Torra</th>
+                   <th className="p-2 font-bold">Lote Base (Café Verde)</th>
+                   <th className="p-2 font-bold text-center">Rendimento Final</th>
+                   <th className="p-2 font-bold text-center border-l border-white/5">Quebra (%)</th>
+                   <th className="p-2 font-bold   border-l border-white/5">Ações</th>
                 </tr>
               </thead>
               <tbody className="text-sm">
@@ -46,19 +46,19 @@ export default async function TorraPage() {
                     
                     return (
                       <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
-                        <td className="p-4 border-r border-white/5">
+                        <td className="p-2 border-r border-white/5">
                            <div className="flex flex-col">
                              <span className="text-sm font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
                              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text]">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                            </div>
                         </td>
-                        <td className="p-4">
+                        <td className="p-2">
                            <div className="flex flex-col">
                              <span className="text-base font-serif text-[--primary] font-medium">{r.green_coffee?.name || 'N/A'}</span>
                              <span className="text-[10px] capitalize text-[--secondary-text]">{r.qty_before_kg}kg orig.</span>
                            </div>
                         </td>
-                        <td className="p-4 text-center">
+                        <td className="p-2 text-center">
                            <div className="flex flex-col items-center">
                              <div className={`text-xl font-serif font-bold ${yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}`}>
                                {yieldPerc?.toFixed(1)}%
@@ -66,13 +66,13 @@ export default async function TorraPage() {
                              <span className="text-[9px] font-bold text-[--secondary-text] capitalize">{r.qty_after_kg.toFixed(2)}kg produzidos</span>
                            </div>
                         </td>
-                        <td className="p-4 text-center border-l border-white/5">
+                        <td className="p-2 text-center border-l border-white/5">
                            <div className="flex flex-col items-center">
                              <span className="text-xl font-mono text-[--danger] font-bold opacity-80">{shrinkage.toFixed(1)}%</span>
                              <span className="text-[9px] font-bold opacity-30 capitalize tracking-tighter">Perda de umidade</span>
                            </div>
                         </td>
-                        <td className="p-4 text-right border-l border-white/5">
+                        <td className="p-2   border-l border-white/5">
                            <div className="flex items-center justify-end gap-2">
                             <form action={deleteRoastBatch} className="flex items-center">
                                <input type="hidden" name="id" value={r.id} />

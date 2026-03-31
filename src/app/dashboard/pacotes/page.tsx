@@ -23,9 +23,9 @@ export default async function PacotesPage() {
       <PacotesHeader roasts={roasts} expensePackages={expensePackages} />
 
       {/* Histórico / Relatório de Pacotes */}
-      <div className="flex flex-col gap-4 mt-4">
+      <div className="flex flex-col gap-2 mt-4">
         <div className="glass-panel overflow-hidden border-t-4 border-[--primary] shadow-2xl">
-           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
+           <div className="p-2 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
             <h2 className="font-serif text-[--primary] text-xl">Estoque Disponível / Produtos Finais</h2>
            </div>
            

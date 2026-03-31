@@ -29,7 +29,7 @@ export default async function DashboardIndex() {
               Ideal: &gt; 80%
             </div>
           </div>
-          <div className="flex-1 flex items-end justify-between gap-2 mt-4 min-h-[200px] wood-texture rounded-lg p-4 border border-[--card-border]">
+          <div className="flex-1 flex items-end justify-between gap-2 mt-4 min-h-[200px] wood-texture rounded-lg p-2 border border-[--card-border]">
             {latestFive.length > 0 ? (
               latestFive.map((roast: any, idx: number) => {
                 const yieldP = parseFloat(roast.yield_percentage || ((roast.qty_after_kg / roast.qty_before_kg) * 100).toString())
@@ -59,14 +59,14 @@ export default async function DashboardIndex() {
 
         {/* Logs Recentes */}
         <div className="glass-panel p-0 flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
+          <div className="p-2 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
             <h2 className="font-serif">Lotes Recentes</h2>
             <span className="text-xs py-1 px-3 bg-white/10 rounded-full border border-white/5">{latestFive.length}</span>
           </div>
-          <div className="p-4 flex flex-col gap-4">
+          <div className="p-2 flex flex-col gap-2">
             {latestFive.length > 0 ? (
               latestFive.map((roast: any, idx: number) => (
-                <div key={roast.roast_batch_id || roast.id || idx} className="flex items-center gap-3">
+                <div key={roast.roast_batch_id || roast.id || idx} className="flex items-center gap-2">
                   <div className="w-10 h-10 rounded-full border border-[--primary]/50 overflow-hidden shrink-0 relative bg-black">
                     <div className="absolute inset-0 opacity-40 wood-texture" />
                     <span className="absolute inset-0 flex items-center justify-center text-xs">TR</span>

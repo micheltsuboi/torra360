@@ -26,37 +26,37 @@ export default async function ComercialPage() {
         
         {/* Histórico Vendas */}
         <div className="glass-panel overflow-hidden h-fit">
-           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40">
+           <div className="p-2 border-b border-[--card-border] wood-texture bg-black/40">
               <h2 className="font-serif">Últimas Vendas (PDV)</h2>
            </div>
            <div className="overflow-x-auto max-h-[400px]">
-              <table className="w-full text-left border-collapse">
+              <table className="w-full   border-collapse">
                  <thead className="bg-[#1a1512] sticky top-0">
                     <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--border]">
-                       <th className="p-3">Data/Cliente</th>
-                       <th className="p-3">Itens</th>
-                       <th className="p-3">Pgto</th>
-                       <th className="p-3 text-right">Total Final</th>
-                       <th className="p-3 text-right">Ações</th>
+                       <th className="p-2">Data/Cliente</th>
+                       <th className="p-2">Itens</th>
+                       <th className="p-2">Pgto</th>
+                       <th className="p-2  ">Total Final</th>
+                       <th className="p-2  ">Ações</th>
                     </tr>
                  </thead>
                  <tbody className="text-sm">
                     {salesHistory.map((s: any) => (
                       <tr key={s.id} className="border-b border-[--card-border]/50 hover:bg-white/5">
-                        <td className="p-3">
+                        <td className="p-2">
                            <span className="block">{new Date(s.date).toLocaleDateString()}</span>
                            <span className="text-xs text-[--secondary-text]">{s.client?.name || 'Cliente Avulso'}</span>
                         </td>
-                        <td className="p-3">
+                        <td className="p-2">
                            {s.sale_items?.map((item: any, idx: number) => (
                              <div key={idx} className="text-xs text-[--primary]">
                                {item.quantity}x {item.pkg?.roast_batch?.green_coffee?.name || 'Produto'} ({item.pkg?.bean_format})
                              </div>
                            ))}
                         </td>
-                        <td className="p-3 text-xs text-[--secondary-text] capitalize">{s.payment_method}</td>
-                        <td className="p-3 text-right text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
-                        <td className="p-3 text-right">
+                        <td className="p-2 text-xs text-[--secondary-text] capitalize">{s.payment_method}</td>
+                        <td className="p-2   text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
+                        <td className="p-2  ">
                            <form action={deleteSale} className="flex items-center justify-end gap-2">
                               <input type="hidden" name="id" value={s.id} />
                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
