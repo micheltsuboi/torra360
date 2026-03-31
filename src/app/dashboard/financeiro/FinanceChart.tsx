@@ -17,8 +17,8 @@ export default function FinanceChart({ stats }: ChartProps) {
 
   return (
     <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 mb-8 max-w-6xl w-full">
-      <div className="p-3 px-5 border-b border-white/5 bg-black/40 card-texture-header flex justify-between items-center">
-         <h2 className="text-[10px] uppercase tracking-widest text-[--primary] font-serif font-bold">Resumo Financeiro (Fluxo)</h2>
+      <div className="p-3 px-5 border-b border-white/5 bg-black/40 wood-texture backdrop-blur-sm flex justify-between items-center">
+         <h2 className="text-[11px] uppercase tracking-widest text-[--primary] font-serif">Resumo Financeiro (Fluxo)</h2>
          <div className="flex gap-4 text-[9px] font-bold uppercase tracking-widest">
             <div className="flex items-center gap-1.5 opacity-60">
                <div className="w-2 h-2 rounded bg-[--success]" />

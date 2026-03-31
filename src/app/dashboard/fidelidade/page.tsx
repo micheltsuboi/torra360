@@ -21,10 +21,10 @@ export default async function FidelityPage() {
 
       {/* Relatório de Clientes */}
       <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 flex flex-col mt-4">
-        <div className="p-3 border-b border-[--card-border] card-texture-header bg-black/40 flex justify-between items-center">
+        <div className="p-3 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
            <div className="flex items-center gap-2">
              <UserCheck className="w-4 h-4 text-[--primary]" />
-             <h2 className="title-glow text-base text-[--primary] font-serif uppercase tracking-widest">Saldo de Cashback por Cliente</h2>
+             <h2 className="text-base text-[--primary] font-serif uppercase tracking-widest">Saldo de Cashback por Cliente</h2>
            </div>
         </div>
 

@@ -18,8 +18,8 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
       
       {/* 1. Faturamento Total */}
       <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--success] bg-black/20 text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/40">
-           <h3 className="text-[9px] uppercase tracking-widest text-[--success] font-serif font-bold">Faturamento Total</h3>
+        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
+           <h2 className="text-[11px] uppercase tracking-widest text-[--primary] font-serif">Faturamento Total</h2>
            <TrendingUp className="w-3 h-3 text-[--success] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--success]/5">
@@ -33,8 +33,8 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
 
       {/* 2. Custo de Produção */}
       <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/40">
-           <h3 className="text-[9px] uppercase tracking-widest text-[--primary] font-serif font-bold">Custos Operacionais</h3>
+        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
+           <h2 className="text-[11px] uppercase tracking-widest text-[--primary] font-serif">Custos Operacionais</h2>
            <Activity className="w-3 h-3 text-[--primary] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
@@ -47,8 +47,8 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
 
       {/* 3. Despesas Gerais */}
       <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--danger] bg-black/20 text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/40">
-           <h3 className="text-[9px] uppercase tracking-widest text-[--danger] font-serif font-bold">Gasto com Despesas</h3>
+        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
+           <h2 className="text-[11px] uppercase tracking-widest text-[--primary] font-serif">Gasto com Despesas</h2>
            <Receipt className="w-3 h-3 text-[--danger] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--danger]/5">
@@ -62,8 +62,8 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
 
       {/* 4. Lucro Real */}
       <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 shadow-2xl text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/60 shadow-xl">
-           <h3 className="text-[9px] uppercase tracking-widest text-[--primary] font-serif font-bold">Lucro Líquido Real</h3>
+        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/60 shadow-xl">
+           <h2 className="text-[11px] uppercase tracking-widest text-[--primary] font-serif">Lucro Líquido Real</h2>
            <Wallet className="w-3 h-3 text-[--primary] opacity-80" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-br from-transparent via-[--primary]/10 to-[--primary]/5 relative overflow-hidden">
