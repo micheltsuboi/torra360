@@ -56,39 +56,39 @@ export default async function CustosPage() {
                    </div>
                    {pkg.expense_package_items?.map((item: any) => (
                      <div key={item.id} className="flex justify-between items-center text-sm group/item border-b border-white/5 pb-1 last:border-0 hover:bg-white/5 transition-colors px-2 rounded py-1">
-                        <form action={updateExpenseItem} className="flex-1 flex justify-between items-center gap-2">
+                        <form action={updateExpenseItem} className="flex-1 flex items-center gap-3">
                            <input type="hidden" name="id" value={item.id} />
                            <input type="hidden" name="package_id" value={pkg.id} />
                            
                            <input 
                              name="name" 
                              defaultValue={item.name} 
-                             className="text-[--foreground] bg-transparent border-0 p-1 focus:ring-1 ring-[--primary]/20 rounded w-full text-xs font-medium focus:bg-black/40 transition-all"
+                             className="text-[--foreground] bg-transparent border-0 p-1 focus:ring-1 ring-[--primary]/20 rounded flex-1 min-w-0 text-xs font-medium focus:bg-black/40 transition-all"
                            />
                            
-                           <div className="flex items-center gap-2">
-                              <div className="relative flex items-center">
+                           <div className="flex items-center gap-1 shrink-0">
+                              <div className="relative flex items-center bg-black/20 px-1 rounded border border-white/5">
                                 <span className="text-[10px] text-[--secondary-text] mr-0.5 font-bold opacity-40">R$</span>
                                 <input 
                                   name="cost" 
                                   type="number" 
                                   step="0.01" 
                                   defaultValue={item.cost} 
-                                  className="font-mono text-xs text-[--foreground] bg-transparent border-0 p-1 w-16 text-right focus:ring-1 ring-[--primary]/20 rounded focus:bg-black/40 transition-all font-bold"
+                                  className="font-mono text-xs text-[--foreground] bg-transparent border-0 p-1 w-14 text-right focus:ring-0 rounded font-bold"
                                 />
                               </div>
 
-                              <button type="submit" title="Salvar Alteração" className="action-icon-btn text-[--success] !opacity-0 group-hover/item:!opacity-100 group-focus-within/item:!opacity-100">
-                                <Check className="action-icon" />
+                              <button type="submit" title="Salvar" className="action-icon-btn text-[--success] !opacity-0 group-hover/item:!opacity-100 group-focus-within/item:!opacity-100 p-1">
+                                <Check className="action-icon !w-3 !h-3" />
                               </button>
                            </div>
                         </form>
 
-                        <form action={removeExpenseItem} className="flex items-center ml-1">
+                        <form action={removeExpenseItem} className="flex items-center shrink-0">
                            <input type="hidden" name="id" value={item.id} />
                            <input type="hidden" name="package_id" value={pkg.id} />
-                           <button type="submit" className="action-icon-btn text-[--danger] !opacity-0 group-hover/item:!opacity-100">
-                             <Trash2 className="action-icon" />
+                           <button type="submit" className="action-icon-btn text-[--danger] !opacity-0 group-hover/item:!opacity-100 p-1">
+                             <Trash2 className="action-icon !w-3 !h-3" />
                            </button>
                         </form>
                      </div>

@@ -36,6 +36,7 @@ export async function createClientRecord(formData: FormData) {
   })
   
   revalidatePath('/dashboard/clientes')
+  return { success: true }
 }
 
 export async function deleteClientRecord(formData: FormData) {

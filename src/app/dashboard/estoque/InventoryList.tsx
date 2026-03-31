@@ -16,20 +16,28 @@ export default function InventoryList({ lots }: { lots: any[] }) {
   )
 
   return (
-    <div className="flex flex-col gap-2 mt-4">
-      <div className="glass-panel overflow-hidden">
-        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
-          <h2 className="font-serif text-xl">Estoque de Café Verde</h2>
-          <div className="relative max-w-xs w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--secondary-text] opacity-40" />
-            <input 
-              type="text"
-              placeholder="Buscar lote..."
-              className="!py-2 !pl-10 !pr-4 !text-xs w-full !bg-black/60"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="flex flex-col gap-6 mt-4">
+      {/* Barra de Busca Externa */}
+      <div className="flex flex-col md:flex-row justify-between items-center bg-black/20 p-3 rounded-xl border border-white/5 shadow-inner gap-4">
+        <div className="text-[--primary] font-serif flex items-center gap-2">
+          <Search className="w-5 h-5 opacity-40" />
+          <span className="text-lg">Filtros de Lotes</span>
+        </div>
+        <div className="relative max-w-md w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--secondary-text] opacity-40" />
+          <input 
+            type="text"
+            placeholder="Buscar por lote, origem, fornecedor..."
+            className="!py-3 !pl-10 !pr-4 !text-sm w-full !bg-black/60 !rounded-xl !border-white/10 focus:!border-[--primary]/50 transition-all font-sans"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
+        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
+          <h2 className="font-serif">Estoque de Café Verde</h2>
         </div>
         <div className="responsive-table-container">
           <table className="w-full border-collapse min-w-[1000px]">

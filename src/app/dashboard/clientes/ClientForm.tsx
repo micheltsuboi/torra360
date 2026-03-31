@@ -3,9 +3,16 @@
 import { useState } from 'react'
 import { createClientRecord } from './actions'
 
-export default function ClientForm() {
+export default function ClientForm({ onSuccess }: { onSuccess?: () => void }) {
   const [cpf, setCpf] = useState('')
   const [phone, setPhone] = useState('')
+
+  const handleSubmit = async (formData: FormData) => {
+    const result = await createClientRecord(formData)
+    if (result?.success && onSuccess) {
+      onSuccess()
+    }
+  }
 
   const handleCpfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value.replace(/\D/g, '')
@@ -38,7 +45,7 @@ export default function ClientForm() {
   }
 
   return (
-    <form action={createClientRecord} className="flex flex-col gap-2">
+    <form action={handleSubmit} className="flex flex-col gap-2">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="flex flex-col gap-1">
           <label className="text-xs text-[--secondary-text] capitalize">Nome *</label>

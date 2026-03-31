@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { createPDVSale } from './actions'
-import { ShoppingCart, User, Plus, Minus, Trash, Tag } from 'lucide-react'
+import { ShoppingCart, User, Plus, Minus, Trash, Trash2, Tag } from 'lucide-react'
 
 export default function PDVComponent({ clients, products }: { clients: any[], products: any[] }) {
   const [cart, setCart] = useState<any[]>([])
@@ -147,10 +147,10 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
                 
                 <button 
                   onClick={() => removeFromCart(item.id)} 
-                  className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all opacity-40 hover:opacity-100"
+                  className="action-icon-btn text-[--danger] !opacity-100"
                   title="Remover Item"
                 >
-                  <Trash className="w-5 h-5" />
+                  <Trash2 className="action-icon" />
                 </button>
               </div>
             </div>

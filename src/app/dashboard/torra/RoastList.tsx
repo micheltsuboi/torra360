@@ -14,20 +14,28 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
   )
 
   return (
-    <div className="flex flex-col gap-2 mt-4">
-      <div className="glass-panel overflow-hidden border-t-4 border-[--primary]/30 shadow-2xl">
-        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
-          <h2 className="font-serif text-[--primary] text-xl">Histórico de Produção Recente</h2>
-          <div className="relative max-w-xs w-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--secondary-text] opacity-40" />
-            <input 
-              type="text"
-              placeholder="Buscar produção..."
-              className="!py-2 !pl-10 !pr-4 !text-xs w-full !bg-black/60"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
+    <div className="flex flex-col gap-6 mt-4">
+      {/* Barra de Busca Externa */}
+      <div className="flex flex-col md:flex-row justify-between items-center bg-black/20 p-3 rounded-xl border border-white/5 shadow-inner gap-4">
+        <div className="text-[--primary] font-serif flex items-center gap-2">
+          <Search className="w-5 h-5 opacity-40" />
+          <span className="text-lg">Filtros de Produção</span>
+        </div>
+        <div className="relative max-w-md w-full">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--secondary-text] opacity-40" />
+          <input 
+            type="text"
+            placeholder="Buscar por café, lote ou data..."
+            className="!py-3 !pl-10 !pr-4 !text-sm w-full !bg-black/60 !rounded-xl !border-white/10 focus:!border-[--primary]/50 transition-all font-sans"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
+        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
+          <h2 className="font-serif text-[--primary]/80 text-sm tracking-widest uppercase">Histórico de Produção</h2>
         </div>
         
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
@@ -51,27 +59,27 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                     <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                       <td className="p-2 border-r border-white/5">
                         <div className="flex flex-col items-center">
-                          <span className="text-sm font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
-                          <span className="text-[9px] capitalize tracking-widest text-[--secondary-text]">Lote: #{r.id.slice(-6).toUpperCase()}</span>
+                          <span className="text-xs font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
+                          <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] opacity-40">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                         </div>
                       </td>
                       <td className="p-2">
                         <div className="flex flex-col items-center">
-                          <span className="text-base font-serif text-[--primary] font-medium">{r.green_coffee?.name || 'N/A'}</span>
-                          <span className="text-[10px] capitalize text-[--secondary-text]">{r.qty_before_kg}kg orig.</span>
+                          <span className="text-sm font-semibold text-[--primary]">{r.green_coffee?.name || 'N/A'}</span>
+                          <span className="text-[10px] capitalize text-[--secondary-text] opacity-60">{r.qty_before_kg}kg orig.</span>
                         </div>
                       </td>
                       <td className="p-2 text-center">
                         <div className="flex flex-col items-center">
-                          <div className={`text-xl font-serif font-bold ${yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}`}>
+                          <div className={`text-base font-bold ${yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}`}>
                             {yieldPerc?.toFixed(1)}%
                           </div>
-                          <span className="text-[9px] font-bold text-[--secondary-text] capitalize">{r.qty_after_kg.toFixed(2)}kg produzidos</span>
+                          <span className="text-[9px] font-bold text-[--secondary-text] opacity-40 capitalize tracking-tight">{r.qty_after_kg.toFixed(2)}kg produzidos</span>
                         </div>
                       </td>
                       <td className="p-2 text-center border-l border-white/5">
                         <div className="flex flex-col items-center">
-                          <span className="text-xl font-mono text-[--danger] font-bold opacity-80">{shrinkage.toFixed(1)}%</span>
+                          <span className="text-sm font-mono text-[--danger] font-bold opacity-80">{shrinkage.toFixed(1)}%</span>
                           <span className="text-[9px] font-bold opacity-30 capitalize tracking-tighter">Perda de umidade</span>
                         </div>
                       </td>
