@@ -15,18 +15,14 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
 
   return (
     <div className="flex flex-col gap-6 mt-4">
-      {/* Barra de Busca Externa */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-black/20 p-3 rounded-xl border border-white/5 shadow-inner gap-4">
-        <div className="text-[--primary] font-serif flex items-center gap-2">
-          <Search className="w-5 h-5 opacity-40" />
-          <span className="text-lg">Filtros de Produção</span>
-        </div>
-        <div className="relative max-w-md w-full">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--secondary-text] opacity-40" />
+      {/* Barra de Busca Externa - De fora a fora */}
+      <div className="flex items-center bg-black/20 p-2 rounded-xl border border-white/5 shadow-inner w-full">
+        <div className="relative w-full">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[--primary] opacity-60" />
           <input 
             type="text"
             placeholder="Buscar por café, lote ou data..."
-            className="!py-3 !pl-10 !pr-4 !text-sm w-full !bg-black/60 !rounded-xl !border-white/10 focus:!border-[--primary]/50 transition-all font-sans"
+            className="!py-3 !pl-12 !pr-4 !text-sm w-full !bg-black/60 !rounded-lg !border-white/10 focus:!border-[--primary]/50 transition-all font-sans"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -35,7 +31,7 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
 
       <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
         <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
-          <h2 className="font-serif text-[--primary]/80 text-sm tracking-widest uppercase">Histórico de Produção</h2>
+          <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Histórico de Produção</h2>
         </div>
         
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
