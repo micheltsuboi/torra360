@@ -27,7 +27,7 @@ export async function getPDVData() {
 export async function createPDVSale(payload: any) {
   const supabase = await createClient()
   
-  const { client_id, total_amount, discount_amount, final_amount, payment_method, items } = payload
+  const { client_id, total_amount, discount_amount, final_amount, payment_method, items, cashback_redeemed } = payload
 
   // Inserir Transacao Principal
   const { data: saleData, error: saleError } = await supabase.from('sale_transactions').insert({
@@ -58,6 +58,36 @@ export async function createPDVSale(payload: any) {
     console.error('Error inserting sale items:', itemsError)
   }
 
+  // LÓGICA DE FIDELIDADE (CASHBACK)
+  if (client_id) {
+    // 1. Registrar Resgate se houver
+    if (cashback_redeemed > 0) {
+      await supabase.from('loyalty_transactions').insert({
+        client_id,
+        sale_id: saleData.id,
+        amount: -cashback_redeemed,
+        transaction_type: 'REDEEMED',
+        description: `Resgate de cashback na venda #${saleData.id.slice(0,8)}`
+      })
+    }
+
+    // 2. Calcular e Registrar Ganho (Baseado na configuração do tenant)
+    const { data: settings } = await supabase.from('loyalty_settings').select('cashback_percentage, is_active').single()
+    
+    if (settings?.is_active) {
+       const earnedAmount = final_amount * (settings.cashback_percentage / 100)
+       if (earnedAmount > 0) {
+          await supabase.from('loyalty_transactions').insert({
+            client_id,
+            sale_id: saleData.id,
+            amount: earnedAmount,
+            transaction_type: 'EARNED',
+            description: `Cashback gerado na venda #${saleData.id.slice(0,8)}`
+          })
+       }
+    }
+  }
+
   // Atualizar Estoque de Pacotes (reduzir quantity_units)
   for (const item of items) {
     const { data: pkg } = await supabase.from('packaging_batches').select('quantity_units').eq('id', item.id).single()
@@ -70,7 +100,25 @@ export async function createPDVSale(payload: any) {
 
   revalidatePath('/dashboard/comercial')
   revalidatePath('/dashboard/pacotes')
+  revalidatePath('/dashboard/fidelidade')
   return { success: true }
+}
+
+export async function getClientLoyaltyBalance(clientId: string) {
+  const supabase = await createClient()
+  const { data } = await supabase
+    .from('loyalty_transactions')
+    .select('amount')
+    .eq('client_id', clientId)
+  
+  const balance = data?.reduce((acc, curr) => acc + curr.amount, 0) || 0
+  return balance
+}
+
+export async function getLoyaltySettings() {
+  const supabase = await createClient()
+  const { data } = await supabase.from('loyalty_settings').select('*').single()
+  return data
 }
 
 // ====== HISTÓRICO ======

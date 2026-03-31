@@ -1,15 +1,29 @@
 'use client'
 
-import { useState } from 'react'
-import { createPDVSale } from './actions'
-import { ShoppingCart, User, Plus, Minus, Trash, Trash2, Tag } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { createPDVSale, getClientLoyaltyBalance, getLoyaltySettings } from './actions'
+import { ShoppingCart, User, Plus, Minus, Trash, Trash2, Tag, MessageCircle, Gift } from 'lucide-react'
 
 export default function PDVComponent({ clients, products }: { clients: any[], products: any[] }) {
   const [cart, setCart] = useState<any[]>([])
   const [selectedClient, setSelectedClient] = useState('')
+  const [clientBalance, setClientBalance] = useState(0)
+  const [useCashback, setUseCashback] = useState(false)
+  const [loyaltySettings, setLoyaltySettings] = useState<any>(null)
   const [paymentMethod, setPaymentMethod] = useState('Pix')
   const [discountType, setDiscountType] = useState('valor') // 'valor' | '%'
   const [discountInput, setDiscountInput] = useState(0)
+
+  // Fetch client balance when selected
+  useEffect(() => {
+    if (selectedClient) {
+      getClientLoyaltyBalance(selectedClient).then(setClientBalance)
+      getLoyaltySettings().then(setLoyaltySettings)
+    } else {
+      setClientBalance(0)
+      setUseCashback(false)
+    }
+  }, [selectedClient])
 
   const addToCart = (product: any) => {
     setCart(prev => {
@@ -50,7 +64,9 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
     ? subtotal * (discountInput / 100) 
     : discountInput
     
-  const total = Math.max(0, subtotal - discountAmount)
+  const baseTotal = Math.max(0, subtotal - discountAmount)
+  const cashbackRedeemed = useCashback ? Math.min(baseTotal, clientBalance) : 0
+  const finalTotal = baseTotal - cashbackRedeemed
 
   const handleCheckout = async () => {
     if (cart.length === 0) return alert('O carrinho está vazio.')
@@ -59,7 +75,8 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
       client_id: selectedClient || null,
       total_amount: subtotal,
       discount_amount: discountAmount,
-      final_amount: total,
+      cashback_redeemed: cashbackRedeemed,
+      final_amount: finalTotal,
       payment_method: paymentMethod,
       items: cart
     }
@@ -70,10 +87,13 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
       setCart([])
       setDiscountInput(0)
       setSelectedClient('')
+      setUseCashback(false)
     } else {
       alert('Erro ao registrar venda: ' + error?.message)
     }
   }
+
+  const selectedClientData = clients.find(c => c.id === selectedClient)
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full h-full">
@@ -168,7 +188,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
         {/* Resumo Checkout */}
         <div className="p-2 border-t border-[--card-border] bg-black/40 flex flex-col gap-2">
           
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-center relative">
             <User className="w-4 h-4 text-[--secondary-text]" />
             <select 
               value={selectedClient} 
@@ -180,27 +200,54 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
                 <option key={c.id} value={c.id} className="bg-[#110D0B]">{c.name} {c.cpf ? `(${c.cpf})` : ''}</option>
               ))}
             </select>
+            {selectedClientData?.phone && (
+              <a 
+                href={`https://wa.me/55${selectedClientData.phone.replace(/\D/g, '')}`} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#25D366] hover:scale-125 transition-transform"
+                title="Abrir WhatsApp"
+              >
+                <MessageCircle className="w-5 h-5 fill-current" />
+              </a>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 border-t border-[--card-border]/30 pt-3">
-            <Tag className="w-4 h-4 text-[--secondary-text]" />
-            <span className="text-xs text-[--secondary-text]">Desconto:</span>
-            <select value={discountType} onChange={e => setDiscountType(e.target.value)} className="bg-transparent text-xs p-1 border border-[--card-border] rounded focus:outline-none">
-               <option value="valor" className="bg-[#110D0B]">R$</option>
-               <option value="%" className="bg-[#110D0B]">%</option>
-            </select>
-            <input 
-              type="number" 
-              value={discountInput || ''} 
-              onChange={e => setDiscountInput(parseFloat(e.target.value) || 0)} 
-              className="bg-black/20 text-sm p-1 border border-[--card-border] rounded w-20   focus:border-[--primary] outline-none" 
-              placeholder="0.00"
-            />
+          <div className="flex items-center gap-4 border-t border-[--card-border]/30 pt-3">
+            <div className="flex items-center gap-2">
+              <Tag className="w-4 h-4 text-[--secondary-text]" />
+              <span className="text-xs text-[--secondary-text]">Desconto:</span>
+              <select value={discountType} onChange={e => setDiscountType(e.target.value)} className="bg-transparent text-xs p-1 border border-[--card-border] rounded focus:outline-none">
+                 <option value="valor" className="bg-[#110D0B]">R$</option>
+                 <option value="%" className="bg-[#110D0B]">%</option>
+              </select>
+              <input 
+                type="number" 
+                value={discountInput || ''} 
+                onChange={e => setDiscountInput(parseFloat(e.target.value) || 0)} 
+                className="bg-black/20 text-sm p-1 border border-[--card-border] rounded w-20 focus:border-[--primary] outline-none" 
+                placeholder="0.00"
+              />
+            </div>
+
+            {/* Cashback Checkbox */}
+            {clientBalance > 0 && (
+              <div className="flex items-center gap-2 ml-auto bg-[--primary]/10 px-2 py-1 rounded border border-[--primary]/20">
+                <Gift className="w-3 h-3 text-[--primary]" />
+                <span className="text-[10px] font-bold text-[--primary] uppercase tracking-tighter">Resgatar R$ {clientBalance.toFixed(2)}?</span>
+                <input 
+                  type="checkbox" 
+                  checked={useCashback} 
+                  onChange={e => setUseCashback(e.target.checked)}
+                  className="accent-[--primary]"
+                />
+              </div>
+            )}
           </div>
 
           <div className="flex justify-between items-center text-sm pt-2">
             <span className="text-[--secondary-text]">Método Pgto:</span>
-            <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="bg-transparent text-sm p-1 py-0 font-bold border-0 text-[--primary]   outline-none cursor-pointer focus:ring-0">
+            <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="bg-transparent text-sm p-1 py-0 font-bold border-0 text-[--primary] outline-none cursor-pointer focus:ring-0">
                <option value="Pix" className="bg-[#110D0B]">Pix</option>
                <option value="Crédito" className="bg-[#110D0B]">Cartão de Crédito</option>
                <option value="Débito" className="bg-[#110D0B]">Cartão de Débito</option>
@@ -212,10 +259,18 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             <div className="text-[--secondary-text] text-sm flex flex-col">
               <span>Subtotal: R$ {subtotal.toFixed(2)}</span>
               {discountAmount > 0 && <span className="text-[--danger] text-xs">Desconto: - R$ {discountAmount.toFixed(2)}</span>}
+              {cashbackRedeemed > 0 && <span className="text-[--primary] text-xs font-bold">Cashback: - R$ {cashbackRedeemed.toFixed(2)}</span>}
             </div>
-            <div className=" ">
-              <span className="text-xs text-[--secondary-text] block">Total</span>
-              <span className="text-2xl font-bold text-[--success]">R$ {total.toFixed(2)}</span>
+            <div className="flex flex-col items-end">
+              <div className="flex flex-col items-end mr-4">
+                 <span className="text-[10px] text-[--success] font-bold uppercase tracking-tighter">
+                   + Ganha: R$ {(finalTotal * (loyaltySettings?.cashback_percentage / 100 || 0)).toFixed(2)} cashback
+                 </span>
+              </div>
+              <div className="text-right">
+                <span className="text-xs text-[--secondary-text] block">Total</span>
+                <span className="text-2xl font-bold text-[--success]">R$ {finalTotal.toFixed(2)}</span>
+              </div>
             </div>
           </div>
 

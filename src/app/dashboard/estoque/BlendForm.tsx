@@ -113,8 +113,8 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                     </div>
 
                     {/* Quantidade e Controles */}
-                    <div className="flex items-center gap-2 w-full md:w-auto">
-                      <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3 w-full md:w-auto">
+                      <div className="flex items-center gap-3">
                         <button 
                           type="button"
                           onClick={() => updateComponent(index, 'qty', Math.max(0, (comp.qty || 0) - 1))}
@@ -123,17 +123,17 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                           <Minus className="w-4 h-4" />
                         </button>
                         
-                        <div className="w-20 relative">
+                        <div className="w-24 relative shrink-0">
                           <input 
                             type="number" 
                             step="0.01"
                             value={comp.qty || ''}
                             onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value) || 0)}
                             placeholder="0.0"
-                            className="bg-black/60 border-white/10 text-center text-sm w-full p-2 rounded-lg"
+                            className="bg-black/60 border-white/10 text-center text-sm w-full p-2 pr-8 rounded-lg"
                             required
                           />
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[--primary] font-bold opacity-40">KG</span>
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[--primary] font-bold opacity-40 select-none">KG</span>
                         </div>
 
                         <button 

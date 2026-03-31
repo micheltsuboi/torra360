@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Trash2, Search } from 'lucide-react'
+import { Pencil, Trash2, Search, MessageCircle } from 'lucide-react'
 import { deleteClientRecord } from './actions'
 
 export default function ClientList({ clients }: { clients: any[] }) {
@@ -52,7 +52,22 @@ export default function ClientList({ clients }: { clients: any[] }) {
                   <tr key={client.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
                     <td className="p-2 font-medium text-[--primary]">{client.name}</td>
                     <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
-                    <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
+                    <td className="p-2 text-[--secondary-text] whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        {client.phone || '-'}
+                        {client.phone && (
+                          <a 
+                            href={`https://wa.me/55${client.phone.replace(/\D/g, '')}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-[#25D366] hover:scale-110 transition-transform"
+                            title="Abrir WhatsApp"
+                          >
+                            <MessageCircle className="w-4 h-4 fill-current opacity-80" />
+                          </a>
+                        )}
+                      </div>
+                    </td>
                     <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
                     <td className="p-2 flex items-center justify-center gap-2">
                       <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">

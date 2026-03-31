@@ -13,7 +13,9 @@ import {
   ChevronDown,
   LayoutDashboard,
   Users,
-  Coins
+  Coins,
+  BarChart3,
+  Star
 } from 'lucide-react'
 
 export default async function DashboardLayout({
@@ -40,7 +42,7 @@ export default async function DashboardLayout({
           <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">Torra 360</span>
         </div>
 
-        <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text]">
+        <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
           {/* Dashboard Item */}
           <a href="/dashboard" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
             <LayoutDashboard className="w-5 h-5 opacity-80" />
@@ -66,10 +68,20 @@ export default async function DashboardLayout({
             <TrendingUp className="w-5 h-5 opacity-80" />
             <span className="hidden lg:block text-sm font-medium">Comercial</span>
           </a>
+          {/* Financeiro */}
+          <a href="/dashboard/financeiro" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
+            <BarChart3 className="w-5 h-5 opacity-80" />
+            <span className="hidden lg:block text-sm font-medium">Financeiro</span>
+          </a>
           {/* Clientes */}
           <a href="/dashboard/clientes" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
             <Users className="w-5 h-5 opacity-80" />
             <span className="hidden lg:block text-sm font-medium">Clientes</span>
+          </a>
+          {/* Fidelidade */}
+          <a href="/dashboard/fidelidade" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
+            <Star className="w-5 h-5 opacity-80" />
+            <span className="hidden lg:block text-sm font-medium">Fidelidade</span>
           </a>
           {/* Custos */}
           <a href="/dashboard/custos" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
