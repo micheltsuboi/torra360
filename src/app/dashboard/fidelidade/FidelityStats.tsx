@@ -22,7 +22,7 @@ export default function FidelityStats({ stats }: { stats: Stats }) {
              <Star className="w-4 h-4 text-[--success] opacity-60" />
           </div>
           <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--success]/5">
-             <span className="text-2xl font-serif text-[--success] title-glow uppercase">R$ {stats.totalEarned.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+             <span className="text-2xl font-serif text-[--success] title-glow">R$ {stats.totalEarned.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
              <p className="text-[9px] text-[--secondary-text] mt-1 font-bold opacity-40 uppercase tracking-tighter text-center">Acumulado não expirado</p>
           </div>
         </div>
@@ -34,7 +34,7 @@ export default function FidelityStats({ stats }: { stats: Stats }) {
              <Gift className="w-4 h-4 text-[--primary] opacity-60" />
           </div>
           <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
-             <span className="text-2xl font-serif text-[--foreground] title-glow uppercase">R$ {stats.activeBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+             <span className="text-2xl font-serif text-[--foreground] title-glow">R$ {stats.activeBalance.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
              <p className="text-[9px] text-[--secondary-text] mt-1 font-bold opacity-40 uppercase tracking-tighter text-center">Pronto para resgate</p>
           </div>
         </div>

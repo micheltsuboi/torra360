@@ -1,5 +1,6 @@
 import { getFinancialStats, getRecentTransactions, getExpensesList } from './actions'
 import FinanceStats from './FinanceStats'
+import FinanceChart from './FinanceChart'
 import { Wallet, Receipt, ArrowRight, TrendingUp } from 'lucide-react'
 
 export default async function FinancePage() {
@@ -13,16 +14,19 @@ export default async function FinancePage() {
       <div className="flex justify-between items-end border-b border-white/5 pb-6">
         <div>
            <h1 className="text-3xl font-serif text-[--foreground]">Gestão Financeira</h1>
-           <p className="text-[--secondary-text] mt-1">Visão completa de faturamento, custos e lucratividade real.</p>
+           <p className="text-[--secondary-text] mt-1 text-sm opacity-60">Visão completa de faturamento, custos e lucratividade real.</p>
         </div>
         <div className="flex gap-4">
-           <button className="bg-black/40 px-4 py-2 rounded-lg border border-white/5 text-[--secondary-text] text-xs hover:bg-black/60 transition-all">Exportar PDF</button>
-           <button className="golden-btn px-4 py-2 text-xs">Nova Despesa</button>
+           <button className="bg-black/40 px-4 py-2 rounded-lg border border-white/5 text-[--secondary-text] text-[10px] uppercase tracking-widest font-bold hover:bg-black/60 transition-all">Exportar PDF</button>
+           <button className="golden-btn px-4 py-2 text-[10px] uppercase tracking-widest font-bold">Nova Despesa</button>
         </div>
       </div>
 
       {/* Cards de Métricas */}
       <FinanceStats stats={stats} />
+
+      {/* Gráfico Visual */}
+      <FinanceChart stats={stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         
