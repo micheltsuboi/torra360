@@ -38,9 +38,9 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
           <table className="w-full border-collapse min-w-[700px]">
             <thead>
               <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                <th className="p-2 font-bold border-r border-white/5">Data da Torra</th>
-                <th className="p-2 font-bold">Lote Base (Café Verde)</th>
-                <th className="p-2 font-bold text-center">Rendimento Final</th>
+                <th className="p-2 font-bold">Data da Torra</th>
+                <th className="p-2 font-bold border-l border-white/5">Lote Base (Café Verde)</th>
+                <th className="p-2 font-bold text-center border-l border-white/5">Rendimento Final</th>
                 <th className="p-2 font-bold text-center border-l border-white/5">Quebra (%)</th>
                 <th className="p-2 font-bold border-l border-white/5">Ações</th>
               </tr>
@@ -53,19 +53,19 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                   
                   return (
                     <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
-                      <td className="p-2 border-r border-white/5">
+                      <td className="p-2">
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
                           <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] opacity-40">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                         </div>
                       </td>
-                      <td className="p-2">
+                      <td className="p-2 border-l border-white/5">
                         <div className="flex flex-col items-center">
                           <span className="text-sm font-semibold text-[--primary]">{r.green_coffee?.name || 'N/A'}</span>
                           <span className="text-[10px] capitalize text-[--secondary-text] opacity-60">{r.qty_before_kg}kg orig.</span>
                         </div>
                       </td>
-                      <td className="p-2 text-center">
+                      <td className="p-2 text-center border-l border-white/5">
                         <div className="flex flex-col items-center">
                           <div className={`text-base font-bold ${yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}`}>
                             {yieldPerc?.toFixed(1)}%
