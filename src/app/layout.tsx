@@ -13,8 +13,8 @@ export const metadata: Metadata = {
   description: 'Sistema Multitenant de Torrefação Premium',
   manifest: '/manifest.json',
   icons: {
-    icon: '/icon.png',
-    apple: '/apple-touch-icon.png',
+    icon: '/favicon.ico',
+    apple: '/icon.png',
   },
   themeColor: '#c39967',
   appleWebApp: {
