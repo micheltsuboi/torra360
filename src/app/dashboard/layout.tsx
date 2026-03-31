@@ -36,24 +36,18 @@ export default async function DashboardLayout({
       {/* Sidebar Lateral */}
       <aside className="w-20 lg:w-64 flex flex-col items-center lg:items-start p-2 bg-black/10 backdrop-blur-sm relative z-20">
         <div className="flex items-center gap-3 w-full mb-10 mt-2 px-2 cursor-pointer group h-10">
-          {/* Mobile Icon Only */}
-          <div className="lg:hidden shrink-0 transition-transform group-hover:scale-110 duration-500">
-             <img 
-               src="/icon.png" 
-               alt="Icon" 
-               width="36"
-               height="36"
-               className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(195,153,103,0.3)] branding-logo" 
-             />
-          </div>
-          {/* Desktop Full Logo Only */}
-          <div className="hidden lg:block h-full transition-transform group-hover:scale-105 duration-500">
-             <img 
-               src="/logo-full.png" 
-               alt="Torra 360" 
-               className="h-full w-auto object-contain brightness-125 drop-shadow-md branding-logo" 
-             />
-          </div>
+          <img 
+            src="/icon.png" 
+            alt="Icon" 
+            width="36"
+            height="36"
+            className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(195,153,103,0.3)] branding-icon-only" 
+          />
+          <img 
+            src="/logo-full.png" 
+            alt="Torra 360" 
+            className="h-full w-auto object-contain brightness-125 drop-shadow-md branding-logo-full" 
+          />
         </div>
 
         <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">

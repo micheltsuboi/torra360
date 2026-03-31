@@ -20,11 +20,19 @@
   --radius: 12px;
 }
 
-/* Global Branding Reset to prevent "enormous" logos before hydration */
-.branding-logo {
-  max-width: 100% !important;
-  height: auto !important;
+/* Branding Visibility Rules */
+.branding-icon-only {
   display: block;
+}
+.branding-logo-full {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .branding-icon-only { display: none !important; }
+}
+@media (max-width: 1023px) {
+  .branding-logo-full { display: none !important; }
 }
 
 html, body {
