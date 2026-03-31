@@ -43,13 +43,15 @@ export async function createRoastBatch(formData: FormData) {
   const date = formData.get('date') as string
   const qty_before_kg = parseFloat(formData.get('qty_before_kg') as string)
   const qty_after_kg = parseFloat(formData.get('qty_after_kg') as string)
+  const operational_cost = parseFloat(formData.get('operational_cost') as string) || 4.00
 
   // 1. Inserir a Torra
   const { error: insertError } = await supabase.from('roast_batches').insert({
     green_coffee_id,
     date,
     qty_before_kg,
-    qty_after_kg
+    qty_after_kg,
+    operational_cost
   });
 
   if (insertError) {

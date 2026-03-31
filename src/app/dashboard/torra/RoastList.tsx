@@ -42,6 +42,7 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                 <th className="p-2 font-bold border-l border-white/5">Lote Base (Café Verde)</th>
                 <th className="p-2 font-bold text-center border-l border-white/5">Rendimento Final</th>
                 <th className="p-2 font-bold text-center border-l border-white/5">Quebra (%)</th>
+                <th className="p-2 font-bold border-l border-white/5 bg-[--primary]/5">Custo Torrado</th>
                 <th className="p-2 font-bold border-l border-white/5">Ações</th>
               </tr>
             </thead>
@@ -61,7 +62,7 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                       </td>
                       <td className="p-2 border-l border-white/5">
                         <div className="flex flex-col items-center">
-                          <span className="text-sm font-semibold text-[--primary]">{r.green_coffee?.name || 'N/A'}</span>
+                          <span className="text-sm font-semibold text-[--primary]">{r.green_coffee?.name || r.green_coffee_name || 'N/A'}</span>
                           <span className="text-[10px] capitalize text-[--secondary-text] opacity-60">{r.qty_before_kg}kg orig.</span>
                         </div>
                       </td>
@@ -77,6 +78,12 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                         <div className="flex flex-col items-center">
                           <span className="text-sm font-mono text-[--danger] font-bold opacity-80">{shrinkage.toFixed(1)}%</span>
                           <span className="text-[9px] font-bold opacity-30 capitalize tracking-tighter">Perda de umidade</span>
+                        </div>
+                      </td>
+                      <td className="p-2 border-l border-white/5 bg-[--primary]/5">
+                        <div className="flex flex-col items-center">
+                          <span className="text-sm font-bold text-[--primary]">R$ {r.total_roast_cost?.toFixed(2) || '0.00'}</span>
+                          <span className="text-[9px] font-bold opacity-40 uppercase">R$ {r.cost_per_kg_roasted?.toFixed(2) || '0.00'}/kg</span>
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
