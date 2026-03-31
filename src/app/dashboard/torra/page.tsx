@@ -1,6 +1,8 @@
 import { getRoastBatches, getAvailableGreenLots, createRoastBatch, deleteRoastBatch } from './actions'
 import { Pencil, Trash2, Flame } from 'lucide-react'
 
+export const dynamic = 'force-dynamic'
+
 export default async function TorraPage() {
   const greenLots = await getAvailableGreenLots()
   const roastBatches = await getRoastBatches()

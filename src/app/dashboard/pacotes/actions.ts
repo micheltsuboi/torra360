@@ -5,13 +5,20 @@ import { revalidatePath } from 'next/cache'
 
 export async function getRoastBatchesAvailable() {
   const supabase = await createClient()
-  // Pega apenas lotes que têm qty_after_kg > 0 (simplificado, ideal é tracking the consumed pkg kg)
-  // Como as tabelas básicas estão feitas, faremos a chamada principal.
-  const { data } = await supabase
+  
+  // Buscamos os lotes de torra. Idealmente usaríamos a view, mas para a seleção 
+  // no formulário de embalamento, a tabela base com o nome do café verde já resolve.
+  const { data, error } = await supabase
     .from('roast_batches')
     .select('id, date, qty_after_kg, green_coffee(name)')
     .order('date', { ascending: false })
-    .limit(30)
+    .limit(50)
+
+  if (error) {
+    console.error('Error fetching roast batches for packaging:', error)
+    return []
+  }
+
   return data || []
 }
 

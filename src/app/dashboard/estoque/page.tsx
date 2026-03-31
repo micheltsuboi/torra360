@@ -3,6 +3,8 @@ import { Pencil, Trash2, Box, Beaker } from 'lucide-react'
 import { getCoffeeTypes, getQualityLevels, getProviders, getOrigins } from '../parametros/actions'
 import BlendForm from './BlendForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function EstoquePage() {
   const lots = await getGreenCoffeeLots()
   const coffeeTypes = await getCoffeeTypes()
