@@ -369,3 +369,106 @@ button.secondary-btn:hover {
 
 .danger-bg { background-color: rgba(128, 61, 61, 0.1); }
 .danger-border { border-color: rgba(128, 61, 61, 0.2); }
+
+/* Premium Quantity Buttons */
+.qty-btn-premium {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--card-border);
+  color: var(--primary);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.qty-btn-premium:hover {
+  background: var(--primary);
+  color: var(--secondary);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(195, 153, 103, 0.3);
+}
+
+.qty-btn-premium:active {
+  transform: scale(0.95);
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-container {
+  background: var(--background);
+  background-image: var(--wood-texture);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  width: 95%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Typography Refinement */
+.data-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--secondary-text);
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.data-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Responsive Table/Card utility */
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .mobile-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .mobile-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem;
+  }
+}

@@ -118,27 +118,50 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
         </div>
         
         {/* Lista Carrinho */}
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-3 min-h-[200px]">
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 min-h-[300px] scrollbar-thin scrollbar-thumb-[--primary]/20">
           {cart.map(item => (
-            <div key={item.id} className="flex items-center justify-between border-b border-[--card-border]/40 pb-3">
-              <div className="flex flex-col flex-1">
-                <span className="text-sm font-medium">{item.name}</span>
-                <span className="text-xs text-[--primary]">R$ {item.price.toFixed(2)}</span>
+            <div key={item.id} className="flex items-center justify-between border-b border-white/5 pb-4 group/cartitem">
+              <div className="flex flex-col flex-1 pr-4">
+                <span className="text-sm font-medium text-[--foreground] group-hover/cartitem:text-[--primary] transition-colors line-clamp-2 leading-tight mb-1">{item.name}</span>
+                <span className="text-xs font-bold text-[--primary] opacity-80">R$ {item.price.toFixed(2)} / unid</span>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="flex bg-black/40 rounded border border-[--card-border] items-center">
-                  <button onClick={() => updateQty(item.id, -1)} className="p-1 hover:text-[--primary]"><Minus className="w-3 h-3" /></button>
-                  <span className="text-sm w-6 text-center">{item.qty}</span>
-                  <button onClick={() => updateQty(item.id, 1)} className="p-1 hover:text-[--primary]"><Plus className="w-3 h-3" /></button>
+              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 bg-black/40 p-1.5 rounded-full border border-white/5 shadow-inner">
+                  <button 
+                    onClick={() => updateQty(item.id, -1)} 
+                    className="qty-btn-premium w-7 h-7 flex items-center justify-center text-[--foreground] hover:bg-[--danger]/20 hover:text-[--danger]"
+                  >
+                    <Minus className="w-3 h-3" />
+                  </button>
+                  
+                  <span className="text-sm font-bold font-mono w-4 text-center text-[--primary]">{item.qty}</span>
+                  
+                  <button 
+                    onClick={() => updateQty(item.id, 1)} 
+                    className="qty-btn-premium w-7 h-7 flex items-center justify-center text-[--foreground] hover:bg-[--success]/20 hover:text-[--success]"
+                  >
+                    <Plus className="w-3 h-3" />
+                  </button>
                 </div>
-                <button onClick={() => removeFromCart(item.id)} className="text-[--danger] hover:opacity-70 p-1">
-                  <Trash className="w-4 h-4" />
+                
+                <button 
+                  onClick={() => removeFromCart(item.id)} 
+                  className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all opacity-40 hover:opacity-100"
+                  title="Remover Item"
+                >
+                  <Trash className="w-5 h-5" />
                 </button>
               </div>
             </div>
           ))}
           {cart.length === 0 && (
-            <div className="m-auto text-center text-xs text-[--secondary-text]">Adicione produtos ao carrinho clicando na vitrine física ao lado.</div>
+            <div className="m-auto text-center flex flex-col items-center gap-4 py-10">
+              <ShoppingCart className="w-12 h-12 text-[--primary] opacity-10" />
+              <p className="text-xs text-[--secondary-text] leading-relaxed max-w-[150px] opacity-40">
+                O carrinho está vazio. Selecione produtos na vitrine ao lado.
+              </p>
+            </div>
           )}
         </div>
 

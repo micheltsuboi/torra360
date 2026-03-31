@@ -1,7 +1,7 @@
 import { getRoastBatchesAvailable, getPackages, createPackages, deletePackage } from './actions'
 import { getExpensePackages } from '../custos/actions'
 import PackageList from './PackageList'
-import { ShoppingBag } from 'lucide-react'
+import PacotesHeader from './PacotesHeader'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,122 +10,31 @@ export default async function PacotesPage() {
   const packages = await getPackages()
   const expensePackages = await getExpensePackages()
 
-  // Reusable icon for accordions
-  const ChevronIcon = () => (
-    <span className="transition duration-300 group-open:rotate-180 text-[--primary]">
-      <svg fill="none" height="20" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="20">
-        <path d="M6 9l6 6 6-6"></path>
-      </svg>
-    </span>
-  )
-
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-8 text-foreground">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>
           <h1 className="text-3xl font-serif text-[--foreground]">Embalamento de Café</h1>
-          <p className="text-[--secondary-text] mt-1">Geração de pacotes a partir de Lotes Torrados</p>
+          <p className="text-[--secondary-text] mt-1 italic opacity-60">Geração de pacotes a partir de lotes torrados e integração de custos.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-        
-        {/* Formulário de Pacotes */}
-        <div className="flex flex-col gap-4">
-          <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
-            <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
-              <div className="flex items-center gap-2">
-                <ShoppingBag className="w-5 h-5" />
-                <span>Registrar Embalamento</span>
-              </div>
-              <ChevronIcon />
-            </summary>
-            <div className="p-6 border-t border-[--card-border]">
-              <form action={createPackages} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-[--secondary-text] uppercase">Data</label>
-              <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} />
-            </div>
+      <PacotesHeader roasts={roasts} expensePackages={expensePackages} />
 
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-[--secondary-text] uppercase">Lote Torrado Original</label>
-              <select name="roast_batch_id" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                <option value="">Selecione um Lote...</option>
-                {roasts.map((r: any) => (
-                  <option key={r.id} value={r.id}>
-                    {r.green_coffee?.name} • Torrado: {new Date(r.date).toLocaleDateString()} ({r.qty_after_kg}kg disp.)
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Formato do Café</label>
-                <select name="bean_format" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                  <option value="Grãos Inteiros">Grãos Inteiros</option>
-                  <option value="Café Moído">Café Moído</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Tamanho Pct (g)</label>
-                <select name="package_size_g" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                  <option value="250">250g</option>
-                  <option value="500">500g</option>
-                  <option value="1000">1kg</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Qtd de Pacotes</label>
-                <input name="quantity_units" type="number" min="1" placeholder="Ex: 50" required />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Valor de Venda (R$)</label>
-                <input name="retail_price" type="number" step="0.01" min="0" placeholder="Ex: 45.90" required />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1 mt-2">
-              <label className="text-xs text-[--secondary-text] uppercase">Pacote de Despesas (Custo)</label>
-              <select name="expense_package_id" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
-                <option value="">Nenhum custo adicional</option>
-                {expensePackages.map((ep: any) => (
-                  <option key={ep.id} value={ep.id}>
-                    {ep.name} (R$ {ep.total_cost.toFixed(2)})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mt-4 pt-4 border-t border-[--card-border] text-xs text-[--secondary-text]">
-               Cálculo da conversão de rendimentos (Pacotes Finais e Retorno Bruto Estimado) atualizado agora nesta tabela.
-            </div>
-
-            <button type="submit" className="primary-btn mt-2">Registrar Produção</button>
-          </form>
+      {/* Histórico / Relatório de Pacotes */}
+      <div className="flex flex-col gap-4 mt-4">
+        <div className="glass-panel overflow-hidden border-t-4 border-[--primary] shadow-2xl">
+           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
+            <h2 className="font-serif text-[--primary] text-xl">Estoque Disponível / Produtos Finais</h2>
+           </div>
+           
+           <PackageList 
+              packages={packages} 
+              roasts={roasts} 
+              expensePackages={expensePackages} 
+           />
         </div>
-      </details>
-    </div>
-
-        {/* Histórico / Relatório de Pacotes */}
-        <div className="xl:col-span-2 flex flex-col gap-4">
-          <div className="glass-panel overflow-hidden border-t-4 border-[--primary]">
-             <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
-              <h2 className="font-serif text-[--primary] text-xl">Estoque de Venda / Produtos</h2>
-             </div>
-             
-             <PackageList 
-                packages={packages} 
-                roasts={roasts} 
-                expensePackages={expensePackages} 
-             />
-          </div>
-        </div>
-
       </div>
     </div>
   )

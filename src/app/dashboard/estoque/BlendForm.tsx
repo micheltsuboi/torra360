@@ -10,7 +10,7 @@ interface Lot {
   available_qty_kg: number
 }
 
-export default function BlendForm({ lots }: { lots: Lot[] }) {
+export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplete?: () => void }) {
   const [name, setName] = useState('')
   const [components, setComponents] = useState<{ lotId: string, qty: number }[]>([
     { lotId: '', qty: 0 }
@@ -52,8 +52,12 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
       const result = await createBlend({ name, components })
       if (result.success) {
         setMessage({ type: 'success', text: 'Blend criado com sucesso!' })
-        setName('')
-        setComponents([{ lotId: '', qty: 0 }])
+        if (onComplete) {
+           setTimeout(() => onComplete(), 1000)
+        } else {
+          setName('')
+          setComponents([{ lotId: '', qty: 0 }])
+        }
       } else {
         setMessage({ type: 'error', text: result.error || 'Erro ao criar blend.' })
       }
@@ -65,131 +69,135 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
   }
 
   return (
-    <div className="p-6 h-fit bg-black/20">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <div className="flex flex-col gap-1">
-          <label className="text-xs text-[--secondary-text] uppercase font-bold">Nome do Novo Blend</label>
+    <div className="flex flex-col gap-6">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="data-label">Nome do Novo Blend comercial</label>
           <input 
             value={name}
             onChange={(e) => setName(e.target.value)}
             type="text" 
             placeholder="Ex: Blend Especial de Inverno" 
             required 
-            className="bg-black/40 border-[--card-border]"
+            className="text-lg bg-black/40 border-[--card-border]"
           />
         </div>
 
-        <div className="flex flex-col gap-3 mt-2">
-          <label className="text-xs text-[--secondary-text] uppercase font-bold">Composição do Blend</label>
+        <div className="flex flex-col gap-4">
+          <label className="data-label">Composição dos Grãos</label>
           
-          {components.map((comp, index) => {
-            const percentage = totalQty > 0 ? ((comp.qty / totalQty) * 100).toFixed(1) : '0'
-            const selectedLot = lots.find(l => l.id === comp.lotId)
-            
-            return (
-              <div key={index} className="flex flex-col gap-2 p-4 rounded-lg bg-black/40 border border-[--card-border]/30 relative transition-all hover:border-[--primary]/40 shadow-lg group">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-                  
-                  {/* Select Lote */}
-                  <div className="md:col-span-6 flex flex-col gap-1">
-                    <select 
-                      value={comp.lotId}
-                      onChange={(e) => updateComponent(index, 'lotId', e.target.value)}
-                      className="bg-black/60 text-sm border-white/10 w-full"
-                      required
-                    >
-                      <option value="">Selecionar Lote...</option>
-                      {availableLots.map(l => (
-                        <option key={l.id} value={l.id}>
-                          {l.name} ({l.available_qty_kg}kg)
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {/* Quantidade e Controles */}
-                  <div className="md:col-span-5 flex items-center gap-3">
-                    <div className="flex items-center bg-black/40 rounded border border-white/10 p-1 flex-1">
-                      <button 
-                        type="button"
-                        onClick={() => updateComponent(index, 'qty', Math.max(0, (comp.qty || 0) - 1))}
-                        className="p-1 hover:text-[--primary] transition-colors"
+          <div className="flex flex-col gap-3">
+            {components.map((comp, index) => {
+              const percentage = totalQty > 0 ? ((comp.qty / totalQty) * 100).toFixed(1) : '0'
+              const selectedLot = lots.find(l => l.id === comp.lotId)
+              
+              return (
+                <div key={index} className="flex flex-col gap-3 p-4 rounded-xl bg-black/40 border border-[--card-border]/30 relative transition-all hover:bg-black/60 shadow-xl group">
+                  <div className="flex flex-col md:flex-row gap-4 items-center">
+                    
+                    {/* Select Lote */}
+                    <div className="flex-1 w-full">
+                      <select 
+                        value={comp.lotId}
+                        onChange={(e) => updateComponent(index, 'lotId', e.target.value)}
+                        className="bg-black/60 text-sm border-white/10 w-full"
+                        required
                       >
-                        <Minus className="w-5 h-5" />
-                      </button>
-                      <div className="flex-1">
-                        <input 
-                          type="number" 
-                          step="0.01"
-                          value={comp.qty || ''}
-                          onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value) || 0)}
-                          placeholder="kg"
-                          className="bg-transparent border-none text-center text-sm w-full focus:ring-0 p-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                          required
-                        />
+                        <option value="">Selecionar Lote...</option>
+                        {availableLots.map(l => (
+                          <option key={l.id} value={l.id}>
+                            {l.name} ({l.available_qty_kg}kg)
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Quantidade e Controles */}
+                    <div className="flex items-center gap-4 w-full md:w-auto">
+                      <div className="flex items-center gap-2">
+                        <button 
+                          type="button"
+                          onClick={() => updateComponent(index, 'qty', Math.max(0, (comp.qty || 0) - 1))}
+                          className="qty-btn-premium"
+                        >
+                          <Minus className="w-4 h-4" />
+                        </button>
+                        
+                        <div className="w-20 relative">
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            value={comp.qty || ''}
+                            onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value) || 0)}
+                            placeholder="0.0"
+                            className="bg-black/60 border-white/10 text-center text-sm w-full p-2 rounded-lg"
+                            required
+                          />
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[--primary] font-bold opacity-40">KG</span>
+                        </div>
+
+                        <button 
+                          type="button"
+                          onClick={() => updateComponent(index, 'qty', (comp.qty || 0) + 1)}
+                          className="qty-btn-premium"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
                       </div>
-                      <button 
-                        type="button"
-                        onClick={() => updateComponent(index, 'qty', (comp.qty || 0) + 1)}
-                        className="p-1 hover:text-[--primary] transition-colors"
-                      >
-                        <Plus className="w-5 h-5" />
-                      </button>
-                    </div>
-                    <div className="w-16 text-right font-mono text-[--primary] text-sm font-bold">
-                      {percentage}%
-                    </div>
-                  </div>
 
-                  {/* Lixeira */}
-                  <div className="md:col-span-1 flex justify-end">
-                    {components.length > 1 && (
-                      <button 
-                        type="button"
-                        onClick={() => removeComponent(index)}
-                        className="action-icon-btn text-[--danger] hover:scale-110 transition-transform p-2"
-                        title="Remover Item"
-                      >
-                        <Trash2 className="w-5 h-5" />
-                      </button>
-                    )}
+                      <div className="min-w-[60px] text-right font-mono text-[--primary] text-sm font-bold bg-[--primary]/10 px-2 py-1 rounded">
+                        {percentage}%
+                      </div>
+
+                      {/* Lixeira */}
+                      {components.length > 1 && (
+                        <button 
+                          type="button"
+                          onClick={() => removeComponent(index)}
+                          className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all"
+                          title="Remover Item"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      )}
+                    </div>
                   </div>
+                  
+                  {selectedLot && comp.qty > selectedLot.available_qty_kg && (
+                    <p className="text-[--danger] text-[10px] uppercase font-bold text-center bg-[--danger]/10 py-1 rounded">
+                      Quantidade excede o disponível ({selectedLot.available_qty_kg}kg)
+                    </p>
+                  )}
                 </div>
-                
-                {selectedLot && comp.qty > selectedLot.available_qty_kg && (
-                  <p className="text-[--danger] text-[10px] uppercase font-bold mt-1 text-center bg-[--danger]/10 py-1 rounded">
-                    Quantidade excede o disponível ({selectedLot.available_qty_kg}kg)
-                  </p>
-                )}
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
 
           <button 
             type="button" 
             onClick={addComponent}
-            className="golden-btn w-full mt-2 flex items-center justify-center gap-2"
+            className="flex items-center justify-center gap-2 text-[--primary] border border-dashed border-[--primary]/30 py-3 rounded-xl hover:bg-[--primary]/5 transition-all text-xs font-bold uppercase tracking-widest"
           >
-            <Plus className="w-5 h-5" /> Adicionar Outro Lote ao Blend
+            <Plus className="w-4 h-4" /> Adicionar Outro Lote
           </button>
         </div>
 
-        <div className="mt-4 p-4 bg-black/60 rounded border border-white/10 flex justify-between items-center shadow-inner">
+        <div className="mt-8 p-6 bg-black/60 rounded-2xl border border-[--primary]/20 flex justify-between items-center shadow-2xl">
             <div className="flex flex-col">
-              <span className="text-[10px] uppercase text-[--secondary-text] font-bold">Total do Blend Final</span>
-              <span className="text-xl font-bold text-[--primary]">{totalQty.toFixed(2)} kg</span>
+              <span className="data-label">Total do Blend Final</span>
+              <span className="text-3xl font-bold text-[--primary] font-serif">{totalQty.toFixed(2)} <span className="text-sm font-sans">kg</span></span>
             </div>
             <button 
               type="submit" 
               disabled={isSubmitting || totalQty <= 0}
-              className="golden-btn px-10"
+              className="golden-btn px-10 py-5 text-lg"
             >
               {isSubmitting ? 'Processando...' : 'Finalizar Blend'}
             </button>
         </div>
 
         {message && (
-          <p className={`text-center text-sm font-medium mt-2 ${message.type === 'error' ? 'text-[--danger]' : 'text-[--success]'}`}>
+          <p className={`text-center text-sm font-medium mt-2 p-3 rounded bg-white/5 border border-white/5 ${message.type === 'error' ? 'text-[--danger]' : 'text-[--success]'}`}>
             {message.text}
           </p>
         )}
