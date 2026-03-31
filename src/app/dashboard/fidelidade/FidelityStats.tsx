@@ -12,12 +12,11 @@ interface Stats {
 
 export default function FidelityStats({ stats }: { stats: Stats }) {
   return (
-    <div className="flex flex-col gap-6">
-      
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <div className="w-full max-w-5xl">
+      <div className="flex flex-col md:flex-row gap-4 items-stretch">
         
         {/* Card 1: Ganhos Ativos */}
-        <div className="glass-panel overflow-hidden border-t-2 border-[--success]/40 bg-black/20">
+        <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--success]/40 bg-black/20 text-center">
           <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/40">
              <h3 className="text-[9px] uppercase tracking-widest text-[--success] font-serif font-bold">Ganhos Ativos</h3>
              <Star className="w-4 h-4 text-[--success] opacity-60" />
@@ -29,7 +28,7 @@ export default function FidelityStats({ stats }: { stats: Stats }) {
         </div>
 
         {/* Card 2: Saldo Disponível */}
-        <div className="glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20">
+        <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center">
           <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex justify-between items-center bg-black/40">
              <h3 className="text-[9px] uppercase tracking-widest text-[--primary] font-serif font-bold">Saldo Disponível</h3>
              <Gift className="w-4 h-4 text-[--primary] opacity-60" />
@@ -41,7 +40,7 @@ export default function FidelityStats({ stats }: { stats: Stats }) {
         </div>
 
         {/* Card 3: Configurações Admin */}
-        <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 bg-black/40 shadow-2xl">
+        <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary]/20 bg-black/40 shadow-2xl">
            <div className="p-2 px-4 border-b border-[--card-border] card-texture-header flex items-center gap-2 bg-black/60 shadow-lg">
               <Settings className="w-3 h-3 text-[--primary]" />
               <h3 className="text-[9px] uppercase tracking-widest font-bold font-serif text-[--primary]">Configuração</h3>
