@@ -11,9 +11,9 @@ export default function LoginPage({
       <div className="absolute top-0 left-0 w-full h-full wood-texture opacity-10 pointer-events-none" />
       
       <div className="relative z-10 w-full max-w-md p-8 glass-panel">
-        <div className="text-center mb-10">
-          <h1 className="text-4xl title-glow font-serif text-[--primary] mb-2">TORRA 360</h1>
-          <p className="text-[--secondary-text] text-sm">Acesse seu painel de torrefação</p>
+        <div className="text-center mb-10 flex flex-col items-center">
+          <img src="/logo-full.png" alt="Torra 360" className="h-16 object-contain mb-4 brightness-125 drop-shadow-[0_0_15px_rgba(195,153,103,0.3)]" />
+          <p className="text-[--secondary-text] text-sm opacity-60">Acesse seu painel de torrefação</p>
         </div>
 
         <form className="flex flex-col gap-5">

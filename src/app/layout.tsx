@@ -11,6 +11,17 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: 'Torra 360',
   description: 'Sistema Multitenant de Torrefação Premium',
+  manifest: '/manifest.json',
+  icons: {
+    icon: '/icon.png',
+    apple: '/apple-touch-icon.png',
+  },
+  themeColor: '#c39967',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Torra 360',
+  },
 }
 
 export default function RootLayout({

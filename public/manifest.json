@@ -1,0 +1,22 @@
+{
+  "name": "Torra 360",
+  "short_name": "Torra 360",
+  "description": "Sistema Multitenant de Torrefação Premium",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#c39967",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -35,11 +35,14 @@ export default async function DashboardLayout({
       
       {/* Sidebar Lateral */}
       <aside className="w-20 lg:w-64 flex flex-col items-center lg:items-start p-2 bg-black/10 backdrop-blur-sm relative z-20">
-        <div className="flex items-center gap-2 w-full mb-10 mt-2 cursor-pointer">
-          <div className="w-8 h-8 rounded-full border border-[--primary] flex items-center justify-center text-[--primary] shrink-0">
-            <Coffee className="w-4 h-4" />
+        <div className="flex items-center gap-3 w-full mb-12 mt-2 cursor-pointer group">
+          <div className="w-10 h-10 rounded-full border border-[--primary]/30 flex items-center justify-center text-[--primary] shrink-0 bg-black shadow-lg relative overflow-hidden group-hover:border-[--primary] transition-all">
+             <div className="absolute inset-0 opacity-10 wood-texture" />
+             <img src="/icon.png" alt="Icon" className="w-6 h-6 object-contain relative z-10" />
           </div>
-          <span className="font-serif text-xl tracking-wide hidden lg:block title-glow text-[--primary]">Torra 360</span>
+          <div className="hidden lg:flex flex-col">
+             <img src="/logo-full.png" alt="Torra 360" className="h-7 object-contain brightness-110 drop-shadow-lg" />
+          </div>
         </div>
 
         <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
