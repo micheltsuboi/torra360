@@ -2,6 +2,9 @@
 ALTER TABLE public.roast_batches 
 ADD COLUMN IF NOT EXISTS operational_cost numeric DEFAULT 4.00;
 
+-- Remover a view anterior para evitar erro de mudança de nome de colunas (Postgres 42P16)
+DROP VIEW IF EXISTS public.roast_reports_view;
+
 -- Atualizar view de relatórios de torra para considerar o novo campo preenchível
 CREATE OR REPLACE VIEW public.roast_reports_view AS
 SELECT 
