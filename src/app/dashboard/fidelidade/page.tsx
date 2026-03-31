@@ -54,7 +54,7 @@ export default async function FidelityPage() {
                                   className="text-[#25D366] hover:scale-125 transition-transform"
                                   title="Abrir WhatsApp"
                                 >
-                                  <MessageCircle className="w-4 h-4 fill-current" />
+                                  <MessageCircle className="w-4 h-4" />
                                 </a>
                              )}
                           </div>
