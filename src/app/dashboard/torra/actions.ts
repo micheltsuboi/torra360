@@ -6,24 +6,24 @@ import { revalidatePath } from 'next/cache'
 export async function getRoastBatches() {
   const supabase = await createClient()
   
-  // O ideal é trazer a View de Relatorios que já tem os cálculos, ou fazer join.
-  // Como as policies podem ser complicadas na view sem explicit set, 
-  // trazemos a tabela e o join direto se possivel, ou consultamos a View.
+  // Consultamos a View consolidada que já possui todos os cálculos e o nome do café
   const { data, error } = await supabase
     .from('roast_reports_view')
-    .select('*, green_coffee:green_coffee_id(name)')
+    .select('*')
     .order('date', { ascending: false })
     .limit(50)
 
-  // Em caso de view nao funcionar por erro de relation, retornamos a tabela base com join:
   if (error) {
+     console.error('Erro ao acessar view de torra:', error)
+     // Fallback para tabela base se a view falhar
      const fallback = await supabase
         .from('roast_batches')
         .select('*, green_coffee(name)')
-        .order('created_at', { ascending: false });
-     return fallback.data || [];
+        .order('date', { ascending: false })
+        .limit(50)
+     return fallback.data || []
   }
-  return data || [];
+  return data || []
 }
 
 export async function getAvailableGreenLots() {
