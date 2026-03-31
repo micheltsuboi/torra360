@@ -17,12 +17,12 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
     <div className="flex flex-col gap-6 mt-4">
       {/* Barra de Busca Externa - De fora a fora */}
       <div className="flex items-center bg-black/20 p-2 rounded-xl border border-white/5 shadow-inner w-full">
-        <div className="relative w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[--primary] opacity-60" />
+        <div className="flex items-center w-full bg-black/60 rounded-lg border border-white/10 px-4 gap-3 focus-within:border-[--primary]/50 transition-all">
+          <Search className="w-5 h-5 text-[--primary] opacity-60 shrink-0" />
           <input 
             type="text"
             placeholder="Buscar por café, lote ou data..."
-            className="!py-3 !pl-12 !pr-4 !text-sm w-full !bg-black/60 !rounded-lg !border-white/10 focus:!border-[--primary]/50 transition-all font-sans"
+            className="!py-3 !bg-transparent !border-none !p-0 focus:!ring-0 w-full !text-sm font-sans outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
