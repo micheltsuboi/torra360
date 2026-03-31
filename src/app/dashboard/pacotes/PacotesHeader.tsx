@@ -80,7 +80,7 @@ export default function PacotesHeader({ roasts, expensePackages }: PacotesHeader
               <label className="data-label">Quantidade de Pacotes</label>
               <div className="relative">
                 <input name="quantity_units" type="number" min="1" placeholder="Ex: 40" required className="text-xl" />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold opacity-30 uppercase">UNID</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-bold opacity-30 capitalize">UNID</span>
               </div>
             </div>
             <div className="flex flex-col gap-1">
@@ -104,7 +104,7 @@ export default function PacotesHeader({ roasts, expensePackages }: PacotesHeader
             </select>
           </div>
 
-          <div className="p-4 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] uppercase font-bold italic leading-relaxed">
+          <div className="p-4 bg-[--primary]/5 rounded-xl border border-[--primary]/10 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
              <span className="text-[--primary]">📊 Inteligência:</span> O sistema deduzirá automaticamente o peso do lote torrado selecionado 
              e calculará o custo unitário por pacote baseado no café verde + custos operacionais.
           </div>

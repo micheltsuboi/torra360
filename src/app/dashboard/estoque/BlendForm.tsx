@@ -164,7 +164,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                   </div>
                   
                   {selectedLot && comp.qty > selectedLot.available_qty_kg && (
-                    <p className="text-[--danger] text-[10px] uppercase font-bold text-center bg-[--danger]/10 py-1 rounded">
+                    <p className="text-[--danger] text-[10px] capitalize font-bold text-center bg-[--danger]/10 py-1 rounded">
                       Quantidade excede o disponível ({selectedLot.available_qty_kg}kg)
                     </p>
                   )}
@@ -176,7 +176,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
           <button 
             type="button" 
             onClick={addComponent}
-            className="flex items-center justify-center gap-2 text-[--primary] border border-dashed border-[--primary]/30 py-3 rounded-xl hover:bg-[--primary]/5 transition-all text-xs font-bold uppercase tracking-widest"
+            className="flex items-center justify-center gap-2 text-[--primary] border border-dashed border-[--primary]/30 py-3 rounded-xl hover:bg-[--primary]/5 transition-all text-xs font-bold capitalize tracking-widest"
           >
             <Plus className="w-4 h-4" /> Adicionar Outro Lote
           </button>

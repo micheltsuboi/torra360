@@ -14,8 +14,8 @@
   --warning: #C7B074;
   --danger: #803D3D;
 
-  --font-serif: var(--font-playfair), 'Lora', serif;
-  --font-sans: var(--font-inter), 'Roboto', sans-serif;
+  --font-serif: var(--font-montserrat), sans-serif;
+  --font-sans: var(--font-montserrat), sans-serif;
   
   --radius: 12px;
 }
@@ -37,7 +37,7 @@ body {
     url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b59371' fill-opacity='0.04' fill-rule='evenodd'%3E%3Cpath d='M0 0h3v3H0V0zm3 3h3v3H3V3z'/%3E%3C/g%3E%3C/svg%3E");
   background-attachment: fixed;
   font-family: var(--font-sans);
-  font-size: 110%; /* General font-size increase */
+  font-size: 100%; /* Padronizado conforme pedido */
   margin: 0;
   -webkit-font-smoothing: antialiased;
 }
@@ -122,7 +122,7 @@ button.golden-btn {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  text-transform: uppercase;
+  text-transform: capitalize;
   letter-spacing: 0.05em;
 }
 
@@ -185,7 +185,7 @@ button.secondary-btn:hover {
   background: transparent !important;
   background-color: transparent !important;
   border: none !important;
-  padding: 0 !important;
+  padding: 4px !important;
   margin: 0 !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -197,18 +197,19 @@ button.secondary-btn:hover {
   outline: none !important;
   color: inherit;
   transition: all 0.2s ease;
-  width: 20px !important;
-  height: 20px !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 .action-icon-btn:hover {
   opacity: 1 !important;
-  transform: scale(1.15);
+  color: var(--primary);
+  transform: scale(1.1);
 }
 
 .action-icon {
-  width: 11px !important;
-  height: 11px !important;
+  width: 18px !important;
+  height: 18px !important;
 }
 
 /* 
@@ -375,10 +376,10 @@ button.secondary-btn:hover {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.05);
+  background: transparent;
   border: 1px solid var(--card-border);
   color: var(--primary);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -439,8 +440,8 @@ button.secondary-btn:hover {
 /* Typography Refinement */
 .data-label {
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  text-transform: capitalize;
+  letter-spacing: 0.05em;
   color: var(--secondary-text);
   font-weight: 700;
   opacity: 0.7;

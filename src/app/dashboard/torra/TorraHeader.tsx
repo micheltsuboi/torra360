@@ -71,7 +71,7 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
             </div>
           </div>
 
-          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-[11px] text-[--secondary-text] uppercase font-bold italic leading-relaxed">
+          <div className="p-4 bg-black/40 rounded-xl border border-white/5 text-[11px] text-[--secondary-text] capitalize font-bold italic leading-relaxed">
              <span className="text-[--primary]">💡 Dica:</span> O custo operacional padrão é de R$ 4,00 por Kg torrado. 
              O rendimento e os custos finais serão processados automaticamente pelo sistema.
           </div>

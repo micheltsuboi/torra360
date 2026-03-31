@@ -32,7 +32,7 @@ export default async function ComercialPage() {
            <div className="overflow-x-auto max-h-[400px]">
               <table className="w-full text-left border-collapse">
                  <thead className="bg-[#1a1512] sticky top-0">
-                    <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--border]">
+                    <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--border]">
                        <th className="p-3">Data/Cliente</th>
                        <th className="p-3">Itens</th>
                        <th className="p-3">Pgto</th>
@@ -54,7 +54,7 @@ export default async function ComercialPage() {
                              </div>
                            ))}
                         </td>
-                        <td className="p-3 text-xs text-[--secondary-text] uppercase">{s.payment_method}</td>
+                        <td className="p-3 text-xs text-[--secondary-text] capitalize">{s.payment_method}</td>
                         <td className="p-3 text-right text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</td>
                         <td className="p-3 text-right">
                            <form action={deleteSale} className="flex items-center justify-end gap-2">

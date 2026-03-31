@@ -30,7 +30,7 @@ export default async function TorraPage() {
            <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
             <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
-                <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-[--card-border]/50 bg-white/5 tracking-widest">
+                <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
                    <th className="p-4 font-bold border-r border-white/5">Data da Torra</th>
                    <th className="p-4 font-bold">Lote Base (Café Verde)</th>
                    <th className="p-4 font-bold text-center">Rendimento Final</th>
@@ -49,13 +49,13 @@ export default async function TorraPage() {
                         <td className="p-4 border-r border-white/5">
                            <div className="flex flex-col">
                              <span className="text-sm font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
-                             <span className="text-[9px] uppercase tracking-widest text-[--secondary-text]">Lote: #{r.id.slice(-6).toUpperCase()}</span>
+                             <span className="text-[9px] capitalize tracking-widest text-[--secondary-text]">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                            </div>
                         </td>
                         <td className="p-4">
                            <div className="flex flex-col">
                              <span className="text-base font-serif text-[--primary] font-medium">{r.green_coffee?.name || 'N/A'}</span>
-                             <span className="text-[10px] uppercase text-[--secondary-text]">{r.qty_before_kg}kg orig.</span>
+                             <span className="text-[10px] capitalize text-[--secondary-text]">{r.qty_before_kg}kg orig.</span>
                            </div>
                         </td>
                         <td className="p-4 text-center">
@@ -63,13 +63,13 @@ export default async function TorraPage() {
                              <div className={`text-xl font-serif font-bold ${yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}`}>
                                {yieldPerc?.toFixed(1)}%
                              </div>
-                             <span className="text-[9px] font-bold text-[--secondary-text] uppercase">{r.qty_after_kg.toFixed(2)}kg produzidos</span>
+                             <span className="text-[9px] font-bold text-[--secondary-text] capitalize">{r.qty_after_kg.toFixed(2)}kg produzidos</span>
                            </div>
                         </td>
                         <td className="p-4 text-center border-l border-white/5">
                            <div className="flex flex-col items-center">
                              <span className="text-xl font-mono text-[--danger] font-bold opacity-80">{shrinkage.toFixed(1)}%</span>
-                             <span className="text-[9px] font-bold opacity-30 uppercase tracking-tighter">Perda de umidade</span>
+                             <span className="text-[9px] font-bold opacity-30 capitalize tracking-tighter">Perda de umidade</span>
                            </div>
                         </td>
                         <td className="p-4 text-right border-l border-white/5">

@@ -38,7 +38,7 @@ export default async function CustosPage() {
                          <Check className="w-5 h-5" />
                       </button>
                    </form>
-                   <span className="text-[10px] text-[--secondary-text] uppercase tracking-widest font-bold opacity-40">Pacote de Insumos</span>
+                   <span className="text-[10px] text-[--secondary-text] capitalize tracking-widest font-bold opacity-40">Pacote de Insumos</span>
                 </div>
                 <form action={deleteExpensePackage} className="flex items-center">
                    <input type="hidden" name="id" value={pkg.id} />
@@ -126,12 +126,12 @@ export default async function CustosPage() {
 
              <div className="p-6 bg-black/60 border-t border-[--card-border] flex justify-between items-center group/total">
                 <div className="flex flex-col">
-                  <span className="text-[10px] uppercase text-[--secondary-text] font-bold tracking-widest opacity-40">Total Gerado</span>
+                  <span className="text-[10px] capitalize text-[--secondary-text] font-bold tracking-widest opacity-40">Total Gerado</span>
                   <span className="text-xs text-[--secondary-text] opacity-20 group-hover/total:opacity-100 transition-opacity">Consolidado do pacote</span>
                 </div>
                 <div className="flex flex-col items-end">
                   <span className="text-2xl font-serif font-bold text-[--success] drop-shadow-[0_0_10px_rgba(34,197,94,0.1)]">R$ {pkg.total_cost.toFixed(2)}</span>
-                  <span className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-20">Unitário estimado</span>
+                  <span className="text-[9px] capitalize font-bold text-[--secondary-text] opacity-20">Unitário estimado</span>
                 </div>
              </div>
           </div>

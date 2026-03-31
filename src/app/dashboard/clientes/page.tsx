@@ -32,7 +32,7 @@ export default async function ClientesPage() {
              <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]">
+                  <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--card-border]">
                     <th className="p-4 font-medium">Nome</th>
                     <th className="p-4 font-medium">Documento</th>
                     <th className="p-4 font-medium">Contato</th>

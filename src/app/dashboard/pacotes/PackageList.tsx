@@ -11,7 +11,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
     <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
       <table className="w-full text-left border-collapse min-w-[700px]">
         <thead>
-          <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-[--card-border]/50 bg-white/5 tracking-widest">
+          <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
             <th className="p-4 font-bold">Produto / Lote Torra</th>
             <th className="p-4 font-bold border-l border-white/5">Formato / Tamanho</th>
             <th className="p-4 font-bold text-center border-l border-white/5">Qtd (Unids)</th>
@@ -76,7 +76,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                 <tr key={p.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                   <td className="p-4">
                     <span className="font-serif text-lg text-[--primary] block group-hover:text-[--foreground] transition-colors">{roast?.green_coffee?.name || 'Lote Não Encontrado'}</span>
-                    <span className="text-[10px] text-[--secondary-text] uppercase font-bold tracking-widest">Produzido em {new Date(p.date).toLocaleDateString()}</span>
+                    <span className="text-[10px] text-[--secondary-text] capitalize font-bold tracking-widest">Produzido em {new Date(p.date).toLocaleDateString()}</span>
                   </td>
                   <td className="p-4 border-l border-white/5">
                     <span className="text-sm font-bold text-[--foreground] block">{p.bean_format}</span>
@@ -87,28 +87,28 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                       <span className={`text-xl font-bold font-serif ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                         {p.quantity_units}
                       </span>
-                      <span className="text-[9px] uppercase font-bold opacity-30 tracking-widest">unidades</span>
+                      <span className="text-[9px] capitalize font-bold opacity-30 tracking-widest">unidades</span>
                     </div>
                   </td>
                   <td className="p-4 text-right border-l border-white/5">
                     <div className="text-[--foreground] font-bold text-base">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                    <div className="text-[--secondary-text] text-[10px] uppercase font-bold opacity-40">Valor Estimado Est.: R$ {totalEstimado}</div>
+                    <div className="text-[--secondary-text] text-[10px] capitalize font-bold opacity-40">Valor Estimado Est.: R$ {totalEstimado}</div>
                   </td>
                   <td className="p-4 text-right border-l border-white/5">
                     <div className="flex justify-end items-center gap-2">
-                      <button 
-                        onClick={() => setEditingId(p.id)}
-                        className="p-2 text-[--primary] hover:bg-[--primary]/10 rounded-full transition-all opacity-40 hover:opacity-100" 
-                        title="Editar Registro"
-                      >
-                         <Pencil className="w-4 h-4" />
-                      </button>
-                      <form action={deletePackage} className="flex items-center">
-                         <input type="hidden" name="id" value={p.id} />
-                         <button type="submit" className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all opacity-40 hover:opacity-100">
-                            <Trash2 className="w-4 h-4" />
-                         </button>
-                      </form>
+                        <button 
+                          onClick={() => setEditingId(p.id)}
+                          className="action-icon-btn text-[--primary]" 
+                          title="Editar Registro"
+                        >
+                           <Pencil className="w-4 h-4" />
+                        </button>
+                        <form action={deletePackage} className="flex items-center">
+                           <input type="hidden" name="id" value={p.id} />
+                           <button type="submit" className="action-icon-btn text-[--danger]">
+                              <Trash2 className="w-4 h-4" />
+                           </button>
+                        </form>
                     </div>
                   </td>
                 </tr>
