@@ -29,53 +29,71 @@ export default async function DashboardIndex() {
               Ideal: &gt; 80%
             </div>
           </div>
-          <div className="flex-1 flex items-end justify-around gap-2 mt-8 min-h-[220px] wood-texture rounded-xl p-6 border border-[--card-border] shadow-inner">
-            {latestFive.length > 0 ? (
-              latestFive.map((roast: any, idx: number) => {
-                const yieldP = parseFloat(roast.yield_percentage || ((roast.qty_after_kg / roast.qty_before_kg) * 100).toString())
-                const height = Math.min(100, Math.max(15, yieldP))
-                
-                let colorClass = 'bg-[--primary]'
-                let iconColor = 'text-[--primary]'
-                if (yieldP < 78) { colorClass = 'bg-[--danger]'; iconColor = 'text-[--danger]'; }
-                else if (yieldP >= 78 && yieldP < 82) { colorClass = 'bg-[--warning]'; iconColor = 'text-[--warning]'; }
-                else { colorClass = 'bg-[--success]'; iconColor = 'text-[--success]'; }
+          <div className="flex-1 flex flex-col gap-4 mt-8 bg-black/30 rounded-xl p-8 border border-[--card-border] shadow-2xl relative overflow-hidden">
+            <div className="absolute inset-0 opacity-10 pointer-events-none wood-texture" />
+            
+            <div className="flex-1 flex items-end justify-between gap-6 min-h-[220px] pb-2 px-2 relative z-10">
+              {latestFive.length > 0 ? (
+                latestFive.map((roast: any, idx: number) => {
+                  const yieldP = parseFloat(roast.yield_percentage || ((roast.qty_after_kg / roast.qty_before_kg) * 100).toString())
+                  const height = Math.min(100, Math.max(15, yieldP))
+                  
+                  let colorClass = 'bg-[--primary]'
+                  let iconColor = 'text-[--primary]'
+                  let glowColor = 'shadow-[0_0_20px_rgba(195,153,103,0.3)]'
+                  
+                  if (yieldP < 78) { 
+                    colorClass = 'bg-[--danger]'; 
+                    iconColor = 'text-[--danger]';
+                    glowColor = 'shadow-[0_0_20px_rgba(239,68,68,0.3)]';
+                  }
+                  else if (yieldP >= 78 && yieldP < 82) { 
+                    colorClass = 'bg-[--warning]'; 
+                    iconColor = 'text-[--warning]';
+                    glowColor = 'shadow-[0_0_20px_rgba(245,158,11,0.3)]';
+                  }
+                  else { 
+                    colorClass = 'bg-[--success]'; 
+                    iconColor = 'text-[--success]';
+                    glowColor = 'shadow-[0_0_20px_rgba(34,197,94,0.3)]';
+                  }
 
-                return (
-                  <div key={roast.roast_batch_id || roast.id || idx} className="flex-1 max-w-[80px] h-full flex flex-col justify-end group">
-                    <div className="relative w-full flex flex-col justify-end flex-1">
-                      {/* Tooltip-like value */}
-                      <span className={`absolute -top-7 left-0 right-0 text-center text-[10px] font-bold ${iconColor} opacity-0 group-hover:opacity-100 transition-all -translate-y-2 group-hover:translate-y-0`}>
-                        {yieldP.toFixed(1)}%
-                      </span>
-                      <span className={`absolute -top-7 left-0 right-0 text-center text-[10px] font-bold ${iconColor} group-hover:opacity-0 transition-all`}>
-                        {yieldP.toFixed(1)}%
-                      </span>
+                  return (
+                    <div key={roast.roast_batch_id || roast.id || idx} className="flex-1 flex flex-col items-center group max-w-[120px]">
+                      <div className="relative w-full flex flex-col justify-end h-[160px] bg-white/5 rounded-t-lg border-x border-t border-white/5 shadow-inner">
+                        {/* Percentage Label */}
+                        <div className={`absolute -top-8 w-full text-center font-bold text-sm ${iconColor} drop-shadow-lg`}>
+                          {yieldP.toFixed(1)}%
+                        </div>
+                        
+                        {/* The Actual Bar */}
+                        <div 
+                          className={`w-full ${colorClass} ${glowColor} rounded-t-lg transition-all duration-700 ease-out relative group-hover:opacity-100 opacity-80`} 
+                          style={{ height: `${height}%` }}
+                        >
+                          <div className="absolute inset-x-0 top-0 h-1 bg-white/20 rounded-t-lg" />
+                          <div className="w-full h-full bg-gradient-to-t from-black/40 via-transparent to-white/10" />
+                        </div>
+                      </div>
                       
-                      <div 
-                        className={`w-full ${colorClass} rounded-t-md opacity-60 backdrop-blur-sm transition-all duration-500 hover:opacity-100 hover:scale-x-105 shadow-[0_0_15px_rgba(0,0,0,0.5)]`} 
-                        style={{ height: `${height}%` }}
-                      >
-                        <div className="w-full h-full bg-gradient-to-t from-black/40 to-transparent" />
+                      {/* Name and Date */}
+                      <div className="mt-4 text-center w-full">
+                        <p className="text-[11px] font-bold text-[--primary] truncate mb-0.5 tracking-wide uppercase">
+                          {roast.green_coffee?.name || 'Lote'}
+                        </p>
+                        <p className="text-[9px] text-[--secondary-text] opacity-40 font-mono">
+                          {new Date(roast.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
+                        </p>
                       </div>
                     </div>
-                    
-                    <div className="mt-3 text-center px-1">
-                      <p className="text-[10px] font-bold text-[--foreground] truncate leading-tight mb-0.5">
-                        {roast.green_coffee?.name || 'Lote'}
-                      </p>
-                      <p className="text-[8px] text-[--secondary-text] opacity-40">
-                        {new Date(roast.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
-                      </p>
-                    </div>
-                  </div>
-                )
-              })
-            ) : (
-              <div className="w-full flex items-center justify-center text-[--secondary-text] italic h-full opacity-30">
-                Nenhum lote torrado ainda.
-              </div>
-            )}
+                  )
+                })
+              ) : (
+                <div className="w-full flex items-center justify-center text-[--secondary-text] italic h-full opacity-30">
+                  Nenhum lote torrado ainda.
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
