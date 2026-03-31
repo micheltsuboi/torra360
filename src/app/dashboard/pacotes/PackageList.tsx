@@ -129,21 +129,21 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                 type="date" 
                 required 
                 defaultValue={editingPackage.date} 
-                className="text-lg"
+                className="text-sm"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col gap-1">
                 <label className="data-label">Formato</label>
-                <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-lg">
+                <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-sm">
                   <option value="Grãos Inteiros">Grãos Inteiros</option>
                   <option value="Café Moído">Café Moído</option>
                 </select>
               </div>
               <div className="flex flex-col gap-1">
                 <label className="data-label">Tamanho (g)</label>
-                <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-lg">
+                <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-sm">
                   <option value="250">250g</option>
                   <option value="500">500g</option>
                   <option value="1000">1kg</option>
@@ -160,7 +160,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                   min="1" 
                   defaultValue={editingPackage.quantity_units} 
                   required 
-                  className="text-xl" 
+                  className="text-sm" 
                 />
               </div>
               <div className="flex flex-col gap-1">
@@ -172,9 +172,9 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                     step="0.01" 
                     defaultValue={editingPackage.retail_price} 
                     required 
-                    className="text-xl pl-10" 
+                    className="text-sm pl-10" 
                   />
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[--primary]">R$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[--primary]">R$</span>
                 </div>
               </div>
             </div>
