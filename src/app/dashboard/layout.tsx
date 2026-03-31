@@ -35,18 +35,18 @@ export default async function DashboardLayout({
       
       {/* Sidebar Lateral */}
       <aside className="w-20 lg:w-64 flex flex-col items-center lg:items-start p-2 bg-black/10 backdrop-blur-sm relative z-20">
-        <div className="flex items-center gap-3 w-full mb-10 mt-2 px-2 cursor-pointer group h-10">
+        <div className="flex items-center gap-3 w-full mb-12 mt-4 px-2 cursor-pointer group h-14">
           <img 
             src="/icon.png" 
             alt="Icon" 
-            width="36"
-            height="36"
-            className="w-9 h-9 object-contain drop-shadow-[0_0_12px_rgba(195,153,103,0.3)] branding-icon-only" 
+            width="48"
+            height="48"
+            className="w-12 h-12 object-contain drop-shadow-[0_0_15px_rgba(195,153,103,0.3)] branding-icon-only" 
           />
           <img 
             src="/logo-full.png" 
             alt="Torra 360" 
-            className="h-full w-auto object-contain brightness-125 drop-shadow-md branding-logo-full" 
+            className="h-full w-auto object-contain brightness-125 drop-shadow-lg branding-logo-full" 
           />
         </div>
 
