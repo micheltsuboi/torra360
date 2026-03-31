@@ -34,16 +34,16 @@ export default async function CustosPage() {
                         />
                         <Pencil className="w-4 h-4 absolute right-2 opacity-40 text-[--primary] pointer-events-none group-focus-within/input:hidden" />
                       </div>
-                      <button type="submit" className="opacity-0 group-focus-within/title:opacity-100 text-[--success] p-2 hover:bg-[--success]/10 rounded-full transition-all">
-                         <Check className="w-5 h-5" />
+                      <button type="submit" className="action-icon-btn text-[--success] !opacity-0 group-focus-within/title:!opacity-100">
+                         <Check className="action-icon" />
                       </button>
                    </form>
                    <span className="text-[10px] text-[--secondary-text] capitalize tracking-widest font-bold opacity-40">Pacote de Insumos</span>
                 </div>
                 <form action={deleteExpensePackage} className="flex items-center">
                    <input type="hidden" name="id" value={pkg.id} />
-                   <button type="submit" className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all opacity-40 hover:opacity-100">
-                      <Trash2 className="w-5 h-5" />
+                   <button type="submit" className="action-icon-btn text-[--danger]">
+                      <Trash2 className="action-icon" />
                    </button>
                 </form>
              </div>
@@ -74,8 +74,8 @@ export default async function CustosPage() {
                                 />
                               </div>
 
-                              <button type="submit" title="Salvar Alteração" className="text-[--success] p-1.5 hover:bg-[--success]/10 rounded-full opacity-0 group-hover/item:opacity-100 group-focus-within/item:opacity-100 transition-all">
-                                <Check className="w-4 h-4" />
+                              <button type="submit" title="Salvar Alteração" className="action-icon-btn text-[--success] !opacity-0 group-hover/item:!opacity-100 group-focus-within/item:!opacity-100">
+                                <Check className="action-icon" />
                               </button>
                            </div>
                         </form>
@@ -83,8 +83,8 @@ export default async function CustosPage() {
                         <form action={removeExpenseItem} className="flex items-center ml-1">
                            <input type="hidden" name="id" value={item.id} />
                            <input type="hidden" name="package_id" value={pkg.id} />
-                           <button type="submit" className="text-[--danger] p-1.5 hover:bg-[--danger]/10 rounded-full opacity-0 group-hover/item:opacity-100 transition-all">
-                             <Trash2 className="w-4 h-4" />
+                           <button type="submit" className="action-icon-btn text-[--danger] !opacity-0 group-hover/item:!opacity-100">
+                             <Trash2 className="action-icon" />
                            </button>
                         </form>
                      </div>

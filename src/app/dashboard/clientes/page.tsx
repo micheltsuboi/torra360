@@ -48,7 +48,7 @@ export default async function ClientesPage() {
                         <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
                         <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
                         <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-2 flex items-center justify-end gap-2">
+                        <td className="p-2 flex items-center justify-center gap-2">
                           <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
                             <Pencil className="action-icon" />
                           </span>

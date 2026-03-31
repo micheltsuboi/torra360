@@ -214,10 +214,11 @@ button.secondary-btn:hover {
 /* Global Table Standard Alignment */
 th, td {
   text-align: center !important;
+  vertical-align: middle !important;
 }
 
 table tr td:first-child, table tr th:first-child {
-  text-align: left !important;
+  text-align: center !important;
 }
 
 /* 

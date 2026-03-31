@@ -59,7 +59,7 @@ export default async function EstoquePage() {
                      return (
                        <tr key={lot.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors group">
                          <td className="p-2">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
                               <span className="text-sm font-semibold text-[--primary]">{lot.name}</span>
                               <span className="text-[10px] text-[--secondary-text] opacity-60">{lot.origin || 'N/A'} • {lot.provider || 'N/A'}</span>
                             </div>
@@ -71,19 +71,19 @@ export default async function EstoquePage() {
                             </div>
                          </td>
                          <td className="p-2 border-l border-white/5">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
                                <span className="font-medium">{lot.total_qty_kg} kg</span>
                                <span className="text-[9px] text-[--secondary-text] opacity-40">comprados</span>
                             </div>
                          </td>
                          <td className="p-2 border-l border-white/5">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
                                <span className="font-medium">{lot.total_roasted_qty.toFixed(2)} kg</span>
                                <span className="text-[9px] text-[--secondary-text] opacity-40">torrados</span>
                             </div>
                          </td>
                          <td className="p-2 border-l border-white/5">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
                               <span className="font-semibold text-xs">R$ {lot.total_cost.toFixed(2)}</span>
                               <span className="text-[9px] opacity-40">R$ {costPerKgGreen.toFixed(2)}/kg</span>
                             </div>
@@ -95,7 +95,7 @@ export default async function EstoquePage() {
                             </div>
                          </td>
                          <td className="p-2 border-l border-white/5">
-                            <div className="flex flex-col">
+                            <div className="flex flex-col items-center">
                               <span className="font-bold text-[--primary] text-sm">R$ {estRoastedCost.toFixed(2)}</span>
                               <span className="text-[9px] opacity-40">Est. / kg</span>
                             </div>

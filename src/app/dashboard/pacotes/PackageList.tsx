@@ -83,7 +83,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                     <span className="text-[10px] opacity-40">{p.package_size_g}g</span>
                   </td>
                   <td className="p-2 border-l border-white/5">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col items-center">
                       <span className={`font-bold ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                         {p.quantity_units}
                       </span>
@@ -91,8 +91,10 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                     </div>
                   </td>
                   <td className="p-2 border-l border-white/5">
-                    <div className="text-[--foreground] font-bold text-sm">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                    <div className="text-[9px] opacity-30">Total: R$ {totalEstimado}</div>
+                    <div className="flex flex-col items-center">
+                      <div className="text-[--foreground] font-bold text-sm">R$ {(p.retail_price || 0).toFixed(2)}</div>
+                      <div className="text-[9px] opacity-30">Total: R$ {totalEstimado}</div>
+                    </div>
                   </td>
                   <td className="p-2 border-l border-white/5">
                     <div className="flex justify-center items-center gap-1">

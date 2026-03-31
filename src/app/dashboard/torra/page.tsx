@@ -47,13 +47,13 @@ export default async function TorraPage() {
                     return (
                       <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                         <td className="p-2 border-r border-white/5">
-                           <div className="flex flex-col">
+                           <div className="flex flex-col items-center">
                              <span className="text-sm font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
                              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text]">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                            </div>
                         </td>
                         <td className="p-2">
-                           <div className="flex flex-col">
+                           <div className="flex flex-col items-center">
                              <span className="text-base font-serif text-[--primary] font-medium">{r.green_coffee?.name || 'N/A'}</span>
                              <span className="text-[10px] capitalize text-[--secondary-text]">{r.qty_before_kg}kg orig.</span>
                            </div>
@@ -72,12 +72,12 @@ export default async function TorraPage() {
                              <span className="text-[9px] font-bold opacity-30 capitalize tracking-tighter">Perda de umidade</span>
                            </div>
                         </td>
-                        <td className="p-2   border-l border-white/5">
-                           <div className="flex items-center justify-end gap-2">
+                        <td className="p-2 border-l border-white/5">
+                           <div className="flex justify-center items-center gap-1">
                             <form action={deleteRoastBatch} className="flex items-center">
                                <input type="hidden" name="id" value={r.id} />
-                               <button type="submit" className="p-2 text-[--danger] hover:bg-[--danger]/10 rounded-full transition-all">
-                                  <Trash2 className="w-5 h-5 opacity-40 hover:opacity-100" />
+                               <button type="submit" className="action-icon-btn text-[--danger]">
+                                  <Trash2 className="action-icon" />
                                </button>
                             </form>
                            </div>
