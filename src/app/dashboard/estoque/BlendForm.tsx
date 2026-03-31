@@ -93,7 +93,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
               
               return (
                 <div key={index} className="flex flex-col gap-2 p-2 rounded-xl bg-black/40 border border-[--card-border]/30 relative transition-all hover:bg-black/60 shadow-xl group">
-                  <div className="flex flex-col md:flex-row gap-2 items-center">
+                  <div className="flex flex-col md:flex-row gap-3 items-center">
                     
                     {/* Select Lote */}
                     <div className="flex-1 w-full">
@@ -123,17 +123,17 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                           <Minus className="w-4 h-4" />
                         </button>
                         
-                        <div className="w-24 relative shrink-0">
+                        <div className="w-28 relative shrink-0">
                           <input 
                             type="number" 
                             step="0.01"
                             value={comp.qty || ''}
                             onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value) || 0)}
                             placeholder="0.0"
-                            className="bg-black/60 border-white/10 text-center text-sm w-full p-2 pr-8 rounded-lg"
+                            className="bg-black/60 border-white/10 text-center text-sm w-full p-2 pr-7 rounded-lg font-mono focus:border-[--primary]/50 transition-all outline-none"
                             required
                           />
-                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[--primary] font-bold opacity-40 select-none">KG</span>
+                          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[--primary] font-bold opacity-30 select-none uppercase">kg</span>
                         </div>
 
                         <button 
@@ -145,7 +145,7 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
                         </button>
                       </div>
 
-                      <div className="min-w-[60px]   font-mono text-[--primary] text-sm font-bold bg-[--primary]/10 px-2 py-1 rounded">
+                      <div className="min-w-[60px] text-center font-mono text-[--primary] text-[10px] uppercase font-bold bg-[--primary]/10 px-2 py-2 rounded-lg border border-[--primary]/20 tracking-tighter">
                         {percentage}%
                       </div>
 
@@ -184,8 +184,8 @@ export default function BlendForm({ lots, onComplete }: { lots: Lot[], onComplet
 
         <div className="mt-8 p-6 bg-black/60 rounded-2xl border border-[--primary]/20 flex justify-between items-center shadow-2xl">
             <div className="flex flex-col">
-              <span className="data-label">Total do Blend Final</span>
-              <span className="text-3xl font-bold text-[--primary] font-serif">{totalQty.toFixed(2)} <span className="text-sm font-sans">kg</span></span>
+              <span className="data-label text-[10px] tracking-widest opacity-50 uppercase">Rendimento Final Estimado</span>
+              <span className="text-2xl font-bold text-[--primary] font-serif leading-none mt-1">{totalQty.toFixed(2)} <span className="text-xs font-sans opacity-60 uppercase tracking-widest">kg</span></span>
             </div>
             <button 
               type="submit" 

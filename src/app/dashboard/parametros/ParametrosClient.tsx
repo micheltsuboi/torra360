@@ -37,8 +37,8 @@ export default function ParametrosClient({
         <div key={section.id} className="glass-panel overflow-hidden border-t-2 border-[--primary]/30 flex flex-col shadow-lg">
           <div className="p-2 border-b border-[--card-border] bg-black/40 flex justify-between items-center wood-texture">
             <div className="flex items-center gap-2">
-              <section.icon className="w-5 h-5 text-[--primary]" />
-              <h2 className="font-serif text-lg text-[--primary]">{section.title}</h2>
+              <section.icon className="w-4 h-4 text-[--primary]" />
+              <h2 className="font-serif text-base text-[--primary] tracking-widest uppercase">{section.title}</h2>
             </div>
             <button 
                onClick={() => setActiveModal(section.id as ModalType)}
