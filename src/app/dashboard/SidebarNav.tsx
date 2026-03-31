@@ -17,18 +17,18 @@ import {
 export default function SidebarNav() {
   const pathname = usePathname()
 
-    const navItems = [
-      { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-      { name: 'Configurações', href: '/dashboard/parametros', icon: Settings },
-      { name: 'Café Verde', href: '/dashboard/estoque', icon: Leaf },
-      { name: 'Produção / Torra', href: '/dashboard/torra', icon: Flame },
-      { name: 'Embalamento', href: '/dashboard/pacotes', icon: Box },
-      { name: 'Comercial', href: '/dashboard/comercial', icon: TrendingUp },
-      { name: 'Financeiro', href: '/dashboard/financeiro', icon: BarChart3 },
-      { name: 'Clientes', href: '/dashboard/clientes', icon: Users },
-      { name: 'Fidelidade', href: '/dashboard/fidelidade', icon: Star },
-      { name: 'Custos', href: '/dashboard/custos', icon: Coins },
-    ]
+  const navItems = [
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'Configurações', href: '/dashboard/parametros', icon: Settings },
+    { name: 'Café Verde', href: '/dashboard/estoque', icon: Leaf },
+    { name: 'Produção / Torra', href: '/dashboard/torra', icon: Flame },
+    { name: 'Embalamento', href: '/dashboard/pacotes', icon: Box },
+    { name: 'Comercial', href: '/dashboard/comercial', icon: TrendingUp },
+    { name: 'Financeiro', href: '/dashboard/financeiro', icon: BarChart3 },
+    { name: 'Clientes', href: '/dashboard/clientes', icon: Users },
+    { name: 'Fidelidade', href: '/dashboard/fidelidade', icon: Star },
+    { name: 'Custos', href: '/dashboard/custos', icon: Coins },
+  ]
 
   return (
     <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
