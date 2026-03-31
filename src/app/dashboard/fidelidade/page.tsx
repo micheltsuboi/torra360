@@ -24,7 +24,7 @@ export default async function FidelityPage() {
         <div className="p-3 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
            <div className="flex items-center gap-2">
              <UserCheck className="w-4 h-4 text-[--primary]" />
-             <h2 className="text-base text-[--primary] font-serif uppercase tracking-widest">Saldo de Cashback por Cliente</h2>
+             <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Saldo de Cashback por Cliente</h2>
            </div>
         </div>
 
