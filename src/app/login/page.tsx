@@ -12,8 +12,10 @@ export default function LoginPage({
       
       <div className="relative z-10 w-full max-w-md p-8 glass-panel">
         <div className="text-center mb-10 flex flex-col items-center">
-          <img src="/logo-full.png" alt="Torra 360" className="h-20 object-contain mb-4 brightness-125 drop-shadow-[0_0_25px_rgba(195,153,103,0.4)]" />
-          <p className="text-[--secondary-text] text-sm opacity-50 tracking-wider">SISTEMA DE GESTÃO PARA TORREFAÇÃO</p>
+          <div className="w-full max-w-[240px] px-2 mb-4">
+            <img src="/logo-full.png" alt="Torra 360" className="w-full h-auto object-contain brightness-125 drop-shadow-[0_0_20px_rgba(195,153,103,0.3)]" />
+          </div>
+          <p className="text-[--secondary-text] text-[10px] opacity-50 tracking-[0.2em] font-medium uppercase text-center">SISTEMA DE GESTÃO PARA TORREFAÇÃO</p>
         </div>
 
         <form className="flex flex-col gap-5">
