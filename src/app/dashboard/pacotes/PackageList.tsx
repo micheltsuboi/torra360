@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { Pencil, Trash2, Check, X, Search } from 'lucide-react'
+import { Pencil, Trash2, Search, ShoppingBag } from 'lucide-react'
 import { updatePackage, deletePackage } from './actions'
+import Modal from '@/components/ui/Modal'
 
 export default function PackageList({ packages, roasts, expensePackages }: { packages: any[], roasts: any[], expensePackages: any[] }) {
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingPackage, setEditingPackage] = useState<any | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
   const filteredPackages = packages?.filter(p => {
@@ -50,55 +51,8 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
             <tbody className="text-sm">
               {filteredPackages && filteredPackages.length > 0 ? (
                 filteredPackages.map((p: any) => {
-                  const isEditing = editingId === p.id
                   const totalEstimado = (p.retail_price * p.quantity_units).toFixed(2)
                   const roast = roasts.find(r => r.id === p.roast_batch_id)
-
-                  if (isEditing) {
-                    return (
-                      <tr key={p.id} className="border-b border-[--primary]/30 bg-[--primary]/5">
-                        <td className="p-2">
-                          <form id={`edit-pkg-${p.id}`} action={async (formData) => {
-                            await updatePackage(formData)
-                            setEditingId(null)
-                          }}>
-                            <input type="hidden" name="id" value={p.id} />
-                            <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
-                            <input name="date" type="date" defaultValue={p.date} className="bg-black/60 text-xs p-1 mt-1 border border-white/10 rounded w-full" />
-                          </form>
-                        </td>
-                        <td className="p-2 border-l border-white/5">
-                          <div className="flex flex-col gap-1">
-                            <select name="bean_format" form={`edit-pkg-${p.id}`} defaultValue={p.bean_format} className="bg-black/60 text-[10px] p-1 border border-white/10 rounded">
-                              <option value="Grãos Inteiros">Grãos</option>
-                              <option value="Café Moído">Moído</option>
-                            </select>
-                            <select name="package_size_g" form={`edit-pkg-${p.id}`} defaultValue={p.package_size_g} className="bg-black/60 text-[10px] p-1 border border-white/10 rounded">
-                              <option value="250">250g</option>
-                              <option value="500">500g</option>
-                              <option value="1000">1kg</option>
-                            </select>
-                          </div>
-                        </td>
-                        <td className="p-2 border-l border-white/5">
-                          <input name="quantity_units" type="number" form={`edit-pkg-${p.id}`} defaultValue={p.quantity_units} className="bg-black/60 text-xs p-1 w-16 text-center border border-white/10 rounded" />
-                        </td>
-                        <td className="p-2 border-l border-white/5">
-                          <input name="retail_price" type="number" step="0.01" form={`edit-pkg-${p.id}`} defaultValue={p.retail_price} className="bg-black/60 text-xs p-1 w-20 text-center border border-white/10 rounded" />
-                        </td>
-                        <td className="p-2 border-l border-white/5">
-                          <div className="flex items-center justify-center gap-1">
-                            <button type="submit" form={`edit-pkg-${p.id}`} className="action-icon-btn text-[--success] !opacity-100">
-                              <Check className="action-icon" />
-                            </button>
-                            <button type="button" onClick={() => setEditingId(null)} className="action-icon-btn text-[--secondary-text] !opacity-100">
-                              <X className="action-icon" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                  }
 
                   return (
                     <tr key={p.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
@@ -126,7 +80,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                       <td className="p-2 border-l border-white/5">
                         <div className="flex justify-center items-center gap-1">
                             <button 
-                              onClick={() => setEditingId(p.id)}
+                              onClick={() => setEditingPackage(p)}
                               className="action-icon-btn text-[--primary]" 
                               title="Editar"
                             >
@@ -136,7 +90,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                                <input type="hidden" name="id" value={p.id} />
                                <button type="submit" className="action-icon-btn text-[--danger]">
                                   <Trash2 className="action-icon" />
-                               </button>
+                                </button>
                             </form>
                         </div>
                       </td>
@@ -154,6 +108,95 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
           </table>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      <Modal 
+        isOpen={editingPackage !== null} 
+        onClose={() => setEditingPackage(null)} 
+        title="Editar Embalamento"
+      >
+        {editingPackage && (
+          <form action={async (formData) => {
+            await updatePackage(formData)
+            setEditingPackage(null)
+          }} className="flex flex-col gap-6">
+            <input type="hidden" name="id" value={editingPackage.id} />
+            
+            <div className="flex flex-col gap-1">
+              <label className="data-label">Produto: <span className="text-[--primary]">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span></label>
+              <input 
+                name="date" 
+                type="date" 
+                required 
+                defaultValue={editingPackage.date} 
+                className="text-lg"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Formato</label>
+                <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-lg">
+                  <option value="Grãos Inteiros">Grãos Inteiros</option>
+                  <option value="Café Moído">Café Moído</option>
+                </select>
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Tamanho (g)</label>
+                <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-lg">
+                  <option value="250">250g</option>
+                  <option value="500">500g</option>
+                  <option value="1000">1kg</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Quantidade (Unid)</label>
+                <input 
+                  name="quantity_units" 
+                  type="number" 
+                  min="1" 
+                  defaultValue={editingPackage.quantity_units} 
+                  required 
+                  className="text-xl" 
+                />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Preço Venda (R$)</label>
+                <div className="relative">
+                  <input 
+                    name="retail_price" 
+                    type="number" 
+                    step="0.01" 
+                    defaultValue={editingPackage.retail_price} 
+                    required 
+                    className="text-xl pl-10" 
+                  />
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-[--primary]">R$</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="data-label">Pacote de Custos</label>
+              <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-lg">
+                <option value="">Nenhum custo adicional</option>
+                {expensePackages.map((ep: any) => (
+                  <option key={ep.id} value={ep.id}>
+                    {ep.name} (R$ {ep.total_cost.toFixed(2)})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full">
+              Salvar Alterações
+            </button>
+          </form>
+        )}
+      </Modal>
     </div>
   )
 }
