@@ -45,7 +45,6 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                 <th className="p-2 font-bold border-l border-white/5">Torrado (Total)</th>
                 <th className="p-2 font-bold border-l border-white/5">Custo Verde</th>
                 <th className="p-2 font-bold border-l border-white/10 bg-[--primary]/5">Saldo Disponível</th>
-                <th className="p-2 font-bold border-l border-white/5">Custo Torrado</th>
                 <th className="p-2 font-bold border-l border-white/5">Ações</th>
               </tr>
             </thead>
@@ -53,7 +52,6 @@ export default function InventoryList({ lots }: { lots: any[] }) {
               {filteredLots && filteredLots.length > 0 ? (
                 filteredLots.map((lot: any) => {
                   const costPerKgGreen = lot.total_qty_kg > 0 ? (lot.total_cost / lot.total_qty_kg) : 0;
-                  const estRoastedCost = costPerKgGreen > 0 ? (costPerKgGreen / 0.8) + 4.00 : 0;
 
                   return (
                     <tr key={lot.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors group">
@@ -91,12 +89,6 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                         <div className={`flex flex-col ${lot.available_qty_kg < 10 ? 'text-[--danger]' : 'text-[--success]'}`}>
                           <span className="text-lg font-bold">{lot.available_qty_kg.toFixed(2)} kg</span>
                           <span className="text-[9px] opacity-60 font-bold">em estoque</span>
-                        </div>
-                      </td>
-                      <td className="p-2 border-l border-white/5">
-                        <div className="flex flex-col items-center">
-                          <span className="font-bold text-[--primary] text-sm">R$ {estRoastedCost.toFixed(2)}</span>
-                          <span className="text-[9px] opacity-40">Est. / kg</span>
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
