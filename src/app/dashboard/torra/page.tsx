@@ -1,9 +1,18 @@
 import { getRoastBatches, getAvailableGreenLots, createRoastBatch, deleteRoastBatch } from './actions'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, Flame } from 'lucide-react'
 
 export default async function TorraPage() {
   const greenLots = await getAvailableGreenLots()
   const roastBatches = await getRoastBatches()
+
+  // Reusable icon for accordions
+  const ChevronIcon = () => (
+    <span className="transition duration-300 group-open:rotate-180 text-[--primary]">
+      <svg fill="none" height="20" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="20">
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+    </span>
+  )
 
   return (
     <div className="flex flex-col gap-8">
@@ -18,42 +27,52 @@ export default async function TorraPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
         {/* Formulário de Torra */}
-        <div className="glass-panel p-6 h-fit">
-          <h2 className="text-xl font-serif mb-6 text-[--primary]">Registrar Nova Torra</h2>
-          <form action={createRoastBatch} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-[--secondary-text] uppercase">Data da Torra</label>
-              <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} />
-            </div>
-
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-[--secondary-text] uppercase">Lote de Café Verde Utilizado</label>
-              <select name="green_coffee_id" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                <option value="">Selecione um Lote...</option>
-                {greenLots.map((l: any) => (
-                  <option key={l.id} value={l.id}>{l.name} ({l.available_qty_kg}kg disp.)</option>
-                ))}
-              </select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mt-2">
-              <div className="flex flex-col gap-1 relative">
-                <label className="text-xs text-[--secondary-text] uppercase">Kg Verde (Antes)</label>
-                <input name="qty_before_kg" type="number" step="0.01" placeholder="10" required />
+        <div className="flex flex-col gap-4">
+          <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+            <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
+              <div className="flex items-center gap-2">
+                <Flame className="w-5 h-5" />
+                <span>Registrar Nova Torra</span>
               </div>
-              <div className="flex flex-col gap-1 relative">
-                 <label className="text-xs justify-between flex w-full text-[--primary] uppercase font-bold">Kg Torrado (Depois)</label>
-                 <input name="qty_after_kg" type="number" step="0.01" placeholder="8.4" required className="!border-[--primary]" />
-              </div>
-            </div>
+              <ChevronIcon />
+            </summary>
+            <div className="p-6 border-t border-[--card-border]">
+              <form action={createRoastBatch} className="flex flex-col gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Data da Torra</label>
+                  <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} />
+                </div>
 
-            <div className="mt-4 pt-4 border-t border-[--card-border] text-xs text-[--secondary-text]">
-               Custo Operacional padrão: R$ 4,00 / Kg torrado<br/>
-               Rendimento e Custos serão calculados automaticamente.
-            </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Lote de Café Verde Utilizado</label>
+                  <select name="green_coffee_id" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
+                    <option value="">Selecione um Lote...</option>
+                    {greenLots.map((l: any) => (
+                      <option key={l.id} value={l.id}>{l.name} ({l.available_qty_kg}kg disp.)</option>
+                    ))}
+                  </select>
+                </div>
 
-            <button type="submit" className="primary-btn mt-2">Registrar Lote</button>
-          </form>
+                <div className="grid grid-cols-2 gap-4 mt-2">
+                  <div className="flex flex-col gap-1 relative">
+                    <label className="text-xs text-[--secondary-text] uppercase font-bold">Kg Verde (Antes)</label>
+                    <input name="qty_before_kg" type="number" step="0.01" placeholder="10" required />
+                  </div>
+                  <div className="flex flex-col gap-1 relative">
+                     <label className="text-xs justify-between flex w-full text-[--primary] uppercase font-bold">Kg Torrado (Depois)</label>
+                     <input name="qty_after_kg" type="number" step="0.01" placeholder="8.4" required className="!border-[--primary]" />
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-[--card-border] text-[10px] text-[--secondary-text] uppercase font-bold italic">
+                   Custo Operacional padrão: R$ 4,00 / Kg torrado<br/>
+                   Rendimento e Custos serão calculados automaticamente.
+                </div>
+
+                <button type="submit" className="primary-btn mt-2">Registrar Lote de Torra</button>
+              </form>
+            </div>
+          </details>
         </div>
 
         {/* Histórico / Relatório de Torra */}

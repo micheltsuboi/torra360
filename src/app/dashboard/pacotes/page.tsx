@@ -1,11 +1,21 @@
 import { getRoastBatchesAvailable, getPackages, createPackages, deletePackage } from './actions'
 import { getExpensePackages } from '../custos/actions'
 import PackageList from './PackageList'
+import { ShoppingBag } from 'lucide-react'
 
 export default async function PacotesPage() {
   const roasts = await getRoastBatchesAvailable()
   const packages = await getPackages()
   const expensePackages = await getExpensePackages()
+
+  // Reusable icon for accordions
+  const ChevronIcon = () => (
+    <span className="transition duration-300 group-open:rotate-180 text-[--primary]">
+      <svg fill="none" height="20" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="20">
+        <path d="M6 9l6 6 6-6"></path>
+      </svg>
+    </span>
+  )
 
   return (
     <div className="flex flex-col gap-8">
@@ -20,9 +30,17 @@ export default async function PacotesPage() {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
         {/* Formulário de Pacotes */}
-        <div className="glass-panel p-6 h-fit">
-          <h2 className="text-xl font-serif mb-6 text-[--primary]">Registrar Embalamento</h2>
-          <form action={createPackages} className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+          <details className="glass-panel group overflow-hidden [&_summary::-webkit-details-marker]:hidden">
+            <summary className="card-texture-header cursor-pointer list-none font-serif text-base text-[--primary] p-4 flex justify-between items-center transition-colors">
+              <div className="flex items-center gap-2">
+                <ShoppingBag className="w-5 h-5" />
+                <span>Registrar Embalamento</span>
+              </div>
+              <ChevronIcon />
+            </summary>
+            <div className="p-6 border-t border-[--card-border]">
+              <form action={createPackages} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <label className="text-xs text-[--secondary-text] uppercase">Data</label>
               <input name="date" type="date" required defaultValue={new Date().toISOString().split('T')[0]} />
@@ -88,6 +106,8 @@ export default async function PacotesPage() {
             <button type="submit" className="primary-btn mt-2">Registrar Produção</button>
           </form>
         </div>
+      </details>
+    </div>
 
         {/* Histórico / Relatório de Pacotes */}
         <div className="xl:col-span-2 flex flex-col gap-4">
