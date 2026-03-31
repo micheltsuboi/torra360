@@ -140,21 +140,21 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
           <button 
             type="button" 
             onClick={addComponent}
-            className="flex items-center justify-center gap-2 py-2 border border-dashed border-[--primary]/30 text-[--primary] text-xs hover:bg-[--primary]/10 transition-colors rounded uppercase tracking-widest font-bold"
+            className="golden-btn w-full mt-2"
           >
-            <Plus className="w-3 h-3" /> Adicionar Lote ao Blend
+            <Plus className="w-4 h-4 mr-2" /> Adicionar Lote ao Blend
           </button>
         </div>
 
         <div className="mt-4 p-4 bg-black/60 rounded border border-white/10 flex justify-between items-center shadow-inner">
             <div className="flex flex-col">
               <span className="text-[10px] uppercase text-[--secondary-text] font-bold">Total do Blend Final</span>
-              <span className="text-xl font-bold text-[--success]">{totalQty.toFixed(2)} kg</span>
+              <span className="text-xl font-bold text-[--primary]">{totalQty.toFixed(2)} kg</span>
             </div>
             <button 
               type="submit" 
               disabled={isSubmitting || totalQty <= 0}
-              className="primary-btn h-fit py-2 px-8 uppercase text-xs tracking-widest transition-transform hover:scale-105 active:scale-95"
+              className="golden-btn px-10"
             >
               {isSubmitting ? 'Processando...' : 'Finalizar Blend'}
             </button>

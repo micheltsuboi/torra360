@@ -49,6 +49,7 @@ export async function createGreenCoffeeLot(formData: FormData) {
   }
 
   revalidatePath('/dashboard/estoque')
+  revalidatePath('/dashboard/torra')
 }
 
 export async function deleteGreenCoffeeLot(formData: FormData) {
@@ -136,5 +137,6 @@ export async function createBlend(data: {
   }
 
   revalidatePath('/dashboard/estoque')
+  revalidatePath('/dashboard/torra')
   return { success: true }
 }

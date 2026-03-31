@@ -111,6 +111,34 @@ button.primary-btn:hover {
   transform: translateY(-1px);
 }
 
+button.golden-btn {
+  background: linear-gradient(135deg, #C39967, #8B6B40);
+  color: #151111;
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+button.golden-btn:hover {
+  filter: brightness(1.2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(195, 153, 103, 0.3);
+}
+
+button.golden-btn:disabled {
+  background: #2B211E;
+  color: var(--secondary-text);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
 button.danger-btn {
   background: linear-gradient(135deg, #8A3D35, #632C26);
   color: #F3EAE0;

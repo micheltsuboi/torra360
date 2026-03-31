@@ -68,6 +68,7 @@ export async function createRoastBatch(formData: FormData) {
 
   revalidatePath('/dashboard/torra')
   revalidatePath('/dashboard/estoque')
+  revalidatePath('/dashboard/pacotes')
 }
 
 export async function deleteRoastBatch(formData: FormData) {
@@ -78,4 +79,5 @@ export async function deleteRoastBatch(formData: FormData) {
   await supabase.from('roast_batches').delete().eq('id', id)
   
   revalidatePath('/dashboard/torra')
+  revalidatePath('/dashboard/pacotes')
 }
