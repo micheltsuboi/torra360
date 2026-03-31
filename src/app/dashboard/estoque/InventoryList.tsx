@@ -78,7 +78,7 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                       <td className="p-2 border-l border-white/5">
                         <div className="flex flex-col items-center">
                           <span className="font-medium">{lot.total_roasted_qty.toFixed(2)} kg</span>
-                          <span className="text-[9px] text-[--secondary-text] opacity-40">torrados</span>
+                          <span className="text-[9px] text-[--secondary-text] opacity-40">retirados p/ torra</span>
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
