@@ -53,9 +53,9 @@ export async function createPDVSale(payload: any) {
   }))
 
   const { error: itemsError } = await supabase.from('sale_items').insert(saleItems)
-
   if (itemsError) {
     console.error('Error inserting sale items:', itemsError)
+    return { success: false, error: itemsError }
   }
 
   // LÓGICA DE FIDELIDADE (CASHBACK)
@@ -94,11 +94,17 @@ export async function createPDVSale(payload: any) {
 
   // Atualizar Estoque de Pacotes (reduzir quantity_units)
   for (const item of items) {
-    const { data: pkg } = await supabase.from('packaging_batches').select('quantity_units').eq('id', item.id).single()
+    const { data: pkg, error: pkgError } = await supabase.from('packaging_batches').select('quantity_units').eq('id', item.id).single()
+    if (pkgError) {
+      console.error('Error fetching package units:', pkgError)
+      continue
+    }
     if (pkg) {
-      await supabase.from('packaging_batches').update({
+      const { error: updateError } = await supabase.from('packaging_batches').update({
         quantity_units: Math.max(0, pkg.quantity_units - item.qty)
       }).eq('id', item.id)
+      
+      if (updateError) console.error('Error updating stock:', updateError)
     }
   }
 
@@ -128,10 +134,15 @@ export async function getLoyaltySettings() {
 // ====== HISTÓRICO ======
 export async function getSalesHistory() {
   const supabase = await createClient()
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('sale_transactions')
-    .select('*, client:client_id(name), sale_items(*, pkg:packaging_batch_id(bean_format, package_size_g, roast_batch(green_coffee(name))))')
+    .select('*, client:client_id(name), sale_items(*, pkg:packaging_batch_id(bean_format, package_size_g, roast_batch:roast_batch_id(green_coffee(name))))')
     .order('created_at', { ascending: false })
+  
+  if (error) {
+    console.error('Error fetching sales history:', error)
+    return []
+  }
   
   return data || []
 }
