@@ -1,6 +1,7 @@
 import { getGreenCoffeeLots, createGreenCoffeeLot, deleteGreenCoffeeLot } from './actions'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, Box, Beaker } from 'lucide-react'
 import { getCoffeeTypes, getQualityLevels, getProviders, getOrigins } from '../parametros/actions'
+import BlendForm from './BlendForm'
 
 export default async function EstoquePage() {
   const lots = await getGreenCoffeeLots()
@@ -21,95 +22,103 @@ export default async function EstoquePage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
-        {/* Formulário de Cadastro */}
-        <div className="glass-panel p-6 h-fit">
-          <h2 className="text-xl font-serif mb-6 text-[--primary]">Entrada de Lote</h2>
-          <form action={createGreenCoffeeLot} className="flex flex-col gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="text-xs text-[--secondary-text] uppercase">Nome do Lote</label>
-              <input name="name" type="text" placeholder="Ex: Lote Especial Sul de Minas" required />
+        {/* Formulários de Cadastro e Blend */}
+        <div className="flex flex-col gap-8">
+          {/* Formulário de Cadastro */}
+          <div className="glass-panel p-6 h-fit border-t-4 border-[--primary]">
+            <div className="flex items-center gap-2 mb-6">
+              <Box className="w-5 h-5 text-[--primary]" />
+              <h2 className="text-xl font-serif text-[--primary]">Entrada de Lote</h2>
             </div>
+            <form action={createGreenCoffeeLot} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text] uppercase font-bold">Nome do Lote</label>
+                <input name="name" type="text" placeholder="Ex: Lote Especial Sul de Minas" required />
+              </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Qtd Total (kg)</label>
-                <input name="total_qty_kg" type="number" step="0.01" placeholder="20" required />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Qtd Total (kg)</label>
+                  <input name="total_qty_kg" type="number" step="0.01" placeholder="20" required />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Custo Total (R$)</label>
+                  <input name="total_cost" type="number" step="0.01" placeholder="1500.00" required />
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Custo Total (R$)</label>
-                <input name="total_cost" type="number" step="0.01" placeholder="1500.00" required />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Fornecedor</label>
-                <select name="provider" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                  <option value="">Selecione...</option>
-                  {providers && providers.length > 0 ? (
-                    providers.map((p: any) => (
-                      <option key={p.id} value={p.name}>{p.name}</option>
-                    ))
-                  ) : (
-                     <option value="" disabled>(Cadastre em Parâmetros)</option>
-                  )}
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Fornecedor</label>
+                  <select name="provider" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
+                    <option value="">Selecione...</option>
+                    {providers && providers.length > 0 ? (
+                      providers.map((p: any) => (
+                        <option key={p.id} value={p.name}>{p.name}</option>
+                      ))
+                    ) : (
+                       <option value="" disabled>(Cadastre em Parâmetros)</option>
+                    )}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Origem</label>
+                  <select name="origin" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
+                    <option value="">Selecione...</option>
+                    {origins && origins.length > 0 ? (
+                      origins.map((o: any) => (
+                        <option key={o.id} value={o.name}>{o.name}</option>
+                      ))
+                    ) : (
+                       <option value="" disabled>(Cadastre em Parâmetros)</option>
+                    )}
+                  </select>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Origem</label>
-                <select name="origin" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]" required>
-                  <option value="">Selecione...</option>
-                  {origins && origins.length > 0 ? (
-                    origins.map((o: any) => (
-                      <option key={o.id} value={o.name}>{o.name}</option>
-                    ))
-                  ) : (
-                     <option value="" disabled>(Cadastre em Parâmetros)</option>
-                  )}
-                </select>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Tipo Café</label>
-                <select name="coffee_type" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
-                  {coffeeTypes.length > 0 ? (
-                    coffeeTypes.map((ct: any) => (
-                      <option key={ct.id} value={ct.name}>{ct.name}</option>
-                    ))
-                  ) : (
-                    <option value="">(Cadastre em Parâmetros)</option>
-                  )}
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Tipo Café</label>
+                  <select name="coffee_type" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
+                    {coffeeTypes.length > 0 ? (
+                      coffeeTypes.map((ct: any) => (
+                        <option key={ct.id} value={ct.name}>{ct.name}</option>
+                      ))
+                    ) : (
+                      <option value="">(Cadastre em Parâmetros)</option>
+                    )}
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-xs text-[--secondary-text] uppercase font-bold">Qualidade</label>
+                  <select name="quality_level" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
+                    {qualityLevels.length > 0 ? (
+                      qualityLevels.map((ql: any) => (
+                        <option key={ql.id} value={ql.name}>{ql.name}</option>
+                      ))
+                    ) : (
+                      <option value="">(Cadastre em Parâmetros)</option>
+                    )}
+                  </select>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs text-[--secondary-text] uppercase">Qualidade</label>
-                <select name="quality_level" className="bg-black/20 border border-[--card-border] rounded p-2 text-sm text-[--foreground]">
-                  {qualityLevels.length > 0 ? (
-                    qualityLevels.map((ql: any) => (
-                      <option key={ql.id} value={ql.name}>{ql.name}</option>
-                    ))
-                  ) : (
-                    <option value="">(Cadastre em Parâmetros)</option>
-                  )}
-                </select>
+
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                   <div className="flex flex-col gap-1">
+                      <label className="uppercase text-[--secondary-text] font-bold">Pontuação</label>
+                      <input name="score" type="text" placeholder="84+" />
+                   </div>
+                   <div className="flex flex-col gap-1">
+                      <label className="uppercase text-[--secondary-text] font-bold">Peneira</label>
+                      <input name="sieve" type="text" placeholder="15/16" />
+                   </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4 text-xs">
-                 <div className="flex flex-col gap-1">
-                    <label className="uppercase text-[--secondary-text]">Pontuação</label>
-                    <input name="score" type="text" placeholder="84+" />
-                 </div>
-                 <div className="flex flex-col gap-1">
-                    <label className="uppercase text-[--secondary-text]">Peneira</label>
-                    <input name="sieve" type="text" placeholder="15/16" />
-                 </div>
-            </div>
+              <button type="submit" className="primary-btn mt-4">Cadastrar Lote</button>
+            </form>
+          </div>
 
-            <button type="submit" className="primary-btn mt-4">Cadastrar Lote</button>
-          </form>
+          <BlendForm lots={lots} />
         </div>
 
         {/* Listagem de Lotes */}

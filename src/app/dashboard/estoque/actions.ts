@@ -60,3 +60,81 @@ export async function deleteGreenCoffeeLot(formData: FormData) {
   
   revalidatePath('/dashboard/estoque')
 }
+
+export async function createBlend(data: {
+  name: string,
+  components: { lotId: string, qty: number }[]
+}) {
+  const supabase = await createClient()
+
+  // 1. Buscar detalhes dos componentes para calcular custo
+  const lotIds = data.components.map(c => c.lotId)
+  const { data: lots, error: fetchError } = await supabase
+    .from('green_coffee')
+    .select('id, total_cost, total_qty_kg, available_qty_kg, name')
+    .in('id', lotIds)
+
+  if (fetchError || !lots) {
+    console.error('Erro ao buscar componentes do blend:', fetchError)
+    return { error: 'Erro ao buscar componentes' }
+  }
+
+  let totalQty = 0
+  let totalCost = 0
+
+  for (const comp of data.components) {
+    const lot = lots.find(l => l.id === comp.lotId)
+    if (lot) {
+      const unitCost = lot.total_cost / lot.total_qty_kg
+      totalCost += unitCost * comp.qty
+      totalQty += comp.qty
+    }
+  }
+
+  // 2. Criar o novo lote de Blend
+  const { data: newLot, error: insertError } = await supabase
+    .from('green_coffee')
+    .insert({
+      name: data.name,
+      total_qty_kg: totalQty,
+      available_qty_kg: totalQty,
+      total_cost: totalCost,
+      quality_level: 'Blend',
+      coffee_type: 'Blend',
+      origin: 'Várias (Mix)',
+      provider: 'Interno (Blend)'
+    })
+    .select()
+    .single()
+
+  if (insertError || !newLot) {
+    console.error('Erro ao criar lote de blend:', insertError)
+    return { error: 'Erro ao criar lote de blend' }
+  }
+
+  // 3. Registrar a composição e dar baixa nos lotes originais
+  for (const comp of data.components) {
+    const percentage = (comp.qty / totalQty) * 100
+
+    // Registrar composição
+    await supabase.from('green_coffee_blend_composition').insert({
+      blend_lot_id: newLot.id,
+      component_lot_id: comp.lotId,
+      quantity_kg: comp.qty,
+      percentage: percentage
+    })
+
+    // Dar baixa no estoque do componente
+    const lot = lots.find(l => l.id === comp.lotId)
+    if (lot) {
+      const newAvailable = lot.available_qty_kg - comp.qty
+      await supabase
+        .from('green_coffee')
+        .update({ available_qty_kg: newAvailable })
+        .eq('id', comp.lotId)
+    }
+  }
+
+  revalidatePath('/dashboard/estoque')
+  return { success: true }
+}

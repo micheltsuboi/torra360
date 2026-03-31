@@ -69,18 +69,44 @@ export default async function CustosPage() {
              <div className="p-4 flex-1 flex flex-col gap-3">
                 <div className="flex flex-col gap-2">
                    {pkg.expense_package_items?.map((item: any) => (
-                     <div key={item.id} className="flex justify-between items-center text-sm group/item">
-                        <span className="text-[--secondary-text]">{item.name}</span>
-                        <div className="flex items-center gap-3">
-                           <span className="font-medium text-[--foreground]">R$ {item.cost.toFixed(2)}</span>
-                           <form action={removeExpenseItem}>
-                              <input type="hidden" name="id" value={item.id} />
-                              <input type="hidden" name="package_id" value={pkg.id} />
-                              <button type="submit" className="action-icon-btn opacity-0 group-hover/item:opacity-100 text-[--danger]">
-                                <Trash2 className="action-icon" />
-                              </button>
-                           </form>
-                        </div>
+                     <div key={item.id} className="flex justify-between items-center text-sm group/item border-b border-white/5 py-1 last:border-0 hover:bg-white/5 transition-colors px-1 rounded">
+                        <form action={updateExpenseItem} className="flex-1 flex justify-between items-center gap-2">
+                           <input type="hidden" name="id" value={item.id} />
+                           <input type="hidden" name="package_id" value={pkg.id} />
+                           
+                           <input 
+                             name="name" 
+                             defaultValue={item.name} 
+                             className="text-[--secondary-text] bg-transparent border-0 p-0 focus:ring-1 ring-[--primary]/20 rounded px-1 w-full h-7 text-xs"
+                           />
+                           
+                           <div className="flex items-center gap-2">
+                              <div className="relative flex items-center">
+                                <span className="text-[10px] text-[--secondary-text] mr-1">R$</span>
+                                <input 
+                                  name="cost" 
+                                  type="number" 
+                                  step="0.01" 
+                                  defaultValue={item.cost} 
+                                  className="font-medium text-[--foreground] bg-transparent border-0 p-0 w-16 text-right focus:ring-1 ring-[--primary]/20 rounded px-1 h-7 text-xs"
+                                />
+                              </div>
+
+                              <div className="flex items-center gap-1 opacity-0 group-hover/item:opacity-100 transition-opacity">
+                                 <button type="submit" title="Salvar Alteração" className="action-icon-btn text-[--success] p-1">
+                                   <Check className="w-3 h-3" />
+                                 </button>
+                              </div>
+                           </div>
+                        </form>
+
+                        <form action={removeExpenseItem} className="opacity-0 group-hover/item:opacity-100 transition-opacity">
+                           <input type="hidden" name="id" value={item.id} />
+                           <input type="hidden" name="package_id" value={pkg.id} />
+                           <button type="submit" className="action-icon-btn text-[--danger] p-1">
+                             <Trash2 className="w-3 h-3" />
+                           </button>
+                        </form>
                      </div>
                    ))}
                    {(!pkg.expense_package_items || pkg.expense_package_items.length === 0) && (

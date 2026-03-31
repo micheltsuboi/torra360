@@ -67,3 +67,34 @@ export async function deletePackage(formData: FormData) {
   
   revalidatePath('/dashboard/pacotes')
 }
+
+export async function updatePackage(formData: FormData) {
+  const supabase = await createClient()
+  
+  const id = formData.get('id') as string
+  const date = formData.get('date') as string
+  const bean_format = formData.get('bean_format') as string
+  const package_size_g = parseInt(formData.get('package_size_g') as string) || 0
+  const quantity_units = parseInt(formData.get('quantity_units') as string) || 0
+  const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
+  const expense_package_id = formData.get('expense_package_id') as string || null
+
+  const { error } = await supabase
+    .from('packaging_batches')
+    .update({
+      date,
+      bean_format,
+      package_size_g,
+      quantity_units,
+      retail_price,
+      expense_package_id
+    })
+    .eq('id', id)
+
+  if (error) {
+    console.error('Error updating package:', error)
+    return
+  }
+
+  revalidatePath('/dashboard/pacotes')
+}
