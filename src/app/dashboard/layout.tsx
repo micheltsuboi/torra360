@@ -1,21 +1,10 @@
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { logout } from '@/app/login/actions'
+import SidebarNav from './SidebarNav'
 import { 
-  Leaf, 
-  Settings, 
   LogOut, 
-  Coffee, 
-  TrendingUp, 
-  Box, 
-  Activity,
-  Flame,
   ChevronDown,
-  LayoutDashboard,
-  Users,
-  Coins,
-  BarChart3,
-  Star
 } from 'lucide-react'
 
 export default async function DashboardLayout({
@@ -52,58 +41,7 @@ export default async function DashboardLayout({
           />
         </div>
 
-        <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
-          {/* Dashboard Item */}
-          <a href="/dashboard" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <LayoutDashboard className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Dashboard</span>
-          </a>
-          {/* Café Verde */}
-          <a href="/dashboard/estoque" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Leaf className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Café Verde</span>
-          </a>
-          {/* Torra */}
-          <a href="/dashboard/torra" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Flame className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Produção / Torra</span>
-          </a>
-          {/* Pacotes / Embalamento */}
-          <a href="/dashboard/pacotes" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Box className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Embalamento</span>
-          </a>
-          {/* Comercial */}
-          <a href="/dashboard/comercial" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <TrendingUp className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Comercial</span>
-          </a>
-          {/* Financeiro */}
-          <a href="/dashboard/financeiro" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <BarChart3 className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Financeiro</span>
-          </a>
-          {/* Clientes */}
-          <a href="/dashboard/clientes" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Users className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Clientes</span>
-          </a>
-          {/* Fidelidade */}
-          <a href="/dashboard/fidelidade" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Star className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Fidelidade</span>
-          </a>
-          {/* Custos */}
-          <a href="/dashboard/custos" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Coins className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Custos</span>
-          </a>
-          {/* Parâmetros */}
-          <a href="/dashboard/parametros" className="flex items-center gap-2 p-2 w-full rounded-md hover:bg-[--primary]/10 hover:text-[--primary] transition-all">
-            <Settings className="w-5 h-5 opacity-80" />
-            <span className="hidden lg:block text-sm font-medium">Parâmetros</span>
-          </a>
-        </nav>
+        <SidebarNav />
 
         {/* User Profile / Logout */}
         <div className="w-full pt-4 border-t border-[--card-border] mt-auto">
