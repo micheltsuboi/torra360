@@ -35,7 +35,7 @@ export default async function FinancePage() {
           <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
              <div className="flex items-center gap-2">
                <TrendingUp className="w-4 h-4 text-[--success]" />
-               <h2 className="text-base text-[--primary] font-serif uppercase tracking-widest">Últimas Vendas</h2>
+               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Últimas Vendas</h2>
              </div>
              <a href="/dashboard/comercial" className="text-[10px] text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1 group">
                Ver todas <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
@@ -68,7 +68,7 @@ export default async function FinancePage() {
            <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
              <div className="flex items-center gap-2">
                <Receipt className="w-4 h-4 text-[--danger]" />
-               <h2 className="text-base text-[--primary] font-serif uppercase tracking-widest">Despesas Registradas</h2>
+               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Despesas Registradas</h2>
              </div>
              <a href="/dashboard/custos" className="text-[10px] text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1 group">
                Gerenciar <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

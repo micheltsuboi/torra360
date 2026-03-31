@@ -23,7 +23,7 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
            <TrendingUp className="w-3 h-3 text-[--success] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--success]/5">
-           <span className="text-xl font-serif text-[--foreground] title-glow">R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
            <div className="flex items-center gap-1 mt-1 text-[--success]">
              <ArrowUpRight className="w-2 h-2" />
              <span className="text-[8px] font-bold opacity-40 tracking-tighter">Total recebido</span>
@@ -38,7 +38,7 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
            <Activity className="w-3 h-3 text-[--primary] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
-           <span className="text-xl font-serif text-[--foreground] title-glow">R$ {stats.productionCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.productionCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
            <div className="flex items-center gap-1 mt-1 text-[--warning]">
              <span className="text-[8px] font-bold opacity-40 tracking-tighter">Grãos + Processo</span>
            </div>
@@ -52,7 +52,7 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
            <Receipt className="w-3 h-3 text-[--danger] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--danger]/5">
-           <span className="text-xl font-serif text-[--foreground] title-glow">R$ {stats.expenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.expenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
            <div className="flex items-center gap-1 mt-1 text-[--danger]">
              <ArrowDownRight className="w-2 h-2" />
              <span className="text-[8px] font-bold opacity-40 tracking-tighter">Fixas e Variáveis</span>
@@ -68,7 +68,7 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-br from-transparent via-[--primary]/10 to-[--primary]/5 relative overflow-hidden">
            <div className="absolute inset-0 opacity-10 pointer-events-none wood-texture" />
-           <span className="text-2xl font-serif text-[--primary] title-glow relative z-10">R$ {stats.profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <span className="text-xl font-serif text-[--primary] title-glow relative z-10">R$ {stats.profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
            <div className="bg-[--primary]/30 backdrop-blur-md rounded-full px-2 py-0.5 mt-2 border border-[--primary]/40 relative z-10 shadow-lg">
               <span className="text-[9px] font-bold text-[--primary] uppercase tracking-widest">Margem: {profitMargin}%</span>
            </div>
