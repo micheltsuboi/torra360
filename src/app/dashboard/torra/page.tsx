@@ -79,45 +79,45 @@ export default async function TorraPage() {
 
         {/* Histórico / Relatório de Torra */}
         <div className="xl:col-span-2 flex flex-col gap-4">
-          <div className="glass-panel overflow-hidden">
-             <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40">
-              <h2 className="font-serif">Histórico de Produção</h2>
+          <div className="glass-panel overflow-hidden border-t-4 border-[--primary]/30 shadow-2xl">
+             <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
+              <h2 className="font-serif text-[--primary] text-xl">Histórico de Produção</h2>
              </div>
-             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
+             <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20">
+              <table className="w-full text-left border-collapse min-w-[600px]">
                 <thead>
-                  <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]">
+                  <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]/50 bg-white/5">
                      <th className="p-4 font-medium">Data</th>
                      <th className="p-4 font-medium">Lote Base</th>
                      <th className="p-4 font-medium text-right">Rendimento</th>
-                     <th className="p-4 font-medium text-center border-l border-[--card-border]/20">Quebra (%)</th>
-                     <th className="p-4 font-medium text-right border-l border-[--card-border]/20">Ações</th>
+                     <th className="p-4 font-medium text-center border-l border-[--card-border]/10">Quebra</th>
+                     <th className="p-4 font-medium text-right border-l border-[--card-border]/10">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   {roastBatches && roastBatches.length > 0 ? (
                     roastBatches.map((r: any) => {
-                      // Se os calculos não virem da view por erro, vamos fazer manual aqui:
                       const yieldPerc = r.yield_percentage || (r.qty_after_kg / r.qty_before_kg * 100);
+                      const shrinkage = 100 - yieldPerc;
                       
                       return (
-                        <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
-                          <td className="p-4 text-[--secondary-text]">{new Date(r.date).toLocaleDateString()}</td>
+                        <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
+                          <td className="p-4 text-[--secondary-text] whitespace-nowrap">{new Date(r.date).toLocaleDateString()}</td>
                           <td className="p-4 font-medium text-[--primary]">{r.green_coffee?.name || 'N/A'}</td>
                           <td className="p-4 text-right">
-                             <div className="flex items-center justify-end gap-2">
-                               {yieldPerc > 80 ? '🔥' : '⚠️'} {yieldPerc?.toFixed(1)}%
+                             <div className="flex items-center justify-end gap-2 font-mono">
+                               <span className={yieldPerc < 80 ? 'text-[--danger]' : 'text-[--success]'}>
+                                 {yieldPerc?.toFixed(1)}%
+                               </span>
+                               {yieldPerc < 80 ? '⚠️' : '🔥'}
                              </div>
                           </td>
-                          <td className="p-4 text-center border-l border-[--card-border]/20 text-[--danger]">{r.shrinkage_pct ? r.shrinkage_pct.toFixed(1) : '-'}%</td>
-                          <td className="p-4 text-right border-l border-[--card-border]/20 flex items-center justify-end gap-2 h-full">
-                            <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
-                               <Pencil className="action-icon" />
-                            </span>
-                            <form action={deleteRoastBatch}>
+                          <td className="p-4 text-center border-l border-[--card-border]/10 text-[--danger] font-mono">{shrinkage.toFixed(1)}%</td>
+                          <td className="p-4 text-right border-l border-[--card-border]/10 flex items-center justify-end gap-2">
+                            <form action={deleteRoastBatch} className="flex items-center">
                                <input type="hidden" name="id" value={r.id} />
-                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                                  <Trash2 className="action-icon" />
+                               <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                                  <Trash2 className="action-icon w-5 h-5" />
                                </button>
                             </form>
                           </td>

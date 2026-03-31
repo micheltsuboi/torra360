@@ -162,47 +162,65 @@ export default async function EstoquePage() {
                 <thead>
                   <tr className="text-[--secondary-text] text-xs uppercase border-b border-[--card-border]">
                     <th className="p-4 font-medium">Lote</th>
-                    <th className="p-4 font-medium text-right">Qtd (kg)</th>
+                    <th className="p-4 font-medium text-right">Verde (kg)</th>
                     <th className="p-4 font-medium text-right">Disponível</th>
-                    <th className="p-4 font-medium text-right">Custo/kg</th>
-                    <th className="p-4 font-medium">Origem</th>
-                    <th className="p-4 font-medium">Tipo</th>
+                    <th className="p-4 font-medium text-right">Custo Verde/kg</th>
+                    <th className="p-4 font-medium text-right text-[--primary]">Torrado (kg)</th>
+                    <th className="p-4 font-medium text-right text-[--primary]">Custo Torrado/kg</th>
+                    <th className="p-4 font-medium">Tipo / Qualidade</th>
                     <th className="p-4 font-medium text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="text-sm">
                   {lots && lots.length > 0 ? (
                     lots.map((lot: any) => {
-                      const costPerKg = lot.total_qty_kg > 0 ? (lot.total_cost / lot.total_qty_kg).toFixed(2) : '0.00';
+                      const costPerKg = lot.total_qty_kg > 0 ? (lot.total_cost / lot.total_qty_kg) : 0;
+                      
+                      // Cálculo Estimado de Custo Torrado:
+                      // Formula: (Custo Verde / 0.8) + 4.00 (op)
+                      // O 0.8 representa a quebra de 20% de umidade.
+                      const estRoastedCost = costPerKg > 0 ? (costPerKg / 0.8) + 4.00 : 0;
+
                       return (
                         <tr key={lot.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
-                          <td className="p-4 font-medium text-[--primary]">{lot.name}</td>
+                          <td className="p-4 font-medium">
+                             <div className="flex flex-col">
+                               <span className="text-[--primary] font-serif transition-all hover:tracking-wider cursor-default">{lot.name}</span>
+                               <span className="text-[10px] text-[--secondary-text] uppercase">{lot.origin}</span>
+                             </div>
+                          </td>
                           <td className="p-4 text-right">{lot.total_qty_kg} kg</td>
                           <td className="p-4 text-right">
-                             <span className={lot.available_qty_kg < 5 ? 'text-[--danger] font-bold' : ''}>
+                             <span className={lot.available_qty_kg < 5 ? 'text-[--danger] font-bold ring-1 ring-[--danger]/20 px-1 rounded' : ''}>
                                 {lot.available_qty_kg} kg
                              </span>
                           </td>
-                          <td className="p-4 text-right">R$ {costPerKg}</td>
-                          <td className="p-4 text-[--secondary-text] text-xs">{lot.origin}</td>
-                          <td className="p-4 text-[--secondary-text] text-xs">{lot.coffee_type} / {lot.quality_level}</td>
+                          <td className="p-4 text-right opacity-80">R$ {costPerKg.toFixed(2)}</td>
+                          <td className="p-4 text-right font-bold text-[--primary]/80">{lot.total_roasted_qty.toFixed(2)} kg</td>
+                          <td className="p-4 text-right">
+                             <div className="flex flex-col items-end">
+                               <span className="font-bold text-[--primary]">R$ {estRoastedCost.toFixed(2)}</span>
+                               <span className="text-[9px] uppercase opacity-40">Est. (20% quebra)</span>
+                             </div>
+                          </td>
+                          <td className="p-4 text-[--secondary-text] text-xs">
+                             {lot.coffee_type}<br/>
+                             <span className="opacity-60">{lot.quality_level}</span>
+                          </td>
                           <td className="p-4 text-right flex items-center justify-end gap-2">
-                            <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
-                              <Pencil className="action-icon" />
-                            </span>
-                            <form action={deleteGreenCoffeeLot}>
-                               <input type="hidden" name="id" value={lot.id} />
-                               <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                                 <Trash2 className="action-icon" />
-                               </button>
-                            </form>
+                             <form action={deleteGreenCoffeeLot}>
+                                <input type="hidden" name="id" value={lot.id} />
+                                <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                                  <Trash2 className="action-icon w-5 h-5" />
+                                </button>
+                             </form>
                           </td>
                         </tr>
                       );
                     })
                   ) : (
                     <tr>
-                      <td colSpan={6} className="p-10 text-center text-[--secondary-text] italic">
+                      <td colSpan={8} className="p-10 text-center text-[--secondary-text] italic">
                         Nenhum lote cadastrado.
                       </td>
                     </tr>

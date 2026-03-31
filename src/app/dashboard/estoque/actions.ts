@@ -5,16 +5,25 @@ import { revalidatePath } from 'next/cache'
 
 export async function getGreenCoffeeLots() {
   const supabase = await createClient()
+  
+  // Buscamos os lotes e incluímos a soma das quantidades torradas (qty_after_kg)
   const { data, error } = await supabase
     .from('green_coffee')
-    .select('*')
+    .select('*, roast_batches(qty_after_kg)')
     .order('created_at', { ascending: false })
 
   if (error) {
      console.error("Error fetching green coffee lots:", error);
      return [];
   }
-  return data
+
+  // Processamos para ter o total torrado fácil no objeto
+  const processed = data?.map((lot: any) => ({
+    ...lot,
+    total_roasted_qty: lot.roast_batches?.reduce((acc: number, r: any) => acc + (r.qty_after_kg || 0), 0) || 0
+  }))
+
+  return processed || []
 }
 
 export async function createGreenCoffeeLot(formData: FormData) {

@@ -12,6 +12,7 @@ import {
   createOrigin,
   deleteOrigin
 } from './actions'
+import { Trash2 } from 'lucide-react'
 
 export default async function ParametrosPage() {
   const coffeeTypes = await getCoffeeTypes()
@@ -60,10 +61,12 @@ export default async function ParametrosPage() {
               {providers && providers.length > 0 ? (
                 providers.map((item: any) => (
                   <div key={item.id} className="flex justify-between items-center p-3 rounded bg-white/5 border border-white/5">
-                    <span className="text-sm truncate w-full pr-2" title={item.name}>{item.name}</span>
-                    <form action={deleteProvider}>
+                    <span className="text-sm truncate w-full pr-2 font-medium" title={item.name}>{item.name}</span>
+                    <form action={deleteProvider} className="flex-shrink-0">
                       <input type="hidden" name="id" value={item.id} />
-                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
+                      <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </form>
                   </div>
                 ))
@@ -96,10 +99,12 @@ export default async function ParametrosPage() {
               {origins && origins.length > 0 ? (
                 origins.map((item: any) => (
                   <div key={item.id} className="flex justify-between items-center p-3 rounded bg-white/5 border border-white/5">
-                    <span className="text-sm truncate w-full pr-2" title={item.name}>{item.name}</span>
-                    <form action={deleteOrigin}>
+                    <span className="text-sm truncate w-full pr-2 font-medium" title={item.name}>{item.name}</span>
+                    <form action={deleteOrigin} className="flex-shrink-0">
                       <input type="hidden" name="id" value={item.id} />
-                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
+                      <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </form>
                   </div>
                 ))
@@ -132,10 +137,12 @@ export default async function ParametrosPage() {
               {coffeeTypes && coffeeTypes.length > 0 ? (
                 coffeeTypes.map((ct: any) => (
                   <div key={ct.id} className="flex justify-between items-center p-3 rounded bg-white/5 border border-white/5">
-                    <span className="text-sm truncate w-full pr-2" title={ct.name}>{ct.name}</span>
-                    <form action={deleteCoffeeType}>
+                    <span className="text-sm truncate w-full pr-2 font-medium" title={ct.name}>{ct.name}</span>
+                    <form action={deleteCoffeeType} className="flex-shrink-0">
                       <input type="hidden" name="id" value={ct.id} />
-                      <button type="submit" className="danger-btn text-xs py-2 px-4 whitespace-nowrap h-fit">Remover</button>
+                      <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </form>
                   </div>
                 ))
@@ -168,10 +175,12 @@ export default async function ParametrosPage() {
               {qualityLevels && qualityLevels.length > 0 ? (
                 qualityLevels.map((ql: any) => (
                   <div key={ql.id} className="flex justify-between items-center p-3 rounded bg-white/5 border border-white/5">
-                    <span className="text-sm truncate w-full pr-2" title={ql.name}>{ql.name}</span>
-                    <form action={deleteQualityLevel}>
+                    <span className="text-sm truncate w-full pr-2 font-medium" title={ql.name}>{ql.name}</span>
+                    <form action={deleteQualityLevel} className="flex-shrink-0">
                       <input type="hidden" name="id" value={ql.id} />
-                      <button type="submit" className="text-[--danger] text-xs hover:underline whitespace-nowrap">Remover</button>
+                      <button type="submit" className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 p-2 rounded-full transition-all">
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </form>
                   </div>
                 ))

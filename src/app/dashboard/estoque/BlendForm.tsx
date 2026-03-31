@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { Plus, Trash2, Calculator } from 'lucide-react'
+import { Plus, Trash2, Minus } from 'lucide-react'
 import { createBlend } from './actions'
 
 interface Lot {
@@ -87,13 +87,15 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
             const selectedLot = lots.find(l => l.id === comp.lotId)
             
             return (
-              <div key={index} className="flex flex-col gap-2 p-3 rounded bg-white/5 border border-white/5 relative group transition-colors hover:bg-white/10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1">
+              <div key={index} className="flex flex-col gap-2 p-4 rounded-lg bg-black/40 border border-[--card-border]/30 relative transition-all hover:border-[--primary]/40 shadow-lg group">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                  
+                  {/* Select Lote */}
+                  <div className="md:col-span-6 flex flex-col gap-1">
                     <select 
                       value={comp.lotId}
                       onChange={(e) => updateComponent(index, 'lotId', e.target.value)}
-                      className="bg-black/60 text-sm border-white/10"
+                      className="bg-black/60 text-sm border-white/10 w-full"
                       required
                     >
                       <option value="">Selecionar Lote...</option>
@@ -104,34 +106,60 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
                       ))}
                     </select>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input 
-                      type="number" 
-                      step="0.01"
-                      value={comp.qty || ''}
-                      onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value))}
-                      placeholder="Qtd (kg)"
-                      className="bg-black/60 text-sm flex-1 border-white/10"
-                      required
-                    />
-                    <div className="w-16 text-right font-mono text-[--primary] text-xs font-bold">
+
+                  {/* Quantidade e Controles */}
+                  <div className="md:col-span-5 flex items-center gap-3">
+                    <div className="flex items-center bg-black/40 rounded border border-white/10 p-1 flex-1">
+                      <button 
+                        type="button"
+                        onClick={() => updateComponent(index, 'qty', Math.max(0, (comp.qty || 0) - 1))}
+                        className="p-1 hover:text-[--primary] transition-colors"
+                      >
+                        <Minus className="w-5 h-5" />
+                      </button>
+                      <div className="flex-1">
+                        <input 
+                          type="number" 
+                          step="0.01"
+                          value={comp.qty || ''}
+                          onChange={(e) => updateComponent(index, 'qty', parseFloat(e.target.value) || 0)}
+                          placeholder="kg"
+                          className="bg-transparent border-none text-center text-sm w-full focus:ring-0 p-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          required
+                        />
+                      </div>
+                      <button 
+                        type="button"
+                        onClick={() => updateComponent(index, 'qty', (comp.qty || 0) + 1)}
+                        className="p-1 hover:text-[--primary] transition-colors"
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                    </div>
+                    <div className="w-16 text-right font-mono text-[--primary] text-sm font-bold">
                       {percentage}%
                     </div>
                   </div>
-                </div>
 
-                {components.length > 1 && (
-                  <button 
-                    type="button"
-                    onClick={() => removeComponent(index)}
-                    className="absolute -right-2 -top-2 bg-[--danger] text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-xl z-10"
-                  >
-                    <Trash2 className="w-3 h-3" />
-                  </button>
-                )}
+                  {/* Lixeira */}
+                  <div className="md:col-span-1 flex justify-end">
+                    {components.length > 1 && (
+                      <button 
+                        type="button"
+                        onClick={() => removeComponent(index)}
+                        className="action-icon-btn text-[--danger] hover:scale-110 transition-transform p-2"
+                        title="Remover Item"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
                 
                 {selectedLot && comp.qty > selectedLot.available_qty_kg && (
-                  <p className="text-[--danger] text-[10px] uppercase font-bold mt-1">Quantidade excede o disponível ({selectedLot.available_qty_kg}kg)</p>
+                  <p className="text-[--danger] text-[10px] uppercase font-bold mt-1 text-center bg-[--danger]/10 py-1 rounded">
+                    Quantidade excede o disponível ({selectedLot.available_qty_kg}kg)
+                  </p>
                 )}
               </div>
             )
@@ -140,9 +168,9 @@ export default function BlendForm({ lots }: { lots: Lot[] }) {
           <button 
             type="button" 
             onClick={addComponent}
-            className="golden-btn w-full mt-2"
+            className="golden-btn w-full mt-2 flex items-center justify-center gap-2"
           >
-            <Plus className="w-4 h-4 mr-2" /> Adicionar Lote ao Blend
+            <Plus className="w-5 h-5" /> Adicionar Outro Lote ao Blend
           </button>
         </div>
 
