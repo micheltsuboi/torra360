@@ -1,6 +1,6 @@
-import { getClients, deleteClientRecord } from './actions'
+import { getClients } from './actions'
 import ClientForm from './ClientForm'
-import { Pencil, Trash2 } from 'lucide-react'
+import ClientList from './ClientList'
 
 export default async function ClientesPage() {
   const clients = await getClients()
@@ -15,64 +15,17 @@ export default async function ClientesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+      <div className="flex flex-col gap-10">
         
-        {/* Formulário de Cadastro */}
-        <div className="glass-panel p-6 h-fit">
+        {/* Formulário de Cadastro - Topo */}
+        <div className="glass-panel p-6 h-fit max-w-2xl mx-auto w-full">
           <h2 className="text-xl font-serif mb-6 text-[--primary]">Novo Cliente</h2>
           <ClientForm />
         </div>
 
-        {/* Listagem de Clientes */}
-        <div className="xl:col-span-2 flex flex-col gap-2">
-          <div className="glass-panel overflow-hidden">
-             <div className="p-2 border-b border-[--card-border] card-texture-header">
-              <h2 className="font-serif">Listagem de Clientes</h2>
-             </div>
-             <div className="overflow-x-auto">
-              <table className="w-full   border-collapse">
-                <thead>
-                  <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--card-border]">
-                    <th className="p-2 font-medium">Nome</th>
-                    <th className="p-2 font-medium">Documento</th>
-                    <th className="p-2 font-medium">Contato</th>
-                    <th className="p-2 font-medium">Local</th>
-                    <th className="p-2 font-medium">Ações</th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm">
-                  {clients && clients.length > 0 ? (
-                    clients.map((client: any) => (
-                      <tr key={client.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
-                        <td className="p-2 font-medium text-[--primary]">{client.name}</td>
-                        <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
-                        <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.phone || '-'}</td>
-                        <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
-                        <td className="p-2 flex items-center justify-center gap-2">
-                          <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
-                            <Pencil className="action-icon" />
-                          </span>
-                          <form action={deleteClientRecord}>
-                            <input type="hidden" name="id" value={client.id} />
-                            <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
-                              <Trash2 className="action-icon" />
-                            </button>
-                          </form>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan={5} className="p-10 text-center text-[--secondary-text] italic">
-                        Nenhum cliente cadastrado.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-             </div>
-          </div>
-        </div>
+        {/* Listagem de Clientes - Base */}
+        <ClientList clients={clients} />
+        
       </div>
     </div>
   )
