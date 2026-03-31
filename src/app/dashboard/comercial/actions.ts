@@ -72,17 +72,21 @@ export async function createPDVSale(payload: any) {
     }
 
     // 2. Calcular e Registrar Ganho (Baseado na configuração do tenant)
-    const { data: settings } = await supabase.from('loyalty_settings').select('cashback_percentage, is_active').single()
+    const { data: settings } = await supabase.from('loyalty_settings').select('cashback_percentage, is_active, expiry_days').single()
     
     if (settings?.is_active) {
        const earnedAmount = final_amount * (settings.cashback_percentage / 100)
        if (earnedAmount > 0) {
+          const expiresAt = new Date()
+          expiresAt.setDate(expiresAt.getDate() + (settings.expiry_days || 365))
+
           await supabase.from('loyalty_transactions').insert({
             client_id,
             sale_id: saleData.id,
             amount: earnedAmount,
             transaction_type: 'EARNED',
-            description: `Cashback gerado na venda #${saleData.id.slice(0,8)}`
+            description: `Cashback gerado na venda #${saleData.id.slice(0,8)}`,
+            expires_at: expiresAt.toISOString()
           })
        }
     }

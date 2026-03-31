@@ -13,16 +13,23 @@ export async function getLoyaltyStats() {
 
   const { data: totals } = await supabase
     .from('loyalty_transactions')
-    .select('amount, transaction_type')
+    .select('amount, transaction_type, expires_at')
 
-  const totalEarned = totals?.filter(t => t.transaction_type === 'EARNED').reduce((acc, curr) => acc + curr.amount, 0) || 0
+  const now = new Date()
+  
+  // Apenas EARNED que não expirou
+  const activeEarned = totals?.filter(t => 
+    t.transaction_type === 'EARNED' && 
+    (!t.expires_at || new Date(t.expires_at) > now)
+  ).reduce((acc, curr) => acc + curr.amount, 0) || 0
+
   const totalRedeemed = totals?.filter(t => t.transaction_type === 'REDEEMED').reduce((acc, curr) => acc + Math.abs(curr.amount), 0) || 0
 
   return {
     settings,
-    totalEarned,
+    totalEarned: activeEarned,
     totalRedeemed,
-    activeBalance: totalEarned - totalRedeemed
+    activeBalance: Math.max(0, activeEarned - totalRedeemed)
   }
 }
 
@@ -38,16 +45,24 @@ export async function getCustomerLoyaltyReport() {
     .from('loyalty_transactions')
     .select('*')
 
+  const now = new Date()
+
   const report = clients?.map(client => {
     const clientTrans = transactions?.filter(t => t.client_id === client.id) || []
-    const earned = clientTrans.filter(t => t.transaction_type === 'EARNED').reduce((acc, curr) => acc + curr.amount, 0)
+    
+    // Apenas EARNED que não expirou PARA O SALDO
+    const earned = clientTrans.filter(t => 
+       t.transaction_type === 'EARNED' && 
+       (!t.expires_at || new Date(t.expires_at) > now)
+    ).reduce((acc, curr) => acc + curr.amount, 0)
+
     const redeemed = clientTrans.filter(t => t.transaction_type === 'REDEEMED').reduce((acc, curr) => acc + Math.abs(curr.amount), 0)
     
     return {
       ...client,
       earned,
       redeemed,
-      balance: earned - redeemed
+      balance: Math.max(0, earned - redeemed)
     }
   }) || []
 
@@ -56,19 +71,18 @@ export async function getCustomerLoyaltyReport() {
 
 export async function updateLoyaltySettings(formData: FormData) {
   const percentage = parseFloat(formData.get('cashback_percentage') as string)
-  const is_active = formData.get('is_active') === 'on'
-  const apply_to_all = formData.get('apply_to_all') === 'on'
+  const expiryDays = parseInt(formData.get('expiry_days') as string) || 365
+  const is_active = formData.get('is_active') === 'on' || formData.get('is_active') === 'true'
 
   const supabase = await createClient()
   await supabase
     .from('loyalty_settings')
     .upsert({ 
         cashback_percentage: percentage, 
+        expiry_days: expiryDays,
         is_active, 
-        apply_to_all,
         updated_at: new Date().toISOString()
     }, { onConflict: 'tenant_id' })
 
   revalidatePath('/dashboard/fidelidade')
-  revalidatePath('/dashboard/parametros')
 }

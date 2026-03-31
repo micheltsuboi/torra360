@@ -1,6 +1,6 @@
 import { getLoyaltyStats, getCustomerLoyaltyReport } from './actions'
 import FidelityStats from './FidelityStats'
-import { Star, Gift, Search, ArrowRight, UserCheck } from 'lucide-react'
+import { Star, Gift, Search, ArrowRight, UserCheck, MessageCircle } from 'lucide-react'
 
 export default async function FidelityPage() {
   const stats = await getLoyaltyStats()
@@ -43,7 +43,22 @@ export default async function FidelityPage() {
                  {report.map((client: any) => (
                     <tr key={client.id} className="border-b border-white/5 hover:bg-white/5 transition-all group">
                        <td className="p-4 font-bold text-[--foreground]">{client.name}</td>
-                       <td className="p-4 opacity-60 text-xs border-l border-white/5">{client.phone || '-'}</td>
+                       <td className="p-4 opacity-60 text-xs border-l border-white/5">
+                          <div className="flex items-center justify-center gap-2">
+                             <span>{client.phone || '-'}</span>
+                             {client.phone && (
+                                <a 
+                                  href={`https://wa.me/55${client.phone.replace(/\D/g, '')}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-[#25D366] hover:scale-125 transition-transform"
+                                  title="Abrir WhatsApp"
+                                >
+                                  <MessageCircle className="w-4 h-4 fill-current" />
+                                </a>
+                             )}
+                          </div>
+                       </td>
                        <td className="p-4 font-mono text-[--success] border-l border-white/5">R$ {client.earned.toFixed(2)}</td>
                        <td className="p-4 font-mono text-[--danger] border-l border-white/5">R$ {client.redeemed.toFixed(2)}</td>
                        <td className="p-4 font-mono font-bold text-[--primary] bg-[--primary]/5 group-hover:bg-[--primary]/10 transition-colors border-l border-white/5">
