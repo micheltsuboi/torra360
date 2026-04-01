@@ -69,8 +69,8 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
             </div>
           </div>
 
-          <div className="p-3 bg-black/40 rounded-xl border border-white/5 text-[10px] text-[--secondary-text] capitalize font-bold leading-relaxed shadow-inner">
-             <span className="text-[--primary] uppercase tracking-widest">💡 Informação:</span> O rendimento e os custos finais do café torrado serão processados automaticamente pelo sistema com base no custo operacional informado.
+          <div className="px-3 py-2 bg-white/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight opacity-70">
+            <span className="text-[--primary] uppercase tracking-tighter mr-1">Nota:</span> Rendimento e custos processados automaticamente com base no custo operacional informado.
           </div>
 
           <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
