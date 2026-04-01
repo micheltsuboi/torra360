@@ -6,24 +6,37 @@ import { revalidatePath } from 'next/cache'
 export async function getRoastBatches() {
   const supabase = await createClient()
   
-  // Consultamos a View consolidada que já possui todos os cálculos e o nome do café
-  const { data, error } = await supabase
+  // Tenta consultar a view primeiro
+  const { data: viewData, error: viewError } = await supabase
     .from('roast_reports_view')
     .select('*')
     .order('date', { ascending: false })
     .limit(50)
 
-  if (error) {
-     console.error('Erro ao acessar view de torra:', error)
-     // Fallback para tabela base se a view falhar
-     const fallback = await supabase
+  if (viewError) {
+     console.error('Erro ao acessar view (usando fallback):', viewError)
+     // Fallback limpo: traz da tabela base com join
+     const { data: tableData } = await supabase
         .from('roast_batches')
-        .select('*, green_coffee(name)')
+        .select(`
+          *,
+          green_coffee:green_coffee_id (
+            name
+          )
+        `)
         .order('date', { ascending: false })
         .limit(50)
-     return fallback.data || []
+     
+     return tableData || []
   }
-  return data || []
+
+  // Normaliza o retorno da view para o componente RoastList
+  // A View já traz 'green_coffee_name', colocamos no objeto aninhado se necessário
+  return (viewData || []).map(item => ({
+    ...item,
+    id: item.roast_batch_id, // Garante que tenha 'id'
+    green_coffee: item.green_coffee_name ? { name: item.green_coffee_name } : null
+  }))
 }
 
 export async function getAvailableGreenLots() {
