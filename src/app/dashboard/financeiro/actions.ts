@@ -25,6 +25,7 @@ export async function getFinancialStats() {
     .from('sale_transactions')
     .select('final_amount, date')
     .eq('tenant_id', tenantId)
+    .eq('payment_status', 'paid')
 
   const totalRevenue = sales?.reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
 
@@ -83,4 +84,39 @@ export async function getExpensesList() {
     .limit(20)
 
   return expenses || []
+}
+
+export async function getPendingSales() {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+  
+  const { data: pendingSales } = await supabase
+    .from('sale_transactions')
+    .select('*, clients(name)')
+    .eq('tenant_id', tenantId)
+    .eq('payment_status', 'pending')
+    .order('date', { ascending: false })
+
+  return pendingSales || []
+}
+
+export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+  
+  const { error } = await supabase
+    .from('sale_transactions')
+    .update({ 
+      payment_status: 'paid',
+      payment_method: finalPaymentMethod,
+      date: new Date().toISOString().split('T')[0] // Opcional: atualizar para a data do recebimento?
+    })
+    .eq('id', saleId)
+    .eq('tenant_id', tenantId)
+
+  if (error) throw error
+  
+  const { revalidatePath } = require('next/cache')
+  revalidatePath('/dashboard/financeiro')
+  revalidatePath('/dashboard/comercial')
 }

@@ -100,7 +100,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
       {/* Esquerda: Catálogo de Produtos para Venda */}
       <div className="glass-panel overflow-hidden flex flex-col h-full max-h-[600px]">
         <div className="p-2 border-b border-[--card-border] card-texture-header">
-           <h2 className="font-serif text-[--primary]">Vitrine de Produtos</h2>
+           <h2 className="font-serif text-[--primary]">Estoque</h2>
         </div>
         <div className="p-2 overflow-y-auto">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
@@ -115,7 +115,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
                   {p.roast_batch?.green_coffee?.name || 'Produto S/N'}
                 </div>
                 <div className="mt-2 text-[--success] font-bold">R$ {p.retail_price.toFixed(2)}</div>
-                <div className="text-[10px] text-[--secondary-text] mt-1">Estoque: {p.quantity_units} pct</div>
+                <div className="text-[10px] text-[--secondary-text] mt-1">Disp: {p.quantity_units} pct</div>
                 <div className="absolute inset-0 bg-[#C39967]/10 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg pointer-events-none" />
               </div>
             ))}
@@ -179,7 +179,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             <div className="m-auto text-center flex flex-col items-center gap-2 py-10">
               <ShoppingCart className="w-12 h-12 text-[--primary] opacity-10" />
               <p className="text-xs text-[--secondary-text] leading-relaxed max-w-[150px] opacity-40">
-                O carrinho está vazio. Selecione produtos na vitrine ao lado.
+                O carrinho está vazio. Selecione produtos no estoque ao lado.
               </p>
             </div>
           )}
@@ -252,6 +252,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
                <option value="Crédito" className="bg-[#110D0B]">Cartão de Crédito</option>
                <option value="Débito" className="bg-[#110D0B]">Cartão de Débito</option>
                <option value="Dinheiro" className="bg-[#110D0B]">Dinheiro Vivo</option>
+               <option value="À receber" className="bg-[#110D0B]">À receber (Pendência)</option>
             </select>
           </div>
 

@@ -57,7 +57,8 @@ export async function createPDVSale(payload: any) {
     total_amount,
     discount_amount,
     final_amount,
-    payment_method
+    payment_method,
+    payment_status: payment_method === 'À receber' ? 'pending' : 'paid'
   }).select('id').single()
 
   if (saleError || !saleData) {
@@ -220,8 +221,36 @@ export async function deleteSale(formData: FormData) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
 
+  // 1. Buscar itens da venda para devolver ao estoque
+  const { data: items } = await supabase
+    .from('sale_items')
+    .select('packaging_batch_id, quantity')
+    .eq('sale_id', id)
+    .eq('tenant_id', tenantId)
+
+  if (items && items.length > 0) {
+    for (const item of items) {
+      // Pequena observação: se o lote de embalamento foi deletado entre a venda e a exclusão, 
+      // o update não fará nada (o que é ok)
+      const { data: pkg } = await supabase
+        .from('packaging_batches')
+        .select('quantity_units')
+        .eq('id', item.packaging_batch_id)
+        .eq('tenant_id', tenantId)
+        .single()
+
+      if (pkg) {
+        await supabase.from('packaging_batches').update({
+          quantity_units: pkg.quantity_units + item.quantity
+        }).eq('id', item.packaging_batch_id).eq('tenant_id', tenantId)
+      }
+    }
+  }
+
+  // 2. Excluir a venda (RLS e FKs devem cuidar do resto se configuradas as cascatas)
   await supabase.from('sale_transactions').delete().eq('id', id).eq('tenant_id', tenantId)
   
   revalidatePath('/dashboard/comercial')
   revalidatePath('/dashboard/pacotes')
+  revalidatePath('/dashboard/financeiro')
 }

@@ -1,12 +1,13 @@
-import { getFinancialStats, getRecentTransactions, getExpensesList } from './actions'
+import { getFinancialStats, getRecentTransactions, getExpensesList, getPendingSales, markSaleAsPaid } from './actions'
 import FinanceStats from './FinanceStats'
 import FinanceChart from './FinanceChart'
-import { Wallet, Receipt, ArrowRight, TrendingUp } from 'lucide-react'
+import { Wallet, Receipt, ArrowRight, TrendingUp, Clock, CheckCircle2 } from 'lucide-react'
 
 export default async function FinancePage() {
   const stats = await getFinancialStats()
   const recentSales = await getRecentTransactions()
   const recentExpenses = await getExpensesList()
+  const pendingSales = await getPendingSales()
 
   return (
     <div className="flex flex-col gap-8 pb-10">
@@ -25,6 +26,60 @@ export default async function FinancePage() {
       {/* Cards de Métricas */}
       <FinanceStats stats={stats} />
 
+      {/* Contas a Receber (Novo) */}
+      {pendingSales.length > 0 && (
+        <div className="glass-panel border-t-2 border-[--primary]/50 overflow-hidden">
+           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/60 flex items-center gap-2">
+              <Clock className="w-4 h-4 text-[--primary]" />
+              <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Contas a Receber / Pendências</h2>
+              <span className="ml-auto bg-[--primary]/20 text-[--primary] text-[10px] px-2 py-0.5 rounded-full font-bold">
+                {pendingSales.length} {pendingSales.length === 1 ? 'pendência' : 'pendências'}
+              </span>
+           </div>
+           <div className="overflow-x-auto">
+              <table className="w-full text-xs">
+                <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
+                  <tr>
+                    <th className="p-3 text-left">Data</th>
+                    <th className="p-3 text-left">Cliente</th>
+                    <th className="p-3 text-right">Valor</th>
+                    <th className="p-3 text-center">Ação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingSales.map((sale: any) => (
+                    <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                      <td className="p-3 opacity-60">{new Date(sale.date).toLocaleDateString()}</td>
+                      <td className="p-3 font-bold text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
+                      <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
+                      <td className="p-3">
+                        <form 
+                          action={async (formData: FormData) => {
+                            'use server'
+                            const method = formData.get('method') as string
+                            await markSaleAsPaid(sale.id, method)
+                          }}
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <select name="method" required className="bg-black/40 border border-white/10 text-[10px] rounded p-1 text-[--primary] outline-none">
+                            <option value="Pix">Pix</option>
+                            <option value="Crédito">Crédito</option>
+                            <option value="Débito">Débito</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                          </select>
+                          <button type="submit" className="bg-[--success]/20 hover:bg-[--success]/40 text-[--success] p-1.5 rounded-lg transition-all" title="Confirmar Recebimento">
+                            <CheckCircle2 className="w-4 h-4" />
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+           </div>
+        </div>
+      )}
+
       {/* Gráfico Visual */}
       <FinanceChart stats={stats} />
 
@@ -35,7 +90,7 @@ export default async function FinancePage() {
           <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
              <div className="flex items-center gap-2">
                <TrendingUp className="w-4 h-4 text-[--success]" />
-               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Últimas Vendas</h2>
+               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Vendas Confirmadas (Pagas)</h2>
              </div>
              <a href="/dashboard/comercial" className="text-[10px] text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1 group">
                Ver todas <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
@@ -51,7 +106,7 @@ export default async function FinancePage() {
                    </tr>
                 </thead>
                 <tbody>
-                   {recentSales.map((sale: any) => (
+                   {recentSales.filter((s:any) => s.payment_status === 'paid').map((sale: any) => (
                       <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
                          <td className="p-3 opacity-60">{new Date(sale.date).toLocaleDateString()}</td>
                          <td className="p-3 font-bold text-[--primary]">{sale.clients?.name || 'Venda Avulsa'}</td>
