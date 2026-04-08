@@ -78,7 +78,8 @@ export async function addPackagingLot(formData: FormData) {
     .from('expenses')
     .insert({
       tenant_id: tenantId,
-      notes: `Compra de Insumo: ${name} (${quantity} un)`,
+      description: name,
+      notes: `${quantity} un`,
       amount: total_cost,
       category: 'Embalagens',
       date: new Date().toISOString().split('T')[0]
