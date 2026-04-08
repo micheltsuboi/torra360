@@ -3,14 +3,28 @@
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
 
+async function getTenantId(supabase: any) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) throw new Error('Usuário não autenticado')
+  
+  const { data: profile } = await supabase
+    .from('users')
+    .select('tenant_id')
+    .eq('id', user.id)
+    .single()
+    
+  if (!profile) throw new Error('Perfil não encontrado')
+  return profile.tenant_id
+}
+
 export async function getRoastBatchesAvailable() {
   const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
   
-  // Buscamos os lotes de torra. Idealmente usaríamos a view, mas para a seleção 
-  // no formulário de embalamento, a tabela base com o nome do café verde já resolve.
   const { data, error } = await supabase
     .from('roast_batches')
     .select('id, date, qty_after_kg, green_coffee(name)')
+    .eq('tenant_id', tenantId)
     .order('date', { ascending: false })
     .limit(50)
 
@@ -24,15 +38,19 @@ export async function getRoastBatchesAvailable() {
 
 export async function getPackages() {
   const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+  
   const { data } = await supabase
     .from('packaging_batches')
     .select('*, roast_batch:roast_batch_id(date, qty_after_kg, green_coffee(name))')
+    .eq('tenant_id', tenantId)
     .order('created_at', { ascending: false })
   return data || []
 }
 
 export async function createPackages(formData: FormData) {
   const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
   
   const roast_batch_id = formData.get('roast_batch_id') as string
   const date = formData.get('date') as string
@@ -44,6 +62,7 @@ export async function createPackages(formData: FormData) {
   const expense_package_id = formData.get('expense_package_id') as string || null
 
   const { error } = await supabase.from('packaging_batches').insert({
+    tenant_id: tenantId,
     roast_batch_id,
     date,
     bean_format,
@@ -58,10 +77,6 @@ export async function createPackages(formData: FormData) {
     return
   }
 
-  // Aqui é mock, como o controle de quanto o loge ja foi embalado requer update:
-  // Para simplificar, confiaremos no uso de "lookup -> qty_after", assumindo que 
-  // um lote de torra foi inteiramente embalado naquele formulário.
-
   revalidatePath('/dashboard/pacotes')
 }
 
@@ -70,13 +85,16 @@ export async function deletePackage(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  await supabase.from('packaging_batches').delete().eq('id', id)
+  const tenantId = await getTenantId(supabase)
+  
+  await supabase.from('packaging_batches').delete().eq('id', id).eq('tenant_id', tenantId)
   
   revalidatePath('/dashboard/pacotes')
 }
 
 export async function updatePackage(formData: FormData) {
   const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
   
   const id = formData.get('id') as string
   const date = formData.get('date') as string
@@ -97,6 +115,7 @@ export async function updatePackage(formData: FormData) {
       expense_package_id
     })
     .eq('id', id)
+    .eq('tenant_id', tenantId)
 
   if (error) {
     console.error('Error updating package:', error)

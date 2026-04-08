@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { Pencil, Trash2, Search, MessageCircle } from 'lucide-react'
-import { deleteClientRecord } from './actions'
+import { deleteClientRecord, updateClientRecord } from './actions'
+import Modal from '@/components/ui/Modal'
 
 export default function ClientList({ clients }: { clients: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [editingClient, setEditingClient] = useState<any | null>(null)
 
   const filteredClients = clients?.filter(client => 
     client.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -70,12 +72,16 @@ export default function ClientList({ clients }: { clients: any[] }) {
                     </td>
                     <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
                     <td className="p-2 flex items-center justify-center gap-2">
-                      <span className="action-icon-btn text-[--primary] opacity-60" title="Edição em breve">
+                      <button 
+                        onClick={() => setEditingClient(client)}
+                        className="action-icon-btn text-[--primary]" 
+                        title="Editar"
+                      >
                         <Pencil className="action-icon" />
-                      </span>
+                      </button>
                       <form action={deleteClientRecord}>
                         <input type="hidden" name="id" value={client.id} />
-                        <button type="submit" className="action-icon-btn text-[--danger] opacity-60">
+                        <button type="submit" className="action-icon-btn text-[--danger]">
                           <Trash2 className="action-icon" />
                         </button>
                       </form>
@@ -93,6 +99,64 @@ export default function ClientList({ clients }: { clients: any[] }) {
           </table>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      <Modal 
+        isOpen={editingClient !== null} 
+        onClose={() => setEditingClient(null)} 
+        title="Editar Cliente"
+      >
+        {editingClient && (
+          <form action={async (formData) => {
+            await updateClientRecord(formData)
+            setEditingClient(null)
+          }} className="flex flex-col gap-4">
+            <input type="hidden" name="id" value={editingClient.id} />
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Nome Completo</label>
+                <input name="name" defaultValue={editingClient.name} required />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">CPF / CNPJ</label>
+                <input name="cpf" defaultValue={editingClient.cpf} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Telefone</label>
+                <input name="phone" defaultValue={editingClient.phone} />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Data de Nascimento</label>
+                <input name="birth_date" type="date" defaultValue={editingClient.birth_date} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[--secondary-text]">Endereço</label>
+              <input name="address" defaultValue={editingClient.address} />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Cidade</label>
+                <input name="city" defaultValue={editingClient.city} />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Estado (UF)</label>
+                <input name="state" defaultValue={editingClient.state} maxLength={2} />
+              </div>
+            </div>
+
+            <button type="submit" className="golden-btn py-4 mt-2">
+              Salvar Alterações
+            </button>
+          </form>
+        )}
+      </Modal>
     </div>
   )
 }

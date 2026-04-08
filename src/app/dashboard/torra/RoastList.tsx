@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, Flame, Search } from 'lucide-react'
-import { deleteRoastBatch } from './actions'
+import { Trash2, Pencil, Flame, Search } from 'lucide-react'
+import { deleteRoastBatch, updateRoastBatch } from './actions'
+import Modal from '@/components/ui/Modal'
 
-export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
+export default function RoastList({ roastBatches, greenLots }: { roastBatches: any[], greenLots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [editingRoast, setEditingRoast] = useState<any | null>(null)
 
   const filteredBatches = roastBatches?.filter(r => 
     r.green_coffee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,18 +84,24 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                       </td>
                       <td className="p-2 border-l border-white/5 bg-[--primary]/5">
                         <div className="flex flex-col items-center">
-                          <span className="text-sm font-bold text-[--primary]">R$ {r.total_roast_cost?.toFixed(2) || '0.00'}</span>
+                          <span className="text-sm font-bold text-[--primary]">R$ {r.total_torra_cost?.toFixed(2) || r.total_roast_cost?.toFixed(2) || '0.00'}</span>
                           <span className="text-[9px] font-bold opacity-40 uppercase">R$ {r.cost_per_kg_roasted?.toFixed(2) || '0.00'}/kg</span>
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
-                        <div className="flex justify-center items-center gap-1">
-                        <form action={deleteRoastBatch} className="flex items-center">
-                          <input type="hidden" name="id" value={r.id} />
-                          <button type="submit" className="action-icon-btn text-[--danger]">
-                              <Trash2 className="action-icon" />
+                        <div className="flex justify-center items-center gap-2">
+                          <button 
+                            onClick={() => setEditingRoast(r)}
+                            className="action-icon-btn text-[--primary]"
+                          >
+                            <Pencil className="action-icon" />
                           </button>
-                        </form>
+                          <form action={deleteRoastBatch} className="flex items-center">
+                            <input type="hidden" name="id" value={r.id} />
+                            <button type="submit" className="action-icon-btn text-[--danger]">
+                                <Trash2 className="action-icon" />
+                            </button>
+                          </form>
                         </div>
                       </td>
                     </tr>
@@ -101,7 +109,7 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
                 })
               ) : (
                 <tr>
-                  <td colSpan={5} className="p-20 text-center text-[--secondary-text] italic opacity-40">
+                  <td colSpan={6} className="p-20 text-center text-[--secondary-text] italic opacity-40">
                     <Flame className="w-12 h-12 mx-auto mb-4" />
                     {searchTerm ? 'Nenhuma produção encontrada para esta busca.' : 'Nenhuma sessão de torra registrada.'}
                   </td>
@@ -111,6 +119,60 @@ export default function RoastList({ roastBatches }: { roastBatches: any[] }) {
           </table>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      <Modal 
+        isOpen={editingRoast !== null} 
+        onClose={() => setEditingRoast(null)} 
+        title="Editar Sessão de Torra"
+      >
+        {editingRoast && (
+          <form action={async (formData) => {
+            await updateRoastBatch(formData)
+            setEditingRoast(null)
+          }} className="flex flex-col gap-6">
+            <input type="hidden" name="id" value={editingRoast.id} />
+            
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[--secondary-text]">Café Verde (Lote de Origem)</label>
+              <select name="green_coffee_id" defaultValue={editingRoast.green_coffee_id} required className="text-sm">
+                <option value="">Selecione um café...</option>
+                {greenLots.map((lot: any) => (
+                  <option key={lot.id} value={lot.id}>
+                    {lot.name} ({lot.available_qty_kg.toFixed(2)}kg disponíveis)
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Data da Torra</label>
+                <input name="date" type="date" defaultValue={editingRoast.date} required className="text-sm" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Custo Operac. (R$/kg)</label>
+                <input name="operational_cost" type="number" step="0.01" defaultValue={editingRoast.operational_cost || 4.00} required className="text-sm" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1 p-3 bg-black/20 rounded-lg border border-white/5">
+                <label className="text-xs text-[--secondary-text] mb-1">Qtd Entrada (Verde kg)</label>
+                <input name="qty_before_kg" type="number" step="0.01" defaultValue={editingRoast.qty_before_kg} required className="text-lg font-bold text-[--primary]" />
+              </div>
+              <div className="flex flex-col gap-1 p-3 bg-white/5 rounded-lg border border-white/5">
+                <label className="text-xs text-[--secondary-text] mb-1">Qtd Saída (Torrado kg)</label>
+                <input name="qty_after_kg" type="number" step="0.01" defaultValue={editingRoast.qty_after_kg} required className="text-lg font-bold text-[--success]" />
+              </div>
+            </div>
+
+            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full">
+              Salvar Alterações
+            </button>
+          </form>
+        )}
+      </Modal>
     </div>
   )
 }

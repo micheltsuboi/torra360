@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Trash2, Search } from 'lucide-react'
-import { deleteGreenCoffeeLot } from './actions'
+import { Trash2, Pencil, Search } from 'lucide-react'
+import { deleteGreenCoffeeLot, updateGreenCoffeeLot } from './actions'
+import Modal from '@/components/ui/Modal'
 
 export default function InventoryList({ lots }: { lots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
+  const [editingLot, setEditingLot] = useState<any | null>(null)
 
   const filteredLots = lots?.filter(lot => 
     lot.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,7 +94,13 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center gap-2">
+                          <button 
+                            onClick={() => setEditingLot(lot)}
+                            className="action-icon-btn text-[--primary]"
+                          >
+                            <Pencil className="action-icon" />
+                          </button>
                           <form action={deleteGreenCoffeeLot}>
                             <input type="hidden" name="id" value={lot.id} />
                             <button type="submit" className="action-icon-btn text-[--danger]">
@@ -115,6 +123,75 @@ export default function InventoryList({ lots }: { lots: any[] }) {
           </table>
         </div>
       </div>
+
+      {/* Modal de Edição */}
+      <Modal 
+        isOpen={editingLot !== null} 
+        onClose={() => setEditingLot(null)} 
+        title="Editar Lote de Café Verde"
+      >
+        {editingLot && (
+          <form action={async (formData) => {
+            await updateGreenCoffeeLot(formData)
+            setEditingLot(null)
+          }} className="flex flex-col gap-4">
+            <input type="hidden" name="id" value={editingLot.id} />
+            
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Nome do Lote / Identificação</label>
+                <input name="name" defaultValue={editingLot.name} required />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Fornecedor / Produtor</label>
+                <input name="provider" defaultValue={editingLot.provider} required />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Tipo</label>
+                <input name="coffee_type" defaultValue={editingLot.coffee_type} required />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Qualidade / Categoria</label>
+                <input name="quality_level" defaultValue={editingLot.quality_level} required />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Peneira</label>
+                <input name="sieve" defaultValue={editingLot.sieve} />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[--secondary-text]">Origem / Região</label>
+              <input name="origin" defaultValue={editingLot.origin} required />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Qtd Comprada (kg)</label>
+                <input name="total_qty_kg" type="number" step="0.01" defaultValue={editingLot.total_qty_kg} required />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Custo Total (R$)</label>
+                <input name="total_cost" type="number" step="0.01" defaultValue={editingLot.total_cost} required />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Pontuação (SCA)</label>
+                <input name="score" defaultValue={editingLot.score} placeholder="Ex: 84 pts" />
+              </div>
+            </div>
+
+            <button type="submit" className="golden-btn py-4 mt-2">
+              Salvar Alterações
+            </button>
+          </form>
+        )}
+      </Modal>
     </div>
   )
 }

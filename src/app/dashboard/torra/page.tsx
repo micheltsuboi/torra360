@@ -18,7 +18,7 @@ export default async function TorraPage() {
       </div>
 
       <TorraHeader greenLots={greenLots} />
-      <RoastList roastBatches={roastBatches} />
+      <RoastList roastBatches={roastBatches} greenLots={greenLots} />
     </div>
   )
 }
