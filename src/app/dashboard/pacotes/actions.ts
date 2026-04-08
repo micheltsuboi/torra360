@@ -105,6 +105,7 @@ export async function createPackages(formData: FormData) {
     }
   }
 
+
   // 3. Inserir o Lote de Embalamento
   const { data: newBatch, error } = await supabase.from('packaging_batches').insert({
     tenant_id: tenantId,
@@ -122,15 +123,25 @@ export async function createPackages(formData: FormData) {
     return { success: false, error: 'Erro ao registrar o embalamento.' }
   }
 
-  // 4. Baixar Estoque de Insumos
+  // 4. Baixar Estoque de Insumos e Registrar Uso
   for (const mat of materials) {
     if (!mat.materialId) continue
-    await supabase.rpc('decrement_inventory', { 
-      item_id: mat.materialId, 
-      qty: mat.quantity 
+    
+    // Registrar Uso Histórico
+    await supabase.from('packaging_batch_materials').insert({
+      packaging_batch_id: newBatch.id,
+      material_id: mat.materialId,
+      quantity_used: mat.quantity,
+      tenant_id: tenantId
     })
-    // Obs: Se o RPC não existir, usamos update normal
-    const { data: current } = await supabase.from('packaging_inventory').select('quantity_available').eq('id', mat.materialId).single()
+
+    // Baixa de Estoque
+    const { data: current } = await supabase
+      .from('packaging_inventory')
+      .select('quantity_available')
+      .eq('id', mat.materialId)
+      .single()
+      
     await supabase.from('packaging_inventory').update({ 
       quantity_available: (current?.quantity_available || 0) - mat.quantity 
     }).eq('id', mat.materialId)
