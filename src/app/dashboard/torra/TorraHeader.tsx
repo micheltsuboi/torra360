@@ -11,12 +11,16 @@ interface TorraHeaderProps {
 
 export default function TorraHeader({ greenLots }: TorraHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-start">
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setError(null)
+            setIsModalOpen(true)
+          }}
           className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
         >
           <Flame className="w-6 h-6" />
@@ -26,13 +30,27 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
 
       <Modal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={() => {
+          setIsModalOpen(false)
+          setError(null)
+        }} 
         title="Nova Sessão de Torra"
       >
         <form action={async (formData) => {
-          await createRoastBatch(formData)
-          setIsModalOpen(false)
+          setError(null)
+          const result = await createRoastBatch(formData)
+          if (result?.success) {
+            setIsModalOpen(false)
+          } else {
+            setError(result?.error || 'Erro inesperado')
+          }
         }} className="flex flex-col gap-6">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+              ⚠️ {error}
+            </div>
+          )}
+
           <div className="grid grid-cols-2 gap-2">
             <div className="flex flex-col gap-1">
               <label className="data-label">Data da Torra</label>

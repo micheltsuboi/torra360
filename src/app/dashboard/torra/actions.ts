@@ -78,7 +78,22 @@ export async function createRoastBatch(formData: FormData) {
   const qty_after_kg = parseFloat(formData.get('qty_after_kg') as string)
   const operational_cost = parseFloat(formData.get('operational_cost') as string) || 4.00
 
-  // 1. Inserir a Torra
+  // 1. Validar estoque de café verde disponível
+  const { data: lot } = await supabase
+    .from('green_coffee')
+    .select('name, available_qty_kg')
+    .eq('id', green_coffee_id)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (!lot || lot.available_qty_kg < qty_before_kg) {
+    return { 
+      success: false, 
+      error: `Estoque insuficiente de ${lot?.name || 'café verde'}. Disponível: ${lot?.available_qty_kg || 0}kg.` 
+    }
+  }
+
+  // 2. Inserir a Torra
   const { error: insertError } = await supabase.from('roast_batches').insert({
     tenant_id: tenantId,
     green_coffee_id,
@@ -90,29 +105,22 @@ export async function createRoastBatch(formData: FormData) {
 
   if (insertError) {
     console.error('Error creating roast batch:', insertError)
-    return
+    return { success: false, error: 'Erro ao salvar o lote de torra.' }
   }
 
-  // 2. Dar baixa no Café Verde
-  const { data: lot } = await supabase
+  // 3. Dar baixa no Café Verde
+  const newQty = lot.available_qty_kg - qty_before_kg
+  await supabase
     .from('green_coffee')
-    .select('available_qty_kg')
+    .update({ available_qty_kg: newQty })
     .eq('id', green_coffee_id)
     .eq('tenant_id', tenantId)
-    .single()
-  
-  if (lot) {
-    const newQty = Math.max(0, lot.available_qty_kg - qty_before_kg)
-    await supabase
-      .from('green_coffee')
-      .update({ available_qty_kg: newQty })
-      .eq('id', green_coffee_id)
-      .eq('tenant_id', tenantId)
-  }
 
   revalidatePath('/dashboard/torra')
   revalidatePath('/dashboard/estoque')
   revalidatePath('/dashboard/pacotes')
+  
+  return { success: true }
 }
 
 export async function updateRoastBatch(formData: FormData) {
@@ -134,9 +142,42 @@ export async function updateRoastBatch(formData: FormData) {
     .eq('tenant_id', tenantId)
     .single()
 
-  if (!currentBatch) return
+  if (!currentBatch) return { success: false, error: 'Lote de torra não encontrado.' }
 
-  // 2. Atualizar a torra
+  // 2. Validar estoque antes de atualizar
+  if (currentBatch.green_coffee_id === green_coffee_id) {
+    const diff = qty_before_kg - currentBatch.qty_before_kg
+    const { data: lot } = await supabase
+      .from('green_coffee')
+      .select('name, available_qty_kg')
+      .eq('id', green_coffee_id)
+      .eq('tenant_id', tenantId)
+      .single()
+
+    if (lot && diff > lot.available_qty_kg) {
+      return { 
+        success: false, 
+        error: `Estoque insuficiente de ${lot.name}. Necessário: ${diff}kg adicionais, Disponível: ${lot.available_qty_kg}kg.` 
+      }
+    }
+  } else {
+    // Caso tenha mudado o lote de origem, validar o saldo no novo lote
+    const { data: newLot } = await supabase
+      .from('green_coffee')
+      .select('name, available_qty_kg')
+      .eq('id', green_coffee_id)
+      .eq('tenant_id', tenantId)
+      .single()
+
+    if (newLot && qty_before_kg > newLot.available_qty_kg) {
+      return { 
+        success: false, 
+        error: `Estoque insuficiente de ${newLot.name}. Necessário: ${qty_before_kg}kg, Disponível: ${newLot.available_qty_kg}kg.` 
+      }
+    }
+  }
+
+  // 3. Atualizar a torra
   const { error: updateError } = await supabase
     .from('roast_batches')
     .update({
@@ -151,12 +192,11 @@ export async function updateRoastBatch(formData: FormData) {
 
   if (updateError) {
     console.error('Error updating roast batch:', updateError)
-    return
+    return { success: false, error: 'Erro ao atualizar o lote de torra.' }
   }
 
-  // 3. Ajustar o estoque de Café Verde
+  // 4. Ajustar o estoque de Café Verde
   if (currentBatch.green_coffee_id === green_coffee_id) {
-    // Mesmo lote, ajustar apenas a diferença
     const diff = qty_before_kg - currentBatch.qty_before_kg
     const { data: lot } = await supabase
       .from('green_coffee')
@@ -207,6 +247,8 @@ export async function updateRoastBatch(formData: FormData) {
 
   revalidatePath('/dashboard/torra')
   revalidatePath('/dashboard/estoque')
+  
+  return { success: true }
 }
 
 export async function deleteRoastBatch(formData: FormData) {

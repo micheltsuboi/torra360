@@ -8,6 +8,7 @@ import Modal from '@/components/ui/Modal'
 export default function RoastList({ roastBatches, greenLots }: { roastBatches: any[], greenLots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [editingRoast, setEditingRoast] = useState<any | null>(null)
+  const [error, setError] = useState<string | null>(null)
 
   const filteredBatches = roastBatches?.filter(r => 
     r.green_coffee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -123,15 +124,29 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
       {/* Modal de Edição */}
       <Modal 
         isOpen={editingRoast !== null} 
-        onClose={() => setEditingRoast(null)} 
+        onClose={() => {
+          setEditingRoast(null)
+          setError(null)
+        }} 
         title="Editar Sessão de Torra"
       >
         {editingRoast && (
           <form action={async (formData) => {
-            await updateRoastBatch(formData)
-            setEditingRoast(null)
+            setError(null)
+            const result = await updateRoastBatch(formData)
+            if (result?.success) {
+              setEditingRoast(null)
+            } else {
+              setError(result?.error || 'Erro ao atualizar')
+            }
           }} className="flex flex-col gap-6">
             <input type="hidden" name="id" value={editingRoast.id} />
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+                ⚠️ {error}
+              </div>
+            )}
             
             <div className="flex flex-col gap-1">
               <label className="text-xs text-[--secondary-text]">Café Verde (Lote de Origem)</label>

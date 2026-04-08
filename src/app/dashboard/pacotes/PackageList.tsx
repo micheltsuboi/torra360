@@ -8,6 +8,7 @@ import Modal from '@/components/ui/Modal'
 export default function PackageList({ packages, roasts, expensePackages }: { packages: any[], roasts: any[], expensePackages: any[] }) {
   const [editingPackage, setEditingPackage] = useState<any | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [error, setError] = useState<string | null>(null)
 
   const filteredPackages = packages?.filter(p => {
     const roast = roasts.find(r => r.id === p.roast_batch_id)
@@ -112,15 +113,29 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
       {/* Modal de Edição */}
       <Modal 
         isOpen={editingPackage !== null} 
-        onClose={() => setEditingPackage(null)} 
+        onClose={() => {
+          setEditingPackage(null)
+          setError(null)
+        }} 
         title="Editar Embalamento"
       >
         {editingPackage && (
           <form action={async (formData) => {
-            await updatePackage(formData)
-            setEditingPackage(null)
+            setError(null)
+            const result = await updatePackage(formData)
+            if (result?.success) {
+              setEditingPackage(null)
+            } else {
+              setError(result?.error || 'Erro ao atualizar')
+            }
           }} className="flex flex-col gap-6">
             <input type="hidden" name="id" value={editingPackage.id} />
+
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+                ⚠️ {error}
+              </div>
+            )}
             
             <div className="flex flex-col gap-1">
               <label className="data-label">Produto: <span className="text-[--primary]">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span></label>

@@ -12,12 +12,16 @@ interface PacotesHeaderProps {
 
 export default function PacotesHeader({ roasts, expensePackages }: PacotesHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-start">
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setError(null)
+            setIsModalOpen(true)
+          }}
           className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
         >
           <ShoppingBag className="w-6 h-6" />
@@ -27,13 +31,26 @@ export default function PacotesHeader({ roasts, expensePackages }: PacotesHeader
 
       <Modal 
         isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        onClose={() => {
+          setIsModalOpen(false)
+          setError(null)
+        }} 
         title="Novo Lote de Produtos"
       >
         <form action={async (formData) => {
-          await createPackages(formData)
-          setIsModalOpen(false)
+          setError(null)
+          const result = await createPackages(formData)
+          if (result?.success) {
+            setIsModalOpen(false)
+          } else {
+            setError(result?.error || 'Erro inesperado')
+          }
         }} className="flex flex-col gap-6">
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+              ⚠️ {error}
+            </div>
+          )}
           <div className="flex flex-col gap-1">
             <label className="data-label">Data de Produção</label>
             <input 
