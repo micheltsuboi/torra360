@@ -40,15 +40,14 @@ export async function getPackages() {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
   
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('packaging_batches')
     .select(`
       *,
       roast_batch:roast_batch_id(
         date, 
         qty_after_kg, 
-        green_coffee(name),
-        roast_reports_view:roast_reports_view(cost_per_kg_roasted)
+        green_coffee(name)
       ),
       expense_package:expense_package_id(total_cost),
       materials:packaging_batch_materials(
@@ -60,9 +59,21 @@ export async function getPackages() {
     .eq('tenant_id', tenantId)
     .order('created_at', { ascending: false })
 
+  if (error) {
+    console.error('Error fetching packages:', error)
+    return []
+  }
+
+  // Buscar custos de torra separadamente para evitar erro de JOIN com View
+  const roastIds = Array.from(new Set(data?.map(p => p.roast_batch_id) || []))
+  const { data: roastCosts } = await supabase
+    .from('roast_reports_view')
+    .select('roast_batch_id, cost_per_kg_roasted')
+    .in('roast_batch_id', roastIds)
+
   // Calcular custos calculados no servidor
   const enrichedData = data?.map(pkg => {
-    const roastCostKg = pkg.roast_batch?.roast_reports_view?.[0]?.cost_per_kg_roasted || 0
+    const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === pkg.roast_batch_id)?.cost_per_kg_roasted || 0
     const coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * pkg.quantity_units
     
     const materialsCost = pkg.materials?.reduce((acc: number, m: any) => {
