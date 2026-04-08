@@ -30,14 +30,14 @@ export default function FinanceDashboardClient({ stats, pendingSales }: FinanceD
           <div className="p-3 bg-[--primary]/10 rounded-lg border border-[--primary]/20 flex items-center gap-3">
             <Clock className="w-5 h-5 text-[--primary]" />
             <div>
-              <p className="text-xs text-[--secondary-text]">Total Pendente</p>
+              <p className="text-[10px] text-[--secondary-text] uppercase tracking-widest font-bold">Total Pendente</p>
               <p className="text-lg font-serif text-[--primary]">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
             </div>
           </div>
 
-          <div className="overflow-x-auto max-h-[400px]">
+          <div className="overflow-x-auto max-h-[400px] scrollbar-thin scrollbar-thumb-[--primary]/20">
             <table className="w-full text-xs">
-              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
+              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-widest text-[10px]">
                 <tr>
                   <th className="p-3 text-left">Data</th>
                   <th className="p-3 text-left">Cliente</th>
@@ -48,8 +48,8 @@ export default function FinanceDashboardClient({ stats, pendingSales }: FinanceD
               <tbody>
                 {pendingSales.map((sale: any) => (
                   <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all font-sans">
-                    <td className="p-3 opacity-60 text-[10px]">{new Date(sale.date).toLocaleDateString()}</td>
-                    <td className="p-3 font-bold text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
+                    <td className="p-3 opacity-60 text-[9px]">{new Date(sale.date).toLocaleDateString()}</td>
+                    <td className="p-3 font-bold text-[--foreground] text-sm">{sale.clients?.name || 'Venda Avulsa'}</td>
                     <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
                     <td className="p-3">
                       <form 

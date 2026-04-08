@@ -25,7 +25,7 @@ export async function getFinancialStats() {
     .from('sale_transactions')
     .select('final_amount, date')
     .eq('tenant_id', tenantId)
-    .eq('payment_status', 'paid')
+    .or('payment_status.eq.paid,payment_status.is.null')
 
   const totalRevenue = sales?.reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
 
