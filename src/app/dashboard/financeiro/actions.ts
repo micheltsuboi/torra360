@@ -58,13 +58,32 @@ export async function getFinancialStats() {
   // 5. Lucro Real (Considera apenas o que foi recebido)
   const realProfit = totalRevenue - (totalProductionCost + totalGeneralExpenses)
 
+  // 6. Variação de Faturamento (Mês atual vs anterior)
+  const now = new Date()
+  const firstDayCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+  const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString()
+  
+  const currentMonthRevenue = sales?.filter(s => s.date >= firstDayCurrentMonth)
+    .reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
+    
+  const lastMonthRevenue = sales?.filter(s => s.date >= firstDayLastMonth && s.date < firstDayCurrentMonth)
+    .reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
+    
+  let revenueChange = 0
+  if (lastMonthRevenue > 0) {
+    revenueChange = parseFloat(((currentMonthRevenue - lastMonthRevenue) / lastMonthRevenue * 100).toFixed(1))
+  } else if (currentMonthRevenue > 0) {
+    revenueChange = 100
+  }
+
   return {
     revenue: totalRevenue,
     productionCost: totalProductionCost,
     expenses: totalGeneralExpenses,
     profit: realProfit,
     pendingRevenue: totalPending,
-    salesCount: sales?.length || 0
+    salesCount: sales?.length || 0,
+    revenueChange
   }
 }
 

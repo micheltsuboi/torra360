@@ -1,6 +1,16 @@
 'use client'
 
-import { TrendingUp, Wallet, Receipt, PieChart, ArrowUpRight, ArrowDownRight, Activity, Clock, ArrowRight } from 'lucide-react'
+import { 
+  TrendingUp, 
+  TrendingDown, 
+  Wallet, 
+  Banknote, 
+  Hourglass, 
+  Plus, 
+  ArrowUpRight, 
+  ArrowDownRight,
+  TrendingUp as ProfitIcon
+} from 'lucide-react'
 
 interface Stats {
   revenue: number
@@ -9,89 +19,101 @@ interface Stats {
   profit: number
   pendingRevenue: number
   salesCount: number
+  revenueChange: number
 }
 
-export default function FinanceStats({ stats, onOpenPending }: { stats: Stats, onOpenPending: () => void }) {
-  const profitMargin = stats.revenue > 0 ? (stats.profit / stats.revenue * 100).toFixed(1) : '0'
+interface FinanceStatsProps {
+  stats: Stats
+  onOpenPending: () => void
+  onNewExpense: () => void
+}
+
+export default function FinanceStats({ stats, onOpenPending, onNewExpense }: FinanceStatsProps) {
+  const totalExpenses = stats.productionCost + stats.expenses
+  const isPositiveProfit = stats.profit >= 0
+  const variation = stats.revenueChange || 0
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full">
       
-      {/* 1. Faturamento Total */}
-      <div className="glass-panel overflow-hidden border-t-2 border-[--success] bg-black/20 text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-60">Faturamento Real</span>
-           <TrendingUp className="w-3 h-3 text-[--success] opacity-60" />
+      {/* 1. Faturamento */}
+      <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--primary]/30 transition-all">
+        <div className="flex justify-between items-start mb-4">
+          <div className="p-2 bg-white/5 rounded-xl border border-white/10 group-hover:scale-110 transition-transform">
+            <Banknote className="w-6 h-6 text-[--primary] opacity-80" />
+          </div>
+          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${variation >= 0 ? 'bg-green-500/10 text-green-500' : 'bg-red-500/10 text-red-500'}`}>
+            {variation > 0 ? '+' : ''}{variation}%
+          </div>
         </div>
-        <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--success]/5">
-           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-           <div className="flex items-center gap-1 mt-1 text-[--success] opacity-60">
-             <ArrowUpRight className="w-2 h-2" />
-             <span className="text-[9px] font-bold tracking-tighter">Total recebido</span>
-           </div>
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-serif text-[--foreground] mb-0.5 tracking-tight">
+            R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </h2>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Faturamento</span>
         </div>
+        <div className="absolute top-0 right-0 p-8 bg-[--primary]/5 blur-3xl rounded-full -mr-10 -mt-10" />
       </div>
 
-      {/* 2. Contas a Receber (Novo Card Interativo) */}
+      {/* 2. Despesas (Vermelho) */}
+      <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-red-500/30 transition-all">
+        <div className="flex justify-between items-start mb-4">
+          <div className="p-2 bg-red-500/5 rounded-xl border border-red-500/10 group-hover:scale-110 transition-transform">
+            <TrendingDown className="w-6 h-6 text-red-500 opacity-80" />
+          </div>
+          <button 
+            onClick={onNewExpense}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-lg text-[10px] text-red-500 font-bold transition-all"
+          >
+            <Plus className="w-3 h-3" /> Nova Despesa
+          </button>
+        </div>
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-serif text-red-500 mb-0.5 tracking-tight group-hover:scale-[1.02] origin-left transition-transform">
+            R$ {totalExpenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </h2>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-red-500/60 font-bold">Despesas</span>
+        </div>
+        <div className="absolute top-0 right-0 p-8 bg-red-500/5 blur-3xl rounded-full -mr-10 -mt-10" />
+      </div>
+
+      {/* 3. Lucro Líquido (Condicional) */}
+      <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--primary]/30 transition-all">
+        <div className="flex justify-between items-start mb-4">
+          <div className={`p-2 rounded-xl border transition-transform group-hover:scale-110 ${isPositiveProfit ? 'bg-green-500/5 border-green-500/10' : 'bg-red-500/5 border-red-500/10'}`}>
+            {isPositiveProfit ? (
+              <ProfitIcon className="w-6 h-6 text-green-500 opacity-80" />
+            ) : (
+              <TrendingDown className="w-6 h-6 text-red-500 opacity-80" />
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col">
+          <h2 className={`text-2xl font-serif mb-0.5 tracking-tight ${isPositiveProfit ? 'text-green-500' : 'text-red-500'}`}>
+            R$ {stats.profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </h2>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Lucro Líquido</span>
+        </div>
+        <div className={`absolute top-0 right-0 p-8 blur-3xl rounded-full -mr-10 -mt-10 ${isPositiveProfit ? 'bg-green-500/5' : 'bg-red-500/5'}`} />
+      </div>
+
+      {/* 4. A Receber (Laranja) */}
       <div 
         onClick={onOpenPending}
-        className="glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center cursor-pointer hover:bg-black/40 transition-all group"
+        className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-orange-500/30 transition-all cursor-pointer"
       >
-        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-60">Contas a Receber</span>
-           <Clock className="w-3 h-3 text-[--primary] group-hover:rotate-12 transition-transform" />
+        <div className="flex justify-between items-start mb-4">
+          <div className="p-2 bg-orange-500/5 rounded-xl border border-orange-500/10 group-hover:rotate-12 transition-all">
+            <Hourglass className="w-6 h-6 text-orange-400 opacity-80" />
+          </div>
         </div>
-        <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
-           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-           <div className="flex items-center gap-1 mt-1 text-[--primary] opacity-60">
-             <ArrowRight className="w-2 h-2" />
-             <span className="text-[9px] font-bold tracking-tighter">Clique para detalhes</span>
-           </div>
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-serif text-orange-400 mb-0.5 tracking-tight group-hover:scale-[1.02] origin-left transition-transform">
+            R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+          </h2>
+          <span className="text-[10px] uppercase tracking-[0.2em] text-orange-400/60 font-bold">A Receber</span>
         </div>
-      </div>
-
-      {/* 3. Custo de Produção / Processos */}
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center opacity-80">
-        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-60">Processos</span>
-           <Activity className="w-3 h-3 text-[--primary] opacity-60" />
-        </div>
-        <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5 text-[--secondary-text]">
-           <span className="text-lg font-serif">R$ {stats.productionCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-           <div className="flex items-center gap-1 mt-1 opacity-60">
-             <span className="text-[9px] font-bold tracking-tighter">Grãos + Operação</span>
-           </div>
-        </div>
-      </div>
-
-      {/* 4. Despesas Gerais */}
-      <div className="glass-panel overflow-hidden border-t-2 border-[--danger] bg-black/20 text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-60">Gasto Despesas</span>
-           <Receipt className="w-3 h-3 text-[--danger] opacity-60" />
-        </div>
-        <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--danger]/5">
-           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.expenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-           <div className="flex items-center gap-1 mt-1 text-[--danger] opacity-60">
-              <ArrowDownRight className="w-2 h-2" />
-              <span className="text-[9px] font-bold tracking-tighter">Fixas e Variáveis</span>
-           </div>
-        </div>
-      </div>
-
-      {/* 5. Lucro Real */}
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 shadow-2xl text-center">
-        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/60 shadow-xl">
-           <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-80">Lucro Líquido Real</span>
-           <Wallet className="w-3 h-3 text-[--primary] opacity-80" />
-        </div>
-        <div className="p-4 flex flex-col items-center bg-gradient-to-br from-transparent via-[--primary]/10 to-[--primary]/5 relative overflow-hidden">
-           <div className="absolute inset-0 opacity-10 pointer-events-none wood-texture" />
-           <span className="text-lg font-serif text-[--primary] title-glow relative z-10">R$ {stats.profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
-           <div className="z-10 mt-1">
-              <span className="text-[10px] font-bold text-[--primary] uppercase tracking-widest opacity-60">Margem: {profitMargin}%</span>
-           </div>
-        </div>
+        <div className="absolute top-0 right-0 p-8 bg-orange-500/5 blur-3xl rounded-full -mr-10 -mt-10" />
       </div>
 
     </div>

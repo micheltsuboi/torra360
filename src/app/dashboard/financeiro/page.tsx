@@ -14,12 +14,11 @@ export default async function FinancePage() {
       
       <div className="flex justify-between items-end border-b border-white/5 pb-6">
         <div>
-           <h1 className="text-3xl font-serif text-[--foreground]">Gestão Financeira</h1>
-           <p className="text-[--secondary-text] mt-1 text-sm opacity-60">Visão completa de faturamento, custos e lucratividade real.</p>
+           <h1 className="text-3xl font-serif text-[--foreground]">Controle Financeiro</h1>
+           <p className="text-[--secondary-text] mt-1 text-sm opacity-60">Visão geral das finanças da Torra 360</p>
         </div>
         <div className="flex gap-4">
            <button className="bg-black/40 px-4 py-2 rounded-lg border border-white/5 text-[--secondary-text] text-[10px] uppercase tracking-widest font-bold hover:bg-black/60 transition-all">Exportar PDF</button>
-           <button className="golden-btn px-4 py-2 text-[10px] uppercase tracking-widest font-bold">Nova Despesa</button>
         </div>
       </div>
 

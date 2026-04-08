@@ -14,12 +14,17 @@ interface FinanceDashboardClientProps {
 export default function FinanceDashboardClient({ stats, pendingSales }: FinanceDashboardClientProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  return (
-    <>
-      <FinanceStats 
-        stats={stats} 
-        onOpenPending={() => setIsModalOpen(true)} 
-      />
+    const onNewExpense = () => {
+      window.location.href = '/dashboard/custos'
+    }
+
+    return (
+      <>
+        <FinanceStats 
+          stats={stats} 
+          onOpenPending={() => setIsModalOpen(true)} 
+          onNewExpense={onNewExpense}
+        />
 
       <Modal 
         isOpen={isModalOpen} 
