@@ -42,10 +42,49 @@ export async function getPackages() {
   
   const { data } = await supabase
     .from('packaging_batches')
-    .select('*, roast_batch:roast_batch_id(date, qty_after_kg, green_coffee(name))')
+    .select(`
+      *,
+      roast_batch:roast_batch_id(
+        date, 
+        qty_after_kg, 
+        green_coffee(name),
+        roast_reports_view:roast_reports_view(cost_per_kg_roasted)
+      ),
+      expense_package:expense_package_id(total_cost),
+      materials:packaging_batch_materials(
+        material_id,
+        quantity_used,
+        packaging_inventory(name, unit_cost)
+      )
+    `)
     .eq('tenant_id', tenantId)
     .order('created_at', { ascending: false })
-  return data || []
+
+  // Calcular custos calculados no servidor
+  const enrichedData = data?.map(pkg => {
+    const roastCostKg = pkg.roast_batch?.roast_reports_view?.[0]?.cost_per_kg_roasted || 0
+    const coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * pkg.quantity_units
+    
+    const materialsCost = pkg.materials?.reduce((acc: number, m: any) => {
+      return acc + (m.quantity_used * (m.packaging_inventory?.unit_cost || 0))
+    }, 0) || 0
+    
+    const extraBatchCost = pkg.expense_package?.total_cost || 0
+    const totalProductionCost = coffeeCost + materialsCost + extraBatchCost
+    
+    return {
+      ...pkg,
+      calculated_costs: {
+        coffee: coffeeCost,
+        materials: materialsCost,
+        extra: extraBatchCost,
+        total: totalProductionCost,
+        unit: totalProductionCost / (pkg.quantity_units || 1)
+      }
+    }
+  })
+
+  return enrichedData || []
 }
 
 export async function createPackages(formData: FormData) {
@@ -104,7 +143,6 @@ export async function createPackages(formData: FormData) {
       }
     }
   }
-
 
   // 3. Inserir o Lote de Embalamento
   const { data: newBatch, error } = await supabase.from('packaging_batches').insert({
@@ -175,10 +213,12 @@ export async function updatePackage(formData: FormData) {
   const quantity_units = parseInt(formData.get('quantity_units') as string) || 0
   const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
   const expense_package_id = formData.get('expense_package_id') as string || null
+  const materialsJson = formData.get('materials') as string
+  const materials = JSON.parse(materialsJson || '[]')
 
   const newTotalKg = (package_size_g * quantity_units) / 1000
 
-  // 1. Buscar embalamento atual para saber qual a torra
+  // 1. Buscar embalamento atual e materiais atuais
   const { data: currentPackage } = await supabase
     .from('packaging_batches')
     .select('roast_batch_id')
@@ -186,6 +226,11 @@ export async function updatePackage(formData: FormData) {
     .single()
 
   if (!currentPackage) return { success: false, error: 'Embalamento não encontrado.' }
+
+  const { data: currentMaterials } = await supabase
+    .from('packaging_batch_materials')
+    .select('material_id, quantity_used')
+    .eq('packaging_batch_id', id)
 
   // 2. Verificar disponibilidade na torra (excluindo o peso atual deste registro)
   const { data: roast } = await supabase
@@ -200,7 +245,7 @@ export async function updatePackage(formData: FormData) {
     .eq('roast_batch_id', currentPackage.roast_batch_id)
     .neq('id', id)
 
-  const sumOthersKg = otherPackages?.reduce((acc, curr) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
+  const sumOthersKg = otherPackages?.reduce((acc: number, curr: any) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
   const availableKg = (roast?.qty_after_kg || 0) - sumOthersKg
 
   if (newTotalKg > (availableKg + 0.001)) {
@@ -210,6 +255,27 @@ export async function updatePackage(formData: FormData) {
     }
   }
 
+  // 3. Reconciliação de Materiais (Insumos)
+  // Devolver estoque antigo
+  if (currentMaterials) {
+    for (const mat of currentMaterials) {
+      const { data: inv } = await supabase.from('packaging_inventory').select('quantity_available').eq('id', mat.material_id).single()
+      await supabase.from('packaging_inventory').update({ 
+        quantity_available: (inv?.quantity_available || 0) + mat.quantity_used 
+      }).eq('id', mat.material_id)
+    }
+  }
+
+  // Verificar se novo estoque é suficiente
+  for (const mat of materials) {
+    if (!mat.materialId) continue
+    const { data: inventoryItem } = await supabase.from('packaging_inventory').select('name, quantity_available').eq('id', mat.materialId).single()
+    if (!inventoryItem || inventoryItem.quantity_available < mat.quantity) {
+      return { success: false, error: `Estoque insuficiente de: ${inventoryItem?.name}. Necessário: ${mat.quantity}` }
+    }
+  }
+
+  // 4. Atualizar o Lote
   const { error } = await supabase
     .from('packaging_batches')
     .update({
@@ -228,6 +294,27 @@ export async function updatePackage(formData: FormData) {
     return { success: false, error: 'Erro ao atualizar o embalamento.' }
   }
 
+  // 5. Atualizar Materiais Vinculados
+  await supabase.from('packaging_batch_materials').delete().eq('packaging_batch_id', id)
+  for (const mat of materials) {
+    if (!mat.materialId) continue
+    
+    // Registrar Uso
+    await supabase.from('packaging_batch_materials').insert({
+      packaging_batch_id: id,
+      material_id: mat.materialId,
+      quantity_used: mat.quantity,
+      tenant_id: tenantId
+    })
+
+    // Baixa de Estoque
+    const { data: current } = await supabase.from('packaging_inventory').select('quantity_available').eq('id', mat.materialId).single()
+    await supabase.from('packaging_inventory').update({ 
+      quantity_available: (current?.quantity_available || 0) - mat.quantity 
+    }).eq('id', mat.materialId)
+  }
+
   revalidatePath('/dashboard/pacotes')
+  revalidatePath('/dashboard/embalagens')
   return { success: true }
 }

@@ -25,9 +25,9 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
       <div className="flex justify-between items-center gap-4">
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
+          className="golden-btn flex items-center gap-2 px-4 py-2 text-sm"
         >
-          <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
+          <Plus className="w-4 h-4 transition-transform group-hover:rotate-90" />
           Registrar Lote
         </button>
 
@@ -54,7 +54,7 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-white/5 bg-white/5 tracking-tighter">
+              <tr className="text-[--secondary-text] text-xs capitalize border-b border-white/5 bg-white/5 tracking-tighter">
                 <th className="p-3 text-left font-bold">Insumo</th>
                 <th className="p-3 text-center font-bold border-l border-white/5">Qtd Disp.</th>
                 <th className="p-3 text-center font-bold border-l border-white/5">Custo Unit.</th>

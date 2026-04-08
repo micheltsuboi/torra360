@@ -44,9 +44,9 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
             setSelectedMaterials([])
             setIsModalOpen(true)
           }}
-          className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
+          className="golden-btn flex items-center gap-2 px-4 py-2 text-sm"
         >
-          <ShoppingBag className="w-6 h-6" />
+          <ShoppingBag className="w-4 h-4" />
           Registrar Novo Embalamento
         </button>
       </div>
@@ -138,9 +138,19 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="data-label">Venda (R$)</label>
+              <label className="data-label font-serif text-[--primary] tracking-wider">Venda (R$)</label>
               <input name="retail_price" type="number" step="0.01" min="0" placeholder="Ex: 45.90" required className="text-sm" />
             </div>
+          </div>
+
+          <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
+            <label className="data-label">Pacote de Custos Extra (Opcional)</label>
+            <select name="expense_package_id" className="text-sm">
+              <option value="">Nenhum custo extra</option>
+              {expensePackages.map((ep: any) => (
+                <option key={ep.id} value={ep.id}>{ep.name} (R$ {ep.total_cost})</option>
+              ))}
+            </select>
           </div>
 
           {/* SEÇÃO DE INSUMOS (ESTOQUE) */}

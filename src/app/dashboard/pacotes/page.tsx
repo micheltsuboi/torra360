@@ -34,6 +34,7 @@ export default async function PacotesPage() {
           packages={packages} 
           roasts={roasts} 
           expensePackages={expensePackages} 
+          inventory={inventory}
         />
       </div>
     </div>
