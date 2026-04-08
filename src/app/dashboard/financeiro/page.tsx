@@ -10,7 +10,7 @@ export default async function FinancePage() {
   const pendingSales = await getPendingSales()
 
   return (
-    <div className="flex flex-col gap-8 pb-10">
+    <div className="flex flex-col gap-8 text-[--foreground] pb-10">
       
       <div className="flex justify-between items-end border-b border-white/5 pb-6">
         <div>
