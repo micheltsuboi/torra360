@@ -115,14 +115,14 @@ export default function PacotesHeader({ roasts, expensePackages }: PacotesHeader
             </select>
           </div>
 
-          <div className="p-3 bg-black/40 rounded-xl border border-white/10 text-[10px] text-[--secondary-text] leading-relaxed">
-             <span className="text-[--primary] font-serif uppercase tracking-widest text-[11px] block mb-1">📊 Inteligência</span> 
+          <div className="px-3 py-2 bg-white/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight opacity-70">
+             <span className="text-[--primary] uppercase tracking-tighter mr-1">Nota/Inteligência:</span> 
              O sistema deduzirá automaticamente o peso do lote torrado selecionado 
              e calculará o custo unitário por pacote baseado no café verde + custos operacionais.
           </div>
 
-          <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full font-serif tracking-widest uppercase">
-            Finalizar E Criar Produtos
+          <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
+            Finalizar e Criar Produtos
           </button>
         </form>
       </Modal>

@@ -182,7 +182,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
               </div>
             </div>
 
-            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full">
+            <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
               Salvar Alterações
             </button>
           </form>

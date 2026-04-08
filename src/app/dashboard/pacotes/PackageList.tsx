@@ -138,8 +138,8 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
             )}
             
             <div className="flex flex-col gap-1">
-              <label className="data-label text-[--primary] font-serif tracking-wider mb-2">
-                Produto: <span className="text-[--foreground]">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span>
+              <label className="data-label text-[--primary] uppercase tracking-tighter opacity-70 mb-2">
+                Produto: <span className="text-[--foreground] font-bold">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span>
               </label>
               <label className="data-label">Data De Produção</label>
               <input 
@@ -206,7 +206,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
               </select>
             </div>
 
-            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full font-serif tracking-widest uppercase">
+            <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
               Salvar Alterações No Lote
             </button>
           </form>
