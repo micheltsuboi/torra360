@@ -1,25 +1,26 @@
 'use client'
 
-import { TrendingUp, Wallet, Receipt, PieChart, ArrowUpRight, ArrowDownRight, Activity } from 'lucide-react'
+import { TrendingUp, Wallet, Receipt, PieChart, ArrowUpRight, ArrowDownRight, Activity, Clock, ArrowRight } from 'lucide-react'
 
 interface Stats {
   revenue: number
   productionCost: number
   expenses: number
   profit: number
+  pendingRevenue: number
   salesCount: number
 }
 
-export default function FinanceStats({ stats }: { stats: Stats }) {
+export default function FinanceStats({ stats, onOpenPending }: { stats: Stats, onOpenPending: () => void }) {
   const profitMargin = stats.revenue > 0 ? (stats.profit / stats.revenue * 100).toFixed(1) : '0'
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-stretch mb-8 w-full max-w-6xl">
+    <div className="flex flex-col md:flex-row gap-4 items-stretch mb-8 w-full">
       
       {/* 1. Faturamento Total */}
       <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--success] bg-black/20 text-center">
         <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[9px] uppercase tracking-[0.15em] text-[--primary] font-bold opacity-60">Faturamento Total</span>
+           <span className="text-[9px] uppercase tracking-[0.15em] text-[--primary] font-bold opacity-60">Faturamento Real</span>
            <TrendingUp className="w-3 h-3 text-[--success] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--success]/5">
@@ -31,16 +32,34 @@ export default function FinanceStats({ stats }: { stats: Stats }) {
         </div>
       </div>
 
-      {/* 2. Custo de Produção */}
-      <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center">
+      {/* 2. Contas a Receber (Novo Card Interativo) */}
+      <div 
+        onClick={onOpenPending}
+        className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center cursor-pointer hover:scale-[1.02] transition-all group"
+      >
         <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
-           <span className="text-[9px] uppercase tracking-[0.15em] text-[--primary] font-bold opacity-60">Custos Operacionais</span>
+           <span className="text-[9px] uppercase tracking-[0.15em] text-[--primary] font-bold opacity-60">Contas a Receber</span>
+           <Clock className="w-3 h-3 text-[--primary] group-hover:rotate-12 transition-transform" />
+        </div>
+        <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
+           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <div className="flex items-center gap-1 mt-1 text-[--primary]">
+             <ArrowRight className="w-2 h-2" />
+             <span className="text-[8px] font-bold opacity-40 tracking-tighter">Clique para ver devedores</span>
+           </div>
+        </div>
+      </div>
+
+      {/* 3. Custo de Produção */}
+      <div className="flex-1 glass-panel overflow-hidden border-t-2 border-[--primary] bg-black/20 text-center opacity-80">
+        <div className="p-2 px-4 border-b border-[--card-border] wood-texture backdrop-blur-sm flex justify-between items-center bg-black/40">
+           <span className="text-[9px] uppercase tracking-[0.15em] text-[--primary] font-bold opacity-60">Processos</span>
            <Activity className="w-3 h-3 text-[--primary] opacity-60" />
         </div>
         <div className="p-4 flex flex-col items-center bg-gradient-to-b from-transparent to-[--primary]/5">
-           <span className="text-lg font-serif text-[--foreground] title-glow">R$ {stats.productionCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+           <span className="text-lg font-serif text-[--foreground]">R$ {stats.productionCost.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
            <div className="flex items-center gap-1 mt-1 text-[--warning]">
-             <span className="text-[8px] font-bold opacity-40 tracking-tighter">Grãos + Processo</span>
+             <span className="text-[8px] font-bold opacity-40 tracking-tighter">Grãos + Operação</span>
            </div>
         </div>
       </div>

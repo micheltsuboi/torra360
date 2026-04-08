@@ -1,7 +1,7 @@
-import { getFinancialStats, getRecentTransactions, getExpensesList, getPendingSales, markSaleAsPaid } from './actions'
-import FinanceStats from './FinanceStats'
+import { getFinancialStats, getRecentTransactions, getExpensesList, getPendingSales } from './actions'
 import FinanceChart from './FinanceChart'
-import { Wallet, Receipt, ArrowRight, TrendingUp, Clock, CheckCircle2 } from 'lucide-react'
+import FinanceDashboardClient from './FinanceDashboardClient'
+import { Receipt, ArrowRight, TrendingUp } from 'lucide-react'
 
 export default async function FinancePage() {
   const stats = await getFinancialStats()
@@ -23,62 +23,8 @@ export default async function FinancePage() {
         </div>
       </div>
 
-      {/* Cards de Métricas */}
-      <FinanceStats stats={stats} />
-
-      {/* Contas a Receber (Novo) */}
-      {pendingSales.length > 0 && (
-        <div className="glass-panel border-t-2 border-[--primary]/50 overflow-hidden">
-           <div className="p-4 border-b border-[--card-border] wood-texture bg-black/60 flex items-center gap-2">
-              <Clock className="w-4 h-4 text-[--primary]" />
-              <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Contas a Receber / Pendências</h2>
-              <span className="ml-auto bg-[--primary]/20 text-[--primary] text-[10px] px-2 py-0.5 rounded-full font-bold">
-                {pendingSales.length} {pendingSales.length === 1 ? 'pendência' : 'pendências'}
-              </span>
-           </div>
-           <div className="overflow-x-auto">
-              <table className="w-full text-xs">
-                <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
-                  <tr>
-                    <th className="p-3 text-left">Data</th>
-                    <th className="p-3 text-left">Cliente</th>
-                    <th className="p-3 text-right">Valor</th>
-                    <th className="p-3 text-center">Ação</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pendingSales.map((sale: any) => (
-                    <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                      <td className="p-3 opacity-60">{new Date(sale.date).toLocaleDateString()}</td>
-                      <td className="p-3 font-bold text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
-                      <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
-                      <td className="p-3">
-                        <form 
-                          action={async (formData: FormData) => {
-                            'use server'
-                            const method = formData.get('method') as string
-                            await markSaleAsPaid(sale.id, method)
-                          }}
-                          className="flex items-center justify-center gap-2"
-                        >
-                          <select name="method" required className="bg-black/40 border border-white/10 text-[10px] rounded p-1 text-[--primary] outline-none">
-                            <option value="Pix">Pix</option>
-                            <option value="Crédito">Crédito</option>
-                            <option value="Débito">Débito</option>
-                            <option value="Dinheiro">Dinheiro</option>
-                          </select>
-                          <button type="submit" className="bg-[--success]/20 hover:bg-[--success]/40 text-[--success] p-1.5 rounded-lg transition-all" title="Confirmar Recebimento">
-                            <CheckCircle2 className="w-4 h-4" />
-                          </button>
-                        </form>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-           </div>
-        </div>
-      )}
+      {/* Stats e Modal de Pendências */}
+      <FinanceDashboardClient stats={stats} pendingSales={pendingSales} />
 
       {/* Gráfico Visual */}
       <FinanceChart stats={stats} />

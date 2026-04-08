@@ -46,7 +46,16 @@ export async function getFinancialStats() {
 
   const totalGeneralExpenses = expenses?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0
 
-  // 4. Lucro Real
+  // 4. Contas a Receber (Vendas Pendentes)
+  const { data: pendingSales } = await supabase
+    .from('sale_transactions')
+    .select('final_amount')
+    .eq('tenant_id', tenantId)
+    .eq('payment_status', 'pending')
+
+  const totalPending = pendingSales?.reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
+
+  // 5. Lucro Real (Considera apenas o que foi recebido)
   const realProfit = totalRevenue - (totalProductionCost + totalGeneralExpenses)
 
   return {
@@ -54,6 +63,7 @@ export async function getFinancialStats() {
     productionCost: totalProductionCost,
     expenses: totalGeneralExpenses,
     profit: realProfit,
+    pendingRevenue: totalPending,
     salesCount: sales?.length || 0
   }
 }
