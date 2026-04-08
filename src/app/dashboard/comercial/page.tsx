@@ -1,6 +1,7 @@
 import { getPDVData, getSalesHistory } from './actions'
 import PDVComponent from './PDVComponent'
 import DeleteSaleButton from './DeleteSaleButton'
+import { formatDate } from '@/utils/date-utils'
 
 export default async function ComercialPage() {
   const { clients, products } = await getPDVData()
@@ -44,7 +45,7 @@ export default async function ComercialPage() {
                     {salesHistory.map((s: any) => (
                       <tr key={s.id} className="border-b border-[--card-border]/50 hover:bg-white/5">
                         <td className="p-2">
-                           <span className="block">{s.date ? new Date(s.date).toLocaleDateString('pt-BR') : new Date(s.created_at).toLocaleDateString('pt-BR')}</span>
+                           <span className="block">{formatDate(s.date || s.created_at)}</span>
                            <span className="text-xs text-[--secondary-text]">{s.client?.name || 'Cliente Avulso'}</span>
                         </td>
                         <td className="p-2">

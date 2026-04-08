@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Modal from '@/components/ui/Modal'
 import FinanceStats from './FinanceStats'
 import { Clock, CheckCircle2, Receipt, Trash2, Pencil, Plus, Calendar, Tag, Info, DollarSign, Type } from 'lucide-react'
+import { formatDate } from '@/utils/date-utils'
 import { markSaleAsPaid, createExpense, updateExpense, deleteExpense } from './actions'
 
 interface FinanceDashboardClientProps {
@@ -77,7 +78,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
               <tbody>
                 {pendingSales.map((sale: any) => (
                   <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all font-sans">
-                    <td className="p-3 opacity-60 text-[9px]">{new Date(sale.date).toLocaleDateString()}</td>
+                    <td className="p-3 opacity-60 text-[9px]">{formatDate(sale.date)}</td>
                     <td className="p-3 font-bold text-[--foreground] text-sm">{sale.clients?.name || 'Venda Avulsa'}</td>
                     <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
                     <td className="p-3">
@@ -150,7 +151,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
 
                   return (
                     <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                      <td className="p-3 opacity-60 text-[10px]">{new Date(exp.date).toLocaleDateString()}</td>
+                      <td className="p-3 opacity-60 text-[10px]">{formatDate(exp.date)}</td>
                       <td className="p-3">
                         <div className="flex flex-col">
                           <span className="font-bold text-[--foreground]">{title}</span>

@@ -1,4 +1,5 @@
 import { getRoastBatches } from './torra/actions'
+import { formatDate } from '@/utils/date-utils'
 
 export default async function DashboardIndex() {
   const recentRoasts = await getRoastBatches()
@@ -113,7 +114,7 @@ export default async function DashboardIndex() {
                   </div>
                   <div className="flex-1 overflow-hidden">
                      <h4 className="text-sm font-semibold text-[--foreground] truncate">{roast.green_coffee?.name || 'Lote de Café'}</h4>
-                     <p className="text-xs text-[--secondary-text]">Data: {roast.date}</p>
+                     <p className="text-xs text-[--secondary-text]">Data: {formatDate(roast.date)}</p>
                   </div>
                   <div className="w-8 flex flex-col items-end text-xs shrink-0">
                     <span className="text-[--success]">{roast.qty_after_kg}kg</span>

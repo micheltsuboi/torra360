@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { Pencil, Trash2, Search, ShoppingBag, Box, Plus, Trash, Package } from 'lucide-react'
 import { updatePackage, deletePackage } from './actions'
 import Modal from '@/components/ui/Modal'
+import { formatDate } from '@/utils/date-utils'
 
 interface PackageListProps {
   packages: any[]
@@ -95,7 +96,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     <tr key={p.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                       <td className="p-2">
                         <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
-                        <span className="text-[10px] text-[--secondary-text] opacity-60">Produzido em {new Date(p.date + 'T12:00:00').toLocaleDateString()}</span>
+                        <span className="text-[10px] text-[--secondary-text] opacity-60">Produzido em {formatDate(p.date)}</span>
                       </td>
                       <td className="p-2 border-l border-white/5 text-center">
                         <span className="text-xs font-medium block">{p.bean_format}</span>
@@ -276,10 +277,10 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       <div className="col-span-7 flex flex-col gap-1">
                          <label className="text-[9px] uppercase opacity-40">Tipo de Insumo</label>
                          <select 
-                           value={sm.materialId}
-                           required
-                           onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
-                           className="text-[11px] p-1.5 bg-black/60"
+                            value={sm.materialId}
+                            required
+                            onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
+                            className="text-[11px] p-1.5 bg-black/60"
                          >
                             <option value="">Selecione...</option>
                             {inventory.map((inv: any) => (
@@ -292,20 +293,20 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       <div className="col-span-3 flex flex-col gap-1">
                          <label className="text-[9px] uppercase opacity-40">Qtd Uso</label>
                          <input 
-                           type="number"
-                           value={sm.quantity}
-                           required
-                           onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
-                           className="text-[11px] p-1.5 bg-black/60 font-mono"
+                            type="number"
+                            value={sm.quantity}
+                            required
+                            onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
+                            className="text-[11px] p-1.5 bg-black/60 font-mono"
                          />
                       </div>
                       <div className="col-span-2 flex justify-center pb-1">
                          <button 
-                           type="button"
-                           onClick={() => removeMaterial(index)}
-                           className="action-icon-btn text-[--danger]"
+                            type="button"
+                            onClick={() => removeMaterial(index)}
+                            className="action-icon-btn text-[--danger]"
                          >
-                           <Trash className="action-icon" />
+                            <Trash className="action-icon" />
                          </button>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Trash2, Pencil, Flame, Search } from 'lucide-react'
 import { deleteRoastBatch, updateRoastBatch } from './actions'
 import Modal from '@/components/ui/Modal'
+import { formatDate } from '@/utils/date-utils'
 
 export default function RoastList({ roastBatches, greenLots }: { roastBatches: any[], greenLots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
@@ -13,7 +14,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
   const filteredBatches = roastBatches?.filter(r => 
     r.green_coffee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     r.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    new Date(r.date).toLocaleDateString().includes(searchTerm)
+    formatDate(r.date).includes(searchTerm)
   )
 
   return (
@@ -59,7 +60,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                     <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                       <td className="p-2">
                         <div className="flex flex-col items-center">
-                          <span className="text-xs font-bold text-[--foreground]">{new Date(r.date).toLocaleDateString()}</span>
+                          <span className="text-xs font-bold text-[--foreground]">{formatDate(r.date)}</span>
                           <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] opacity-40">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                         </div>
                       </td>

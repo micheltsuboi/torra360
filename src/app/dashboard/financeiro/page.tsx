@@ -2,6 +2,7 @@ import { getFinancialStats, getRecentTransactions, getExpensesList, getPendingSa
 import FinanceChart from './FinanceChart'
 import FinanceDashboardClient from './FinanceDashboardClient'
 import { Receipt, ArrowRight, TrendingUp } from 'lucide-react'
+import { formatDate } from '@/utils/date-utils'
 
 export default async function FinancePage({
   searchParams,
@@ -77,75 +78,66 @@ export default async function FinancePage({
       <FinanceChart stats={stats} />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        
         {/* Vendas Recentes */}
-        <div className="glass-panel overflow-hidden border-t-2 border-[--success]/20 flex flex-col">
-          <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
-             <div className="flex items-center gap-2">
-               <TrendingUp className="w-4 h-4 text-[--success]" />
-               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Vendas Confirmadas (Pagas)</h2>
-             </div>
-             <a href="/dashboard/comercial" className="text-[10px] text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1 group">
-               Ver todas <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-             </a>
+        <div className="glass-panel overflow-hidden">
+          <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+            <h2 className="font-serif text-[--primary] flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" /> Vendas Recentes
+            </h2>
+            <a href="/dashboard/comercial" className="text-[10px] uppercase tracking-widest text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1">Ver tudo <ArrowRight className="w-3 h-3" /></a>
           </div>
-          <div className="flex-1 overflow-x-auto">
-             <table className="w-full text-xs">
-                <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
-                   <tr>
-                      <th className="p-3 text-left">Data</th>
-                      <th className="p-3 text-left">Cliente</th>
-                      <th className="p-3 text-right">Valor final</th>
-                   </tr>
-                </thead>
-                <tbody>
-                   {recentSales.filter((s:any) => s.payment_status === 'paid').map((sale: any) => (
-                      <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                         <td className="p-3 opacity-60">{new Date(sale.date).toLocaleDateString()}</td>
-                         <td className="p-3 font-bold text-[--primary]">{sale.clients?.name || 'Venda Avulsa'}</td>
-                         <td className="p-3 text-right font-mono text-[--success]">R$ {sale.final_amount.toFixed(2)}</td>
-                      </tr>
-                   ))}
-                </tbody>
-             </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="text-[--secondary-text] uppercase tracking-tighter bg-black/20">
+                <tr>
+                  <th className="p-3 text-left">Data</th>
+                  <th className="p-3 text-left">Cliente</th>
+                  <th className="p-3 text-right">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentSales.map((sale: any) => (
+                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td className="p-3 opacity-60">{formatDate(sale.date)}</td>
+                    <td className="p-3 font-medium">{sale.clients?.name || 'Venda Avulsa'}</td>
+                    <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
 
         {/* Despesas Recentes */}
-        <div className="glass-panel overflow-hidden border-t-2 border-[--danger]/20 flex flex-col">
-           <div className="p-4 border-b border-[--card-border] wood-texture backdrop-blur-sm bg-black/40 flex justify-between items-center">
-             <div className="flex items-center gap-2">
-               <Receipt className="w-4 h-4 text-[--danger]" />
-               <h2 className="text-sm text-[--primary] font-serif uppercase tracking-widest">Despesas Registradas</h2>
-             </div>
-             <a href="/dashboard/custos" className="text-[10px] text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1 group">
-               Gerenciar <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-             </a>
+        <div className="glass-panel overflow-hidden">
+          <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+            <h2 className="font-serif text-[--danger] flex items-center gap-2">
+              <Receipt className="w-4 h-4" /> Últimas Despesas
+            </h2>
+            <button className="text-[10px] uppercase tracking-widest text-[--secondary-text] hover:text-[--danger] transition-all flex items-center gap-1">Gerenciar</button>
           </div>
-          <div className="flex-1 overflow-x-auto">
-             <table className="w-full text-xs">
-                <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
-                   <tr>
-                      <th className="p-3 text-left">Data</th>
-                      <th className="p-3 text-left">Descrição</th>
-                      <th className="p-3 text-right">Valor</th>
-                   </tr>
-                </thead>
-                <tbody>
-                   {recentExpenses.map((exp: any) => (
-                      <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                         <td className="p-3 opacity-60">{new Date(exp.date).toLocaleDateString()}</td>
-                         <td className="p-3">{exp.notes || exp.category || 'Despesa'}</td>
-                         <td className="p-3 text-right font-mono text-[--danger]">R$ {exp.amount.toFixed(2)}</td>
-                      </tr>
-                   ))}
-                </tbody>
-             </table>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="text-[--secondary-text] uppercase tracking-tighter bg-black/20">
+                <tr>
+                  <th className="p-3 text-left">Data</th>
+                  <th className="p-3 text-left">Gasto</th>
+                  <th className="p-3 text-right">Valor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentExpenses.map((exp: any) => (
+                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td className="p-3 opacity-60">{formatDate(exp.date)}</td>
+                    <td className="p-3">{exp.description || exp.category || 'Despesa'}</td>
+                    <td className="p-3 text-right font-mono text-[--danger]">R$ {exp.amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-
       </div>
-
     </div>
   )
 }
