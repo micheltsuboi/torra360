@@ -23,6 +23,7 @@ export default function SidebarNav() {
     { name: 'Café Verde', href: '/dashboard/estoque', icon: Leaf },
     { name: 'Produção / Torra', href: '/dashboard/torra', icon: Flame },
     { name: 'Embalamento', href: '/dashboard/pacotes', icon: Box },
+    { name: 'Embalagens', href: '/dashboard/embalagens', icon: Box },
     { name: 'Comercial', href: '/dashboard/comercial', icon: TrendingUp },
     { name: 'Financeiro', href: '/dashboard/financeiro', icon: BarChart3 },
     { name: 'Clientes', href: '/dashboard/clientes', icon: Users },

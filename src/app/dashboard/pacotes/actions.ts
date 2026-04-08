@@ -59,13 +59,15 @@ export async function createPackages(formData: FormData) {
   const quantity_units = parseInt(formData.get('quantity_units') as string) || 0
   const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
   const expense_package_id = formData.get('expense_package_id') as string || null
+  const materialsJson = formData.get('materials') as string
+  const materials = JSON.parse(materialsJson || '[]')
 
   const newBatchKg = (package_size_g * quantity_units) / 1000
 
   // 1. Verificar disponibilidade na torra
   const { data: roast } = await supabase
     .from('roast_batches')
-    .select('qty_after_kg, green_coffee(name)')
+    .select('qty_after_kg')
     .eq('id', roast_batch_id)
     .single()
 
@@ -79,14 +81,32 @@ export async function createPackages(formData: FormData) {
   const alreadyPackagedKg = existingPackages?.reduce((acc, curr) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
   const availableKg = roast.qty_after_kg - alreadyPackagedKg
 
-  if (newBatchKg > (availableKg + 0.001)) { // pequena margem para float
+  if (newBatchKg > (availableKg + 0.001)) { 
     return { 
       success: false, 
-      error: `Quantidade insuficiente no lote torrado. Disponível: ${availableKg.toFixed(2)}kg. Tentativa de embalar: ${newBatchKg.toFixed(2)}kg.` 
+      error: `Quantidade insuficiente no lote torrado. Disponível: ${availableKg.toFixed(2)}kg.` 
     }
   }
 
-  const { error } = await supabase.from('packaging_batches').insert({
+  // 2. Verificar disponibilidade de INSUMOS (Embalagens)
+  for (const mat of materials) {
+    if (!mat.materialId) continue
+    const { data: inventoryItem } = await supabase
+      .from('packaging_inventory')
+      .select('name, quantity_available')
+      .eq('id', mat.materialId)
+      .single()
+
+    if (!inventoryItem || inventoryItem.quantity_available < mat.quantity) {
+      return { 
+        success: false, 
+        error: `Estoque insuficiente de: ${inventoryItem?.name || 'Insumo Desconhecido'}. Necessário: ${mat.quantity}, Disponível: ${inventoryItem?.quantity_available || 0}`
+      }
+    }
+  }
+
+  // 3. Inserir o Lote de Embalamento
+  const { data: newBatch, error } = await supabase.from('packaging_batches').insert({
     tenant_id: tenantId,
     roast_batch_id,
     date,
@@ -95,14 +115,29 @@ export async function createPackages(formData: FormData) {
     quantity_units,
     retail_price,
     expense_package_id
-  })
+  }).select().single()
 
   if (error) {
     console.error('Error packaging:', error)
     return { success: false, error: 'Erro ao registrar o embalamento.' }
   }
 
+  // 4. Baixar Estoque de Insumos
+  for (const mat of materials) {
+    if (!mat.materialId) continue
+    await supabase.rpc('decrement_inventory', { 
+      item_id: mat.materialId, 
+      qty: mat.quantity 
+    })
+    // Obs: Se o RPC não existir, usamos update normal
+    const { data: current } = await supabase.from('packaging_inventory').select('quantity_available').eq('id', mat.materialId).single()
+    await supabase.from('packaging_inventory').update({ 
+      quantity_available: (current?.quantity_available || 0) - mat.quantity 
+    }).eq('id', mat.materialId)
+  }
+
   revalidatePath('/dashboard/pacotes')
+  revalidatePath('/dashboard/embalagens')
   return { success: true }
 }
 

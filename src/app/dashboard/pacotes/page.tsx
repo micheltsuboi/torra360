@@ -1,4 +1,5 @@
 import { getRoastBatchesAvailable, getPackages, createPackages, deletePackage } from './actions'
+import { getPackagingInventory } from '../embalagens/actions'
 import { getExpensePackages } from '../custos/actions'
 import PackageList from './PackageList'
 import PacotesHeader from './PacotesHeader'
@@ -9,6 +10,7 @@ export default async function PacotesPage() {
   const roasts = await getRoastBatchesAvailable()
   const packages = await getPackages()
   const expensePackages = await getExpensePackages()
+  const inventory = await getPackagingInventory()
 
   return (
     <div className="flex flex-col gap-8 text-foreground">
@@ -20,7 +22,11 @@ export default async function PacotesPage() {
         </div>
       </div>
 
-      <PacotesHeader roasts={roasts} expensePackages={expensePackages} />
+      <PacotesHeader 
+        roasts={roasts} 
+        expensePackages={expensePackages} 
+        inventory={inventory} 
+      />
 
       {/* Histórico / Relatório de Pacotes */}
       <div className="mt-4">
