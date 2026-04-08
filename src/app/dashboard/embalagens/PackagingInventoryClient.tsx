@@ -25,9 +25,9 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
       <div className="flex justify-between items-center gap-4">
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="golden-btn flex items-center gap-2 px-6 py-3 text-sm"
+          className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
         >
-          <Plus className="w-5 h-5" />
+          <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />
           Registrar Lote
         </button>
 
@@ -43,10 +43,10 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
         </div>
       </div>
 
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
-        <div className="p-3 border-b border-[--card-border] bg-black/40">
-           <h2 className="font-serif text-[--primary] text-[10px] tracking-widest uppercase font-bold flex items-center gap-2">
-             <Box className="w-3 h-3" />
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 shadow-2xl">
+        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
+           <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase font-bold flex items-center gap-3">
+             <Box className="w-4 h-4" />
              Estoque de Insumos e Materiais
            </h2>
         </div>

@@ -153,7 +153,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                 <button 
                   type="button"
                   onClick={handleAddMaterial}
-                  className="text-[10px] bg-[--primary]/20 text-[--primary] px-2 py-1 rounded hover:bg-[--primary]/40 transition-all flex items-center gap-1"
+                  className="golden-btn flex items-center gap-2 px-4 py-2 text-xs"
                 >
                    <Plus className="w-3 h-3" /> Adicionar Insumo
                 </button>
@@ -192,9 +192,10 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                        <button 
                          type="button"
                          onClick={() => removeMaterial(index)}
-                         className="text-red-500 hover:scale-110 transition-transform"
+                         className="action-icon-btn text-[--danger]"
+                         title="Remover Insumo"
                        >
-                         <Trash className="w-4 h-4" />
+                         <Trash className="action-icon" />
                        </button>
                     </div>
                   </div>
