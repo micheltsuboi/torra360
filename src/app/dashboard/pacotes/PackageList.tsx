@@ -117,7 +117,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
           setEditingPackage(null)
           setError(null)
         }} 
-        title="Editar Embalamento"
+        title="Editar Lote De Produtos"
       >
         {editingPackage && (
           <form action={async (formData) => {
@@ -138,7 +138,10 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
             )}
             
             <div className="flex flex-col gap-1">
-              <label className="data-label">Produto: <span className="text-[--primary]">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span></label>
+              <label className="data-label text-[--primary] font-serif tracking-wider mb-2">
+                Produto: <span className="text-[--foreground]">{roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}</span>
+              </label>
+              <label className="data-label">Data De Produção</label>
               <input 
                 name="date" 
                 type="date" 
@@ -150,16 +153,16 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
 
             <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col gap-1">
-                <label className="data-label">Formato</label>
+                <label className="data-label">Formato Do Café</label>
                 <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-sm">
-                  <option value="Grãos Inteiros">Grãos Inteiros</option>
-                  <option value="Café Moído">Café Moído</option>
+                  <option value="Em Grãos">Em Grãos</option>
+                  <option value="Moído">Moído</option>
                 </select>
               </div>
               <div className="flex flex-col gap-1">
-                <label className="data-label">Tamanho (g)</label>
+                <label className="data-label">Tamanho Da Embalagem</label>
                 <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-sm">
-                  <option value="250">250g</option>
+                  <option value="250">250g (Padrão)</option>
                   <option value="500">500g</option>
                   <option value="1000">1kg</option>
                 </select>
@@ -168,7 +171,7 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
 
             <div className="grid grid-cols-2 gap-6">
               <div className="flex flex-col gap-1">
-                <label className="data-label">Quantidade (Unid)</label>
+                <label className="data-label">Quantidade De Pacotes</label>
                 <input 
                   name="quantity_units" 
                   type="number" 
@@ -179,24 +182,21 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="data-label">Preço Venda (R$)</label>
-                <div className="relative">
-                  <input 
-                    name="retail_price" 
-                    type="number" 
-                    step="0.01" 
-                    defaultValue={editingPackage.retail_price} 
-                    required 
-                    className="text-sm pl-10" 
-                  />
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs font-bold text-[--primary]">R$</span>
-                </div>
+                <label className="data-label">Valor De Venda (R$)</label>
+                <input 
+                  name="retail_price" 
+                  type="number" 
+                  step="0.01" 
+                  defaultValue={editingPackage.retail_price} 
+                  required 
+                  className="text-sm" 
+                />
               </div>
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="data-label">Pacote de Custos</label>
-              <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-lg">
+              <label className="data-label">Pacote De Custos</label>
+              <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-sm">
                 <option value="">Nenhum custo adicional</option>
                 {expensePackages.map((ep: any) => (
                   <option key={ep.id} value={ep.id}>
@@ -206,8 +206,8 @@ export default function PackageList({ packages, roasts, expensePackages }: { pac
               </select>
             </div>
 
-            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full">
-              Salvar Alterações
+            <button type="submit" className="golden-btn py-5 text-xl mt-2 w-full font-serif tracking-widest uppercase">
+              Salvar Alterações No Lote
             </button>
           </form>
         )}
