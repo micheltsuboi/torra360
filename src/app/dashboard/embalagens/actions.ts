@@ -94,6 +94,30 @@ export async function addPackagingLot(formData: FormData) {
   return { success: true }
 }
 
+export async function updateInventoryItem(formData: FormData) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+  
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  const quantity = parseInt(formData.get('quantity_available') as string)
+  const unit_cost = parseFloat(formData.get('unit_cost') as string)
+
+  const { error } = await supabase
+    .from('packaging_inventory')
+    .update({
+      name,
+      quantity_available: quantity,
+      unit_cost
+    })
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+
+  if (error) throw error
+  revalidatePath('/dashboard/embalagens')
+  return { success: true }
+}
+
 export async function deleteInventoryItem(id: string) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)

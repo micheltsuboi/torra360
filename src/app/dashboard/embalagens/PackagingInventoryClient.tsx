@@ -1,77 +1,123 @@
 'use client'
 
 import { useState } from 'react'
-import { Plus, Trash2, Box, Calculator, Coins } from 'lucide-react'
+import { Plus, Trash2, Pencil, Box, Calculator, Search } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
-import { addPackagingLot, deleteInventoryItem } from './actions'
+import { addPackagingLot, updateInventoryItem, deleteInventoryItem } from './actions'
 
 export default function PackagingInventoryClient({ inventory }: { inventory: any[] }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState<any | null>(null)
   const [loading, setLoading] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')
+
+  // Form State para Cálculo em Tempo Real (Novo Lote)
   const [formQty, setFormQty] = useState('')
   const [formTotal, setFormTotal] = useState('')
+  const unitCostCalc = (parseFloat(formTotal) || 0) / (parseInt(formQty) || 1)
 
-  const unitCost = (parseFloat(formTotal) || 0) / (parseInt(formQty) || 1)
+  const filteredItems = inventory.filter(item => 
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-start">
+      <div className="flex justify-between items-center gap-4">
         <button 
           onClick={() => setIsModalOpen(true)}
-          className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
+          className="golden-btn flex items-center gap-2 px-6 py-3 text-sm"
         >
-          <Plus className="w-6 h-6" />
-          Registrar Lote de Embalagens
+          <Plus className="w-5 h-5" />
+          Registrar Lote
         </button>
+
+        <div className="flex-1 max-w-md relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--primary] opacity-40 group-focus-within:opacity-100 transition-opacity" />
+          <input 
+            type="text"
+            placeholder="Buscar insumo..."
+            className="w-full pl-10 pr-4 py-2 bg-black/40 border border-white/10 rounded-lg text-xs focus:border-[--primary]/50 transition-all outline-none"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {inventory.map((item) => (
-          <div key={item.id} className="glass-panel group relative overflow-hidden">
-            <div className="p-4 border-b border-[--card-border] card-texture-header flex justify-between items-center">
-              <div className="flex items-center gap-2">
-                <Box className="w-4 h-4 text-[--primary]" />
-                <h3 className="font-serif text-[--primary] uppercase tracking-widest text-xs font-bold">{item.name}</h3>
-              </div>
-              <button 
-                onClick={async () => {
-                  if (confirm('Excluir este item do estoque?')) {
-                    await deleteInventoryItem(item.id)
-                  }
-                }}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-[--danger]"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="p-6 flex flex-col items-center gap-4">
-              <div className="text-center">
-                <p className="text-[10px] uppercase tracking-widest text-[--secondary-text] mb-1">Disponível em Estoque</p>
-                <p className="text-3xl font-serif text-[--foreground]">{item.quantity_available} <span className="text-sm opacity-40 italic">unid</span></p>
-              </div>
-              
-              <div className="w-full flex justify-between items-center bg-black/40 p-3 rounded-lg border border-white/5">
-                <div className="text-left">
-                  <p className="text-[9px] uppercase tracking-tighter text-[--secondary-text] opacity-60">Custo Unitário</p>
-                  <p className="text-sm font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-[9px] uppercase tracking-tighter text-[--secondary-text] opacity-60">Valor em Estoque</p>
-                  <p className="text-sm font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</p>
-                </div>
-              </div>
-            </div>
-            <div className="absolute inset-0 bg-[#C39967]/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-          </div>
-        ))}
-        {inventory.length === 0 && (
-          <div className="col-span-full py-20 text-center border-2 border-dashed border-white/5 rounded-2xl">
-             <Box className="w-12 h-12 text-[--primary] opacity-10 m-auto mb-4" />
-             <p className="text-[--secondary-text] italic">Nenhuma embalagem cadastrada no sistema.</p>
-          </div>
-        )}
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
+        <div className="p-3 border-b border-[--card-border] bg-black/40">
+           <h2 className="font-serif text-[--primary] text-[10px] tracking-widest uppercase font-bold flex items-center gap-2">
+             <Box className="w-3 h-3" />
+             Estoque de Insumos e Materiais
+           </h2>
+        </div>
+        
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-white/5 bg-white/5 tracking-tighter">
+                <th className="p-3 text-left font-bold">Insumo</th>
+                <th className="p-3 text-center font-bold border-l border-white/5">Qtd Disp.</th>
+                <th className="p-3 text-center font-bold border-l border-white/5">Custo Unit.</th>
+                <th className="p-3 text-center font-bold border-l border-white/5">Vlr Total</th>
+                <th className="p-3 text-center font-bold border-l border-white/5 w-24">Ações</th>
+              </tr>
+            </thead>
+            <tbody className="text-sm">
+              {filteredItems.map((item) => (
+                <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
+                  <td className="p-3">
+                    <span className="text-xs font-semibold text-[--foreground] block">{item.name}</span>
+                    <span className="text-[9px] text-[--secondary-text] opacity-40 uppercase tracking-tighter">Material Cadastrado</span>
+                  </td>
+                  <td className="p-3 border-l border-white/5 text-center">
+                    <span className={`text-xs font-mono font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--foreground]'}`}>
+                      {item.quantity_available}
+                    </span>
+                    <span className="text-[9px] opacity-30 italic ml-1">un</span>
+                  </td>
+                  <td className="p-3 border-l border-white/5 text-center">
+                    <span className="text-xs font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</span>
+                  </td>
+                  <td className="p-3 border-l border-white/5 text-center">
+                    <span className="text-xs font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</span>
+                  </td>
+                  <td className="p-3 border-l border-white/5">
+                    <div className="flex justify-center items-center gap-1">
+                      <button 
+                        onClick={() => setEditingItem(item)}
+                        className="action-icon-btn text-[--primary]"
+                        title="Editar"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={async () => {
+                          if (confirm('Deseja excluir este insumo do estoque?')) {
+                            await deleteInventoryItem(item.id)
+                          }
+                        }}
+                        className="action-icon-btn text-[--danger]"
+                        title="Excluir"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {filteredItems.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="p-12 text-center text-[--secondary-text] italic opacity-40 text-xs">
+                    Nenhum insumo encontrado.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
+      {/* Modal: Novo Lote */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
@@ -87,79 +133,83 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
         }} className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <label className="data-label">Nome do Insumo</label>
-            <input 
-              name="name" 
-              placeholder="Ex: Pacote 250g Kraft" 
-              required 
-              className="text-sm"
-              list="common-packaging"
-            />
+            <input name="name" placeholder="Ex: Pacote 250g Kraft" required className="text-sm" list="common-packaging" />
             <datalist id="common-packaging">
-              <option value="Pacote 250g" />
-              <option value="Pacote 500g" />
-              <option value="Pacote 1kg" />
-              <option value="Rótulo Adesivo" />
-              <option value="Válvula Desgaseificadora" />
+              <option value="Pacote 250g" /><option value="Pacote 500g" /><option value="Pacote 1kg" />
+              <option value="Rótulo Adesivo" /><option value="Válvula Desgaseificadora" />
             </datalist>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
-              <label className="data-label">Quantidade Comprada</label>
+              <label className="data-label">Quantidade</label>
               <input 
-                name="quantity" 
-                type="number" 
-                min="1" 
-                required 
-                value={formQty}
-                onChange={e => setFormQty(e.target.value)}
-                className="text-sm"
-                placeholder="Ex: 1000"
+                name="quantity" type="number" min="1" required 
+                value={formQty} onChange={e => setFormQty(e.target.value)}
+                className="text-sm" placeholder="Ex: 1000"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="data-label">Valor Total do Lote (R$)</label>
+              <label className="data-label">Custo Total (R$)</label>
               <input 
-                name="total_cost" 
-                type="number" 
-                step="0.01" 
-                min="0" 
-                required 
-                value={formTotal}
-                onChange={e => setFormTotal(e.target.value)}
-                className="text-sm"
-                placeholder="Ex: 1500.00"
+                name="total_cost" type="number" step="0.01" min="0" required 
+                value={formTotal} onChange={e => setFormTotal(e.target.value)}
+                className="text-sm" placeholder="Ex: 150.00"
               />
             </div>
           </div>
 
-          <div className="bg-[--primary]/10 border border-[--primary]/20 p-4 rounded-lg flex items-center justify-between">
+          <div className="bg-[--primary]/10 border border-[--primary]/20 p-3 rounded-lg flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Calculator className="w-5 h-5 text-[--primary]" />
+              <Calculator className="w-4 h-4 text-[--primary]" />
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase font-bold text-[--primary]/60">Custo Unitário Calculado</span>
-                <span className="text-lg font-serif text-[--primary]">R$ {unitCost.toFixed(3)}</span>
+                <span className="text-[9px] uppercase font-bold text-[--primary]/60">Custo Unitário</span>
+                <span className="text-sm font-serif text-[--primary]">R$ {unitCostCalc.toFixed(3)}</span>
               </div>
             </div>
-            <div className="flex items-center gap-2 opacity-60">
-               <Coins className="w-4 h-4 text-[--success]" />
-               <span className="text-[9px] uppercase font-bold">Lançar Despesa</span>
-            </div>
           </div>
 
-          <div className="px-3 py-2 bg-white/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight italic">
-             Nota: Ao finalizar, o sistema atualizará seu estoque disponível e registrará automaticamente 
-             o valor total como uma despesa no seu controle financeiro do mês.
-          </div>
-
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="golden-btn py-4 text-lg mt-2 w-full disabled:opacity-50"
-          >
-            {loading ? 'Processando...' : 'Finalizar Entrada'}
+          <button type="submit" disabled={loading} className="golden-btn py-3 text-sm mt-2 w-full disabled:opacity-50">
+            {loading ? 'Calculando...' : 'Finalizar e Gerar Despesa'}
           </button>
         </form>
+      </Modal>
+
+      {/* Modal: Editar Item */}
+      <Modal 
+        isOpen={editingItem !== null} 
+        onClose={() => setEditingItem(null)} 
+        title="Ajustar Insumo"
+      >
+        {editingItem && (
+          <form action={async (formData) => {
+            setLoading(true)
+            await updateInventoryItem(formData)
+            setLoading(false)
+            setEditingItem(null)
+          }} className="flex flex-col gap-6">
+            <input type="hidden" name="id" value={editingItem.id} />
+            <div className="flex flex-col gap-1">
+              <label className="data-label">Nome do Insumo</label>
+              <input name="name" defaultValue={editingItem.name} required className="text-sm" />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Estoque Atual</label>
+                <input name="quantity_available" type="number" defaultValue={editingItem.quantity_available} required className="text-sm" />
+              </div>
+              <div className="flex flex-col gap-1">
+                <label className="data-label">Custo Unitário (R$)</label>
+                <input name="unit_cost" type="number" step="0.001" defaultValue={editingItem.unit_cost} required className="text-sm" />
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading} className="golden-btn py-3 text-sm mt-2 w-full disabled:opacity-50">
+              {loading ? 'Salvando...' : 'Salvar Alterações'}
+            </button>
+          </form>
+        )}
       </Modal>
     </div>
   )
