@@ -38,7 +38,7 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense }: Fin
   const isPositiveProfit = profit >= 0
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full text-[--foreground]">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 w-full text-[--foreground]">
       
       {/* 1. Faturamento */}
       <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--primary]/30 transition-all bg-[--card-bg]">

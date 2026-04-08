@@ -252,6 +252,8 @@ table tr td:first-child, table tr th:first-child {
 .justify-start { justify-content: flex-start; }
 .justify-end { justify-content: flex-end; }
 .grid { display: grid; }
+.grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 
 .gap-1 { gap: 0.25rem; }
 .gap-2 { gap: 0.5rem; }
@@ -376,11 +378,13 @@ table tr td:first-child, table tr th:first-child {
   .md\:flex-row { flex-direction: row; }
   .md\:items-center { align-items: center; }
   .md\:flex { display: flex; }
+  .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (min-width: 1024px) {
   .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
   .lg\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .lg\:col-span-2 { grid-column: span 2 / span 2; }
   .lg\:w-64 { width: 16rem; }
   .lg\:items-start { align-items: flex-start; }
