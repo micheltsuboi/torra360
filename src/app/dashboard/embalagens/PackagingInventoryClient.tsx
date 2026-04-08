@@ -67,7 +67,6 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
                 <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                   <td className="p-3">
                     <span className="text-xs font-semibold text-[--foreground] block">{item.name}</span>
-                    <span className="text-[9px] text-[--secondary-text] opacity-40 uppercase tracking-tighter">Material Cadastrado</span>
                   </td>
                   <td className="p-3 border-l border-white/5 text-center">
                     <span className={`text-xs font-mono font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--foreground]'}`}>
@@ -88,7 +87,7 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
                         className="action-icon-btn text-[--primary]"
                         title="Editar"
                       >
-                        <Pencil className="w-4 h-4" />
+                        <Pencil className="action-icon" />
                       </button>
                       <button 
                         onClick={async () => {
@@ -99,7 +98,7 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
                         className="action-icon-btn text-[--danger]"
                         title="Excluir"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="action-icon" />
                       </button>
                     </div>
                   </td>
