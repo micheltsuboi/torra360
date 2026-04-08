@@ -34,6 +34,12 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
     }
   }
 
+  // Função para limpar observações repetitivas (Ex: "Compra de Insumo: Pacote Kraft (1000 un)" -> "1000 un")
+  const cleanNotes = (notes: string) => {
+    if (!notes) return ''
+    return notes.replace(/Compra de Insumo:.*?\(|\)$|Compra de Insumo:/gi, '').trim()
+  }
+
   return (
     <>
       <FinanceStats 
@@ -137,39 +143,45 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                 </tr>
               </thead>
               <tbody>
-                {expensesList.map((exp: any) => (
-                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td className="p-3 opacity-60 text-[10px]">{new Date(exp.date).toLocaleDateString()}</td>
-                    <td className="p-3">
-                      <div className="flex flex-col">
-                        <span className="font-bold text-[--foreground]">{exp.description || 'Sem Título'}</span>
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                           <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] uppercase">{exp.category || 'Geral'}</span>
-                           {exp.notes && <span className="text-[10px] opacity-40 italic">— {exp.notes}</span>}
+                {expensesList.map((exp: any) => {
+                  // Fallback para despesas antigas: se não tem description, tenta tirar do notes
+                  const title = exp.description || (exp.notes?.includes('Compra de Insumo') ? exp.notes.split(':')[1]?.split('(')[0]?.trim() : 'Despesa Geral')
+                  const displayNotes = exp.description ? exp.notes : cleanNotes(exp.notes)
+
+                  return (
+                    <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                      <td className="p-3 opacity-60 text-[10px]">{new Date(exp.date).toLocaleDateString()}</td>
+                      <td className="p-3">
+                        <div className="flex flex-col">
+                          <span className="font-bold text-[--foreground]">{title}</span>
+                          <div className="flex items-center gap-1.5 mt-0.5">
+                             <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] uppercase">{exp.category || 'Geral'}</span>
+                             {displayNotes && <span className="text-[10px] opacity-40 italic">— {displayNotes}</span>}
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td className="p-3 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
-                    <td className="p-3">
-                      <div className="flex items-center justify-center gap-1">
-                        <button 
-                          onClick={() => handleEdit(exp)}
-                          className="action-icon-btn text-[--primary]"
-                          title="Editar"
-                        >
-                          <Pencil className="w-3.5 h-3.5" />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(exp.id)}
-                          className="action-icon-btn text-[--danger]"
-                          title="Excluir"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                      <td className="p-3 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
+                      <td className="p-3">
+                        <div className="flex items-center justify-center gap-0.5">
+                          <button 
+                            onClick={() => handleEdit(exp)}
+                            className="action-icon-btn text-[--primary]"
+                            title="Editar"
+                          >
+                            <Pencil className="action-icon" />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(exp.id)}
+                            className="action-icon-btn text-[--danger]"
+                            title="Excluir"
+                          >
+                            <Trash2 className="action-icon" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
                 {expensesList.length === 0 && (
                   <tr>
                     <td colSpan={4} className="p-10 text-center text-[--secondary-text]">Nenhuma despesa para o período.</td>
@@ -202,14 +214,14 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
-              <Type className="w-3 h-3" /> Título / Descrição
+              <Type className="action-icon" /> Título / Descrição
             </label>
             <input 
               type="text" 
               name="description" 
               required 
               placeholder="Ex: Aluguel Unidade Matriz"
-              defaultValue={editingExpense?.description}
+              defaultValue={editingExpense?.description || (editingExpense?.notes?.includes('Compra de Insumo') ? editingExpense.notes.split(':')[1]?.split('(')[0]?.trim() : '')}
               className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 focus:border-[--primary]/50 outline-none transition-all"
             />
           </div>
@@ -217,7 +229,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
-                <Calendar className="w-3 h-3" /> Data
+                <Calendar className="action-icon" /> Data
               </label>
               <input 
                 type="date" 
@@ -229,7 +241,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
             </div>
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
-                <DollarSign className="w-3 h-3" /> Valor
+                <DollarSign className="action-icon" /> Valor
               </label>
               <input 
                 type="number" 
@@ -245,7 +257,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
-              <Tag className="w-3 h-3" /> Categoria
+              <Tag className="action-icon" /> Categoria
             </label>
             <select 
               name="category" 
@@ -262,13 +274,14 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
               <option value="Manutenção">Manutenção</option>
               <option value="Internet">Internet</option>
               <option value="Pro-labore">Pro-labore</option>
+              <option value="Embalagens">Embalagens</option>
               <option value="Outros">Outros</option>
             </select>
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
-              <Info className="w-3 h-3" /> Observações (Opcional)
+              <Info className="action-icon" /> Observações (Opcional)
             </label>
             <textarea 
               name="notes" 
