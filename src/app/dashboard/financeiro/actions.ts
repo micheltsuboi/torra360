@@ -16,37 +16,48 @@ async function getTenantId(supabase: any) {
   return profile.tenant_id
 }
 
-export async function getFinancialStats() {
+export async function getFinancialStats(startDate?: string, endDate?: string) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
 
   // 1. Faturamento (Vendas)
-  const { data: sales, error: salesError } = await supabase
+  let salesQuery = supabase
     .from('sale_transactions')
     .select('final_amount, date')
     .eq('tenant_id', tenantId)
     .or('payment_status.eq.paid,payment_status.is.null')
 
+  if (startDate) salesQuery = salesQuery.gte('date', startDate)
+  if (endDate) salesQuery = salesQuery.lte('date', endDate)
+
+  const { data: sales } = await salesQuery
   const totalRevenue = sales?.reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
 
   // 2. Custo de Produção (Torra)
-  // Usamos a view roast_reports_view que já inclui tenant_id
-  const { data: roastStats, error: roastError } = await supabase
+  let roastQuery = supabase
     .from('roast_reports_view')
-    .select('total_torra_cost')
+    .select('total_torra_cost, date')
     .eq('tenant_id', tenantId)
 
+  if (startDate) roastQuery = roastQuery.gte('date', startDate)
+  if (endDate) roastQuery = roastQuery.lte('date', endDate)
+
+  const { data: roastStats } = await roastQuery
   const totalProductionCost = roastStats?.reduce((acc, curr) => acc + (curr.total_torra_cost || 0), 0) || 0
 
   // 3. Despesas Gerais (Tabela expenses)
-  const { data: expenses, error: expError } = await supabase
+  let expQuery = supabase
     .from('expenses')
-    .select('amount')
+    .select('amount, date')
     .eq('tenant_id', tenantId)
 
+  if (startDate) expQuery = expQuery.gte('date', startDate)
+  if (endDate) expQuery = expQuery.lte('date', endDate)
+
+  const { data: expenses } = await expQuery
   const totalGeneralExpenses = expenses?.reduce((acc, curr) => acc + (curr.amount || 0), 0) || 0
 
-  // 4. Contas a Receber (Vendas Pendentes)
+  // 4. Contas a Receber (Vendas Pendentes) - Geralmente não filtra por data de criação para mostrar o saldo REAL atual
   const { data: pendingSales } = await supabase
     .from('sale_transactions')
     .select('final_amount')
@@ -55,10 +66,10 @@ export async function getFinancialStats() {
 
   const totalPending = pendingSales?.reduce((acc, curr) => acc + (curr.final_amount || 0), 0) || 0
 
-  // 5. Lucro Real (Considera apenas o que foi recebido)
+  // 5. Lucro Real
   const realProfit = totalRevenue - (totalProductionCost + totalGeneralExpenses)
 
-  // 6. Variação de Faturamento (Mês atual vs anterior)
+  // 6. Variação (Mês atual vs anterior) - Mantemos a lógica fixa de meses para o badge de tendência
   const now = new Date()
   const firstDayCurrentMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
   const firstDayLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString()
@@ -87,32 +98,110 @@ export async function getFinancialStats() {
   }
 }
 
-export async function getRecentTransactions() {
+export async function getRecentTransactions(startDate?: string, endDate?: string) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
   
-  const { data: sales } = await supabase
+  let query = supabase
     .from('sale_transactions')
     .select('*, clients(name)')
     .eq('tenant_id', tenantId)
     .order('date', { ascending: false })
-    .limit(10)
 
+  if (startDate) query = query.gte('date', startDate)
+  if (endDate) query = query.lte('date', endDate)
+  if (!startDate && !endDate) query = query.limit(10)
+
+  const { data: sales } = await query
   return sales || []
 }
 
-export async function getExpensesList() {
+export async function getExpensesList(startDate?: string, endDate?: string) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
   
-  const { data: expenses } = await supabase
+  let query = supabase
     .from('expenses')
     .select('*')
     .eq('tenant_id', tenantId)
     .order('date', { ascending: false })
-    .limit(20)
 
+  if (startDate) query = query.gte('date', startDate)
+  if (endDate) query = query.lte('date', endDate)
+  if (!startDate && !endDate) query = query.limit(20)
+
+  const { data: expenses } = await query
   return expenses || []
+}
+
+export async function createExpense(formData: FormData) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+
+  const amount = parseFloat(formData.get('amount') as string)
+  const date = formData.get('date') as string
+  const category = formData.get('category') as string
+  const notes = formData.get('notes') as string
+
+  const { error } = await supabase
+    .from('expenses')
+    .insert({
+      tenant_id: tenantId,
+      amount,
+      date,
+      category,
+      notes
+    })
+
+  if (error) throw error
+  
+  const { revalidatePath } = require('next/cache')
+  revalidatePath('/dashboard/financeiro')
+  revalidatePath('/dashboard/custos')
+}
+
+export async function updateExpense(formData: FormData) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+
+  const id = formData.get('id') as string
+  const amount = parseFloat(formData.get('amount') as string)
+  const date = formData.get('date') as string
+  const category = formData.get('category') as string
+  const notes = formData.get('notes') as string
+
+  const { error } = await supabase
+    .from('expenses')
+    .update({
+      amount,
+      date,
+      category,
+      notes
+    })
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+
+  if (error) throw error
+  
+  const { revalidatePath } = require('next/cache')
+  revalidatePath('/dashboard/financeiro')
+  revalidatePath('/dashboard/custos')
+}
+
+export async function deleteExpense(id: string) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+
+  const { error } = await supabase
+    .from('expenses')
+    .delete()
+    .eq('id', id)
+    .eq('tenant_id', tenantId)
+
+  if (error) throw error
+  
+  const { revalidatePath } = require('next/cache')
+  revalidatePath('/dashboard/financeiro')
 }
 
 export async function getPendingSales() {

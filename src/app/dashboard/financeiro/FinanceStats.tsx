@@ -23,9 +23,10 @@ interface FinanceStatsProps {
   stats: Stats
   onOpenPending: () => void
   onNewExpense: () => void
+  onOpenExpenses: () => void
 }
 
-export default function FinanceStats({ stats, onOpenPending, onNewExpense }: FinanceStatsProps) {
+export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpenExpenses }: FinanceStatsProps) {
   // Garantir valores padrão para evitar quebra no toLocaleString
   const revenue = stats?.revenue ?? 0
   const productionCost = stats?.productionCost ?? 0
@@ -60,14 +61,20 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense }: Fin
       </div>
 
       {/* 2. Despesas */}
-      <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--danger]/30 transition-all bg-[--card-bg]">
+      <div 
+        onClick={onOpenExpenses}
+        className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--danger]/30 transition-all bg-[--card-bg] cursor-pointer"
+      >
         <div className="flex justify-between items-start mb-4">
           <div className="p-2 bg-[--danger]/5 rounded-xl border border-[--danger]/10 group-hover:scale-110 transition-transform">
             <TrendingDown className="w-6 h-6 text-[--danger] opacity-80" />
           </div>
           <button 
-            onClick={onNewExpense}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-[--danger]/10 hover:bg-[--danger]/20 border border-[--danger]/20 rounded-lg text-[10px] text-[--danger] font-bold transition-all"
+            onClick={(e) => {
+              e.stopPropagation();
+              onNewExpense();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[--danger]/10 hover:bg-[--danger]/20 border border-[--danger]/20 rounded-lg text-[10px] text-[--danger] font-bold transition-all relative z-10"
           >
             <Plus className="w-3 h-3" /> Nova Despesa
           </button>

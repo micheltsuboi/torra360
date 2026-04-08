@@ -3,32 +3,50 @@
 import { useState } from 'react'
 import Modal from '@/components/ui/Modal'
 import FinanceStats from './FinanceStats'
-import { Clock, CheckCircle2 } from 'lucide-react'
-import { markSaleAsPaid } from './actions'
+import { Clock, CheckCircle2, Receipt, Trash2, Edit2, Plus, Calendar, Tag, Info, DollarSign } from 'lucide-react'
+import { markSaleAsPaid, createExpense, updateExpense, deleteExpense } from './actions'
 
 interface FinanceDashboardClientProps {
   stats: any
   pendingSales: any[]
+  expensesList: any[]
 }
 
-export default function FinanceDashboardClient({ stats, pendingSales }: FinanceDashboardClientProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
+export default function FinanceDashboardClient({ stats, pendingSales, expensesList }: FinanceDashboardClientProps) {
+  const [isPendingModalOpen, setIsPendingModalOpen] = useState(false)
+  const [isListModalOpen, setIsListModalOpen] = useState(false)
+  const [isFormModalOpen, setIsFormModalOpen] = useState(false)
+  const [editingExpense, setEditingExpense] = useState<any>(null)
 
-    const onNewExpense = () => {
-      window.location.href = '/dashboard/custos'
+  const handleCreateNew = () => {
+    setEditingExpense(null)
+    setIsFormModalOpen(true)
+  }
+
+  const handleEdit = (expense: any) => {
+    setEditingExpense(expense)
+    setIsFormModalOpen(true)
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm('Tem certeza que deseja excluir esta despesa?')) {
+      await deleteExpense(id)
     }
+  }
 
-    return (
-      <>
-        <FinanceStats 
-          stats={stats} 
-          onOpenPending={() => setIsModalOpen(true)} 
-          onNewExpense={onNewExpense}
-        />
+  return (
+    <>
+      <FinanceStats 
+        stats={stats} 
+        onOpenPending={() => setIsPendingModalOpen(true)} 
+        onNewExpense={handleCreateNew}
+        onOpenExpenses={() => setIsListModalOpen(true)}
+      />
 
+      {/* 1. Modal de Contas a Receber */}
       <Modal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+        isOpen={isPendingModalOpen} 
+        onClose={() => setIsPendingModalOpen(false)} 
         title="Contas a Receber / Pendências"
       >
         <div className="flex flex-col gap-4">
@@ -61,8 +79,6 @@ export default function FinanceDashboardClient({ stats, pendingSales }: FinanceD
                         action={async (formData: FormData) => {
                           const method = formData.get('method') as string
                           await markSaleAsPaid(sale.id, method)
-                          // Se o modal deve fechar após um recebimento, poderíamos fazer aqui 
-                          // ou assumir que o usuário pode querer receber vários de uma vez.
                         }}
                         className="flex items-center justify-center gap-2"
                       >
@@ -88,6 +104,178 @@ export default function FinanceDashboardClient({ stats, pendingSales }: FinanceD
             </table>
           </div>
         </div>
+      </Modal>
+
+      {/* 2. Modal de Listagem de Despesas */}
+      <Modal
+        isOpen={isListModalOpen}
+        onClose={() => setIsListModalOpen(false)}
+        title="Gerenciamento de Despesas"
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between items-center mb-2">
+            <div className="flex items-center gap-2">
+              <Receipt className="w-5 h-5 text-[--danger]" />
+              <span className="text-sm font-serif uppercase tracking-widest text-[--primary]">Lista de Despesas</span>
+            </div>
+            <button 
+              onClick={handleCreateNew}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[--primary]/10 hover:bg-[--primary]/20 border border-[--primary]/20 rounded-lg text-[10px] text-[--primary] font-bold transition-all"
+            >
+              <Plus className="w-3 h-3" /> Nova Despesa
+            </button>
+          </div>
+
+          <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-white/10">
+            <table className="w-full text-xs">
+              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
+                <tr>
+                  <th className="p-3 text-left">Data</th>
+                  <th className="p-3 text-left">Categoria / Notas</th>
+                  <th className="p-3 text-right">Valor</th>
+                  <th className="p-3 text-center">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {expensesList.map((exp: any) => (
+                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td className="p-3 opacity-60 text-[10px]">{new Date(exp.date).toLocaleDateString()}</td>
+                    <td className="p-3">
+                      <div className="flex flex-col">
+                        <span className="font-bold text-[--foreground]">{exp.category || 'Geral'}</span>
+                        <span className="text-[10px] opacity-40 italic">{exp.notes || 'Sem observações'}</span>
+                      </div>
+                    </td>
+                    <td className="p-3 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
+                    <td className="p-3">
+                      <div className="flex items-center justify-center gap-2">
+                        <button 
+                          onClick={() => handleEdit(exp)}
+                          className="p-1.5 text-[--secondary-text] hover:text-[--primary] transition-all"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button 
+                          onClick={() => handleDelete(exp.id)}
+                          className="p-1.5 text-[--secondary-text] hover:text-[--danger] transition-all"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {expensesList.length === 0 && (
+                  <tr>
+                    <td colSpan={4} className="p-10 text-center text-[--secondary-text]">Nenhuma despesa para o período.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </Modal>
+
+      {/* 3. Modal de Formulário de Despesa */}
+      <Modal
+        isOpen={isFormModalOpen}
+        onClose={() => setIsFormModalOpen(false)}
+        title={editingExpense ? 'Editar Despesa' : 'Nova Despesa'}
+      >
+        <form 
+          action={async (formData: FormData) => {
+            if (editingExpense) {
+              await updateExpense(formData)
+            } else {
+              await createExpense(formData)
+            }
+            setIsFormModalOpen(false)
+          }}
+          className="flex flex-col gap-4 p-2"
+        >
+          {editingExpense && <input type="hidden" name="id" value={editingExpense.id} />}
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+                <Calendar className="w-3 h-3" /> Data
+              </label>
+              <input 
+                type="date" 
+                name="date" 
+                required 
+                defaultValue={editingExpense?.date || new Date().toISOString().split('T')[0]}
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+                <DollarSign className="w-3 h-3" /> Valor
+              </label>
+              <input 
+                type="number" 
+                name="amount" 
+                step="0.01" 
+                required 
+                placeholder="0.00"
+                defaultValue={editingExpense?.amount}
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+              <Tag className="w-3 h-3" /> Categoria
+            </label>
+            <select 
+              name="category" 
+              required
+              defaultValue={editingExpense?.category || 'Geral'}
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+            >
+              <option value="Luz">Luz</option>
+              <option value="Água">Água</option>
+              <option value="Gás">Gás</option>
+              <option value="Aluguel">Aluguel</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Limpeza">Limpeza</option>
+              <option value="Manutenção">Manutenção</option>
+              <option value="Internet">Internet</option>
+              <option value="Pro-labore">Pro-labore</option>
+              <option value="Outros">Outros</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+              <Info className="w-3 h-3" /> Observações (Opcional)
+            </label>
+            <textarea 
+              name="notes" 
+              rows={3}
+              defaultValue={editingExpense?.notes}
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 resize-none outline-none focus:border-[--primary]/50 transition-all"
+              placeholder="Ex: Refente ao conserto da máquina de café..."
+            />
+          </div>
+
+          <div className="flex gap-3 mt-4">
+            <button 
+              type="button"
+              onClick={() => setIsFormModalOpen(false)}
+              className="flex-1 px-4 py-3 border border-white/10 rounded-lg text-xs font-bold hover:bg-white/5 transition-all text-[--secondary-text]"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit"
+              className="flex-[2] golden-btn py-3 text-xs font-bold"
+            >
+              {editingExpense ? 'Salvar Alterações' : 'Cadastrar Despesa'}
+            </button>
+          </div>
+        </form>
       </Modal>
     </>
   )
