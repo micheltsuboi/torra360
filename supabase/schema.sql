@@ -144,6 +144,7 @@ create table if not exists public.expenses (
   tenant_id uuid references public.tenants not null default public.get_tenant_id(),
   date date default CURRENT_DATE,
   category text,
+  description text,
   amount numeric not null,
   notes text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null

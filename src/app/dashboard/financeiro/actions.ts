@@ -141,6 +141,7 @@ export async function createExpense(formData: FormData) {
   const amount = parseFloat(formData.get('amount') as string)
   const date = formData.get('date') as string
   const category = formData.get('category') as string
+  const description = formData.get('description') as string
   const notes = formData.get('notes') as string
 
   const { error } = await supabase
@@ -150,6 +151,7 @@ export async function createExpense(formData: FormData) {
       amount,
       date,
       category,
+      description,
       notes
     })
 
@@ -168,6 +170,7 @@ export async function updateExpense(formData: FormData) {
   const amount = parseFloat(formData.get('amount') as string)
   const date = formData.get('date') as string
   const category = formData.get('category') as string
+  const description = formData.get('description') as string
   const notes = formData.get('notes') as string
 
   const { error } = await supabase
@@ -176,6 +179,7 @@ export async function updateExpense(formData: FormData) {
       amount,
       date,
       category,
+      description,
       notes
     })
     .eq('id', id)

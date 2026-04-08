@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Modal from '@/components/ui/Modal'
 import FinanceStats from './FinanceStats'
-import { Clock, CheckCircle2, Receipt, Trash2, Edit2, Plus, Calendar, Tag, Info, DollarSign } from 'lucide-react'
+import { Clock, CheckCircle2, Receipt, Trash2, Pencil, Plus, Calendar, Tag, Info, DollarSign, Type } from 'lucide-react'
 import { markSaleAsPaid, createExpense, updateExpense, deleteExpense } from './actions'
 
 interface FinanceDashboardClientProps {
@@ -131,7 +131,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
               <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
                 <tr>
                   <th className="p-3 text-left">Data</th>
-                  <th className="p-3 text-left">Categoria / Notas</th>
+                  <th className="p-3 text-left">Título / Categoria</th>
                   <th className="p-3 text-right">Valor</th>
                   <th className="p-3 text-center">Ações</th>
                 </tr>
@@ -142,22 +142,27 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                     <td className="p-3 opacity-60 text-[10px]">{new Date(exp.date).toLocaleDateString()}</td>
                     <td className="p-3">
                       <div className="flex flex-col">
-                        <span className="font-bold text-[--foreground]">{exp.category || 'Geral'}</span>
-                        <span className="text-[10px] opacity-40 italic">{exp.notes || 'Sem observações'}</span>
+                        <span className="font-bold text-[--foreground]">{exp.description || 'Sem Título'}</span>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                           <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] uppercase">{exp.category || 'Geral'}</span>
+                           {exp.notes && <span className="text-[10px] opacity-40 italic">— {exp.notes}</span>}
+                        </div>
                       </div>
                     </td>
                     <td className="p-3 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
                     <td className="p-3">
-                      <div className="flex items-center justify-center gap-2">
+                      <div className="flex items-center justify-center gap-1">
                         <button 
                           onClick={() => handleEdit(exp)}
-                          className="p-1.5 text-[--secondary-text] hover:text-[--primary] transition-all"
+                          className="action-icon-btn text-[--primary]"
+                          title="Editar"
                         >
-                          <Edit2 className="w-3.5 h-3.5" />
+                          <Pencil className="w-3.5 h-3.5" />
                         </button>
                         <button 
                           onClick={() => handleDelete(exp.id)}
-                          className="p-1.5 text-[--secondary-text] hover:text-[--danger] transition-all"
+                          className="action-icon-btn text-[--danger]"
+                          title="Excluir"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
@@ -195,6 +200,20 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
         >
           {editingExpense && <input type="hidden" name="id" value={editingExpense.id} />}
           
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+              <Type className="w-3 h-3" /> Título / Descrição
+            </label>
+            <input 
+              type="text" 
+              name="description" 
+              required 
+              placeholder="Ex: Aluguel Unidade Matriz"
+              defaultValue={editingExpense?.description}
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 focus:border-[--primary]/50 outline-none transition-all"
+            />
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
@@ -253,10 +272,10 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
             </label>
             <textarea 
               name="notes" 
-              rows={3}
+              rows={2}
               defaultValue={editingExpense?.notes}
-              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 resize-none outline-none focus:border-[--primary]/50 transition-all"
-              placeholder="Ex: Refente ao conserto da máquina de café..."
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 resize-none outline-none focus:border-[--primary]/50 transition-all font-sans"
+              placeholder="Detalhes adicionais..."
             />
           </div>
 
