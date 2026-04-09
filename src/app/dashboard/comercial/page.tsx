@@ -1,7 +1,6 @@
 import { getPDVData, getSalesHistory } from './actions'
 import PDVComponent from './PDVComponent'
-import DeleteSaleButton from './DeleteSaleButton'
-import PaymentStatusControl from './PaymentStatusControl'
+import SaleActions from './SaleActions'
 import { formatDate } from '@/utils/date-utils'
 
 export default async function ComercialPage() {
@@ -38,7 +37,7 @@ export default async function ComercialPage() {
                     <tr className="bg-black/20 text-[--secondary-text] text-[9px] capitalize border-b border-white/5 font-sans tracking-widest">
                        <th className="px-4 py-3 text-left font-bold opacity-40">Data/Cliente</th>
                        <th className="px-4 py-3 text-left font-bold opacity-40">Itens</th>
-                       <th className="px-4 py-3 text-left font-bold opacity-40">Status / Pagamento</th>
+                       <th className="px-4 py-3 text-center font-bold opacity-40">Status / Pagamento</th>
                        <th className="px-4 py-3 text-right font-bold opacity-40">Total Final</th>
                        <th className="px-4 py-3 text-center font-bold opacity-40">Ações</th>
                     </tr>
@@ -60,16 +59,18 @@ export default async function ComercialPage() {
                              ))}
                            </div>
                         </td>
-                        <td className="px-4 py-3">
-                           <PaymentStatusControl sale={s} />
+                        <td className="px-4 py-3 text-center">
+                           {s.payment_status === 'pending' ? (
+                             <span className="text-[10px] font-bold text-[--warning] py-1 px-2 bg-[--warning]/5 rounded-full border border-[--warning]/10 whitespace-nowrap">À receber</span>
+                           ) : (
+                             <span className="text-[10px] font-bold text-[--success] py-1 px-2 bg-[--success]/5 rounded-full border border-[--success]/10 whitespace-nowrap">{s.payment_method}</span>
+                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
                            <span className="text-[14px] font-mono text-[--success] font-bold">R$ {s.final_amount.toFixed(2)}</span>
                         </td>
                         <td className="px-4 py-3">
-                           <div className="flex justify-center items-center">
-                              <DeleteSaleButton saleId={s.id} />
-                           </div>
+                           <SaleActions sale={s} />
                         </td>
                       </tr>
                     ))}
