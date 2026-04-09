@@ -59,7 +59,7 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                </thead>
                <tbody className="text-[11px]">
                   {visibleSales.map((s) => (
-                    <tr key={s.id} className="bg-white/[0.03] hover:bg-white/[0.06] transition-colors group">
+                    <tr key={s.id} className="even:bg-white/[0.04] odd:bg-black/20 hover:bg-white/[0.08] transition-colors group">
                       <td className="px-6 py-6 rounded-l-xl border-y border-l border-white/5">
                          <div className="flex flex-col">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
