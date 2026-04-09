@@ -254,3 +254,23 @@ export async function deleteSale(formData: FormData) {
   revalidatePath('/dashboard/pacotes')
   revalidatePath('/dashboard/financeiro')
 }
+
+export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+  
+  const { error } = await supabase
+    .from('sale_transactions')
+    .update({ 
+      payment_status: 'paid',
+      payment_method: finalPaymentMethod,
+      date: new Date().toISOString().split('T')[0]
+    })
+    .eq('id', saleId)
+    .eq('tenant_id', tenantId)
+
+  if (error) throw error
+  
+  revalidatePath('/dashboard/comercial')
+  revalidatePath('/dashboard/financeiro')
+}
