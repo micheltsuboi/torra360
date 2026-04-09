@@ -227,13 +227,13 @@ export default function FinanceDashboardClient({
 
                   return (
                     <tr key={exp.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-all group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
-                      <td className="px-4 py-2 opacity-50 text-[10px]">{formatDate(exp.date)}</td>
+                      <td className="px-4 py-2 opacity-50">{formatDate(exp.date)}</td>
                       <td className="px-4 py-2">
                         <div className="flex flex-col">
                           <span className="font-bold text-[--foreground] leading-tight">{title}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                             <span className="text-[8px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] capitalize font-bold">{exp.category || 'Geral'}</span>
-                             {displayNotes && <span className="text-[9px] opacity-40 italic">— {displayNotes}</span>}
+                             <span className="text-[10px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] capitalize font-bold">{exp.category || 'Geral'}</span>
+                             {displayNotes && <span className="opacity-40 italic">— {displayNotes}</span>}
                           </div>
                         </div>
                       </td>

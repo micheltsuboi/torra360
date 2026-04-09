@@ -39,11 +39,11 @@ export default async function FidelityPage() {
                     <th className="p-4 text-center font-bold opacity-40">Saldo Disponível</th>
                  </tr>
               </thead>
-               <tbody className="text-center font-sans">
+               <tbody className="text-center font-sans text-[11px]">
                  {report.map((client: any, index: number) => (
                     <tr key={client.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                        <td className="p-4 font-bold text-[--foreground]">{client.name}</td>
-                       <td className="p-4 opacity-60 text-xs border-l border-white/5">
+                       <td className="p-4 opacity-60 border-l border-white/5">
                           <div className="flex items-center justify-center gap-2">
                              <span>{client.phone || '-'}</span>
                              {client.phone && (

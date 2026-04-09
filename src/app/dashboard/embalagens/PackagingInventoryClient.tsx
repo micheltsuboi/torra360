@@ -61,23 +61,23 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
                 <th className="p-2 text-center font-bold opacity-40 w-24">Ações</th>
               </tr>
             </thead>
-            <tbody className="font-sans">
+            <tbody className="font-sans text-[11px]">
               {filteredItems.map((item, index) => (
                 <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                   <td className="p-2">
-                    <span className="text-sm font-semibold text-[--foreground] block">{item.name}</span>
+                    <span className="font-medium text-[--foreground] block">{item.name}</span>
                   </td>
                   <td className="p-2 border-l border-white/5 text-center">
-                    <span className={`text-sm font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                    <span className={`font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                       {item.quantity_available}
                     </span>
-                    <span className="text-[10px] opacity-40 italic ml-1">un</span>
+                    <span className="opacity-40 italic ml-1">un</span>
                   </td>
                   <td className="p-2 border-l border-white/5 text-center">
-                    <span className="text-sm font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</span>
+                    <span className="font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</span>
                   </td>
                   <td className="p-2 border-l border-white/5 text-center">
-                    <span className="text-sm font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</span>
+                    <span className="font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</span>
                   </td>
                   <td className="p-2 border-l border-white/5">
                     <div className="flex justify-center items-center gap-1">

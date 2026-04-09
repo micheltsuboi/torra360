@@ -50,7 +50,7 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                 <th className="p-2 font-bold text-center opacity-40">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-sm">
+            <tbody className="text-[11px] font-sans">
               {filteredLots && filteredLots.length > 0 ? (
                 filteredLots.map((lot: any, index: number) => {
                   const costPerKgGreen = lot.total_qty_kg > 0 ? (lot.total_cost / lot.total_qty_kg) : 0;

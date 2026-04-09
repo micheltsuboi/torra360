@@ -50,7 +50,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                 <th className="p-2 font-bold opacity-40 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-sm">
+            <tbody className="text-[11px] font-sans">
               {filteredBatches && filteredBatches.length > 0 ? (
                 filteredBatches.map((r: any, index: number) => {
                   const yieldPerc = r.yield_percentage || (r.qty_after_kg / r.qty_before_kg * 100);
@@ -60,14 +60,14 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                     <tr key={r.roast_batch_id || r.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="p-2">
                         <div className="flex flex-col items-center">
-                          <span className="text-xs font-bold text-[--foreground]">{formatDate(r.date)}</span>
-                          <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] opacity-40">Lote: #{r.id.slice(-6).toUpperCase()}</span>
+                          <span className="font-bold text-[--foreground]">{formatDate(r.date)}</span>
+                          <span className="capitalize tracking-widest text-[--secondary-text] opacity-40">Lote: #{r.id.slice(-6).toUpperCase()}</span>
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/5">
                         <div className="flex flex-col items-center">
-                          <span className="text-sm font-semibold text-[--primary]">{r.green_coffee?.name || r.green_coffee_name || 'N/A'}</span>
-                          <span className="text-[10px] capitalize text-[--secondary-text] opacity-60">{r.qty_before_kg}kg orig.</span>
+                          <span className="font-semibold text-[--primary]">{r.green_coffee?.name || r.green_coffee_name || 'N/A'}</span>
+                          <span className="capitalize text-[--secondary-text] opacity-60">{r.qty_before_kg}kg orig.</span>
                         </div>
                       </td>
                       <td className="p-2 text-center border-l border-white/5">

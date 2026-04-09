@@ -48,7 +48,7 @@ export default function ClientList({ clients }: { clients: any[] }) {
                 <th className="p-2 font-bold opacity-40 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody className="font-sans">
+            <tbody className="font-sans text-[11px]">
               {filteredClients && filteredClients.length > 0 ? (
                 filteredClients.map((client: any, index: number) => (
                   <tr key={client.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
@@ -70,7 +70,7 @@ export default function ClientList({ clients }: { clients: any[] }) {
                         )}
                       </div>
                     </td>
-                    <td className="p-2 text-[--secondary-text] text-xs">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
+                    <td className="p-2 text-[--secondary-text]">{(client.city || client.state) ? `${client.city || ''} ${client.state ? '- ' + client.state : ''}` : '-'}</td>
                     <td className="p-2 flex items-center justify-center gap-2">
                       <button 
                         onClick={() => setEditingClient(client)}

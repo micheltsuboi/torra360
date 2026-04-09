@@ -63,7 +63,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
           <input 
             type="text"
             placeholder="Buscar por café, formato ou tamanho..."
-            className="!py-3 !bg-transparent !border-none !p-0 focus:!ring-0 w-full !text-sm font-sans outline-none text-white placeholder:opacity-30"
+            className="!py-3 !bg-transparent !border-none !p-0 focus:!ring-0 w-full ! font-sans outline-none text-white placeholder:opacity-30"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -72,8 +72,8 @@ export default function PackageList({ packages, roasts, expensePackages, invento
 
       <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 shadow-2xl">
         <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
-          <h2 className="font-serif text-[--primary] text-sm tracking-widest capitalize font-bold">Lotes Embalados e Estoque</h2>
-          <span className="text-[10px] text-[--secondary-text] opacity-40 capitalize tracking-widest">{filteredPackages?.length || 0} Registros</span>
+          <h2 className="font-serif text-[--primary]  tracking-widest capitalize font-bold">Lotes Embalados e Estoque</h2>
+          <span className=" text-[--secondary-text] opacity-40 capitalize tracking-widest">{filteredPackages?.length || 0} Registros</span>
         </div>
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse min-w-[900px]">
@@ -87,7 +87,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                 <th className="p-3 font-bold text-center opacity-40">Ações</th>
               </tr>
             </thead>
-            <tbody className="font-sans">
+            <tbody className="font-sans text-[11px]">
               {filteredPackages && filteredPackages.length > 0 ? (
                 filteredPackages.map((p: any, index: number) => {
                   const roast = roasts.find(r => r.id === p.roast_batch_id)
@@ -98,18 +98,18 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       <td className="p-3">
                         {!p.is_blend ? (
                           <>
-                            <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
-                            <span className="text-[10px] text-[--secondary-text] opacity-60">Lote torrado em {formatDate(p.date)}</span>
+                            <span className=" font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
+                            <span className=" text-[--secondary-text] opacity-60">Lote torrado em {formatDate(p.date)}</span>
                           </>
                         ) : (
                           <div className="flex flex-col">
                             <div className="flex items-center gap-1.5">
                               <Beaker className="w-3.5 h-3.5 text-[--primary]" />
-                              <span className="text-sm font-bold text-[--foreground]">Blend Comercial</span>
+                              <span className=" font-bold text-[--foreground]">Blend Comercial</span>
                             </div>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {p.blend_composition?.map((comp: any, i: number) => (
-                                <span key={i} className="text-[9px] bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20 font-medium">
+                                <span key={i} className=" bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20 font-medium">
                                   {comp.roast_batch?.green_coffee?.name}: <strong>{Math.round(comp.percentage)}%</strong>
                                 </span>
                               ))}
@@ -118,27 +118,27 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                         )}
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
-                        <span className="text-xs font-bold block text-[--foreground]">{p.bean_format}</span>
-                        <span className="text-[10px] opacity-40 capitalize tracking-tighter">{p.package_size_g}g</span>
+                        <span className="font-bold block text-[--foreground]">{p.bean_format}</span>
+                        <span className="opacity-40 capitalize tracking-tighter">{p.package_size_g}g</span>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="inline-flex flex-col items-center">
-                          <span className={`text-base font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                          <span className={` font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                             {p.quantity_units}
                           </span>
-                          <span className="text-[8px] capitalize opacity-30 font-bold -mt-1">unidades</span>
+                          <span className=" capitalize opacity-30 font-bold -mt-1">unidades</span>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
-                          <div className="text-[--foreground] font-bold text-sm tracking-tight">R$ {costs.unit.toFixed(2)}</div>
-                          <div className="text-[9px] opacity-40 text-[--secondary-text] capitalize font-bold">Total: R$ {costs.total.toFixed(2)}</div>
+                          <div className="text-[--foreground] font-bold tracking-tight">R$ {costs.unit.toFixed(2)}</div>
+                          <div className="opacity-40 text-[--secondary-text] capitalize font-bold">Total: R$ {costs.total.toFixed(2)}</div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
-                          <div className="text-[--primary] font-bold text-sm tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                          <div className="text-[9px] opacity-25 text-[--secondary-text] capitalize font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
+                          <div className="text-[--primary] font-bold  tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
+                          <div className=" opacity-25 text-[--secondary-text] capitalize font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5">
@@ -171,7 +171,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                   <td colSpan={6} className="p-24 text-center">
                     <div className="flex flex-col items-center gap-2 opacity-30">
                       <ShoppingBag className="w-12 h-12" />
-                      <p className="text-xs uppercase tracking-widest font-bold">
+                      <p className=" uppercase tracking-widest font-bold">
                         {searchTerm ? 'Nenhum lote compatível.' : 'Nenhum produto em estoque.'}
                       </p>
                     </div>
@@ -206,7 +206,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
             <input type="hidden" name="id" value={editingPackage.id} />
 
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+              <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg  font-semibold">
                 ⚠️ {error}
               </div>
             )}
@@ -215,7 +215,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-1">
                   <label className="data-label text-[--primary] uppercase tracking-widest">Produto Original:</label>
-                  <div className="p-3 bg-black/40 rounded-lg text-xs border border-white/5 flex items-center gap-2">
+                  <div className="p-3 bg-black/40 rounded-lg  border border-white/5 flex items-center gap-2">
                      <Package className="w-4 h-4 opacity-40" />
                      <span className="font-bold">
                        {roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'Blend Comercial'}
@@ -229,7 +229,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     type="date" 
                     required 
                     defaultValue={editingPackage.date} 
-                    className="text-sm bg-black/40 border-white/10"
+                    className=" bg-black/40 border-white/10"
                   />
                 </div>
               </div>
@@ -237,14 +237,14 @@ export default function PackageList({ packages, roasts, expensePackages, invento
               <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
                 <div className="flex flex-col gap-1">
                   <label className="data-label">Formato</label>
-                  <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-sm bg-black/40 border-white/10">
+                  <select name="bean_format" defaultValue={editingPackage.bean_format} required className=" bg-black/40 border-white/10">
                     <option value="Em Grãos">Em Grãos</option>
                     <option value="Moído">Moído</option>
                   </select>
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="data-label">Tamanho (g)</label>
-                  <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-sm bg-black/40 border-white/10">
+                  <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className=" bg-black/40 border-white/10">
                     <option value="250">250g</option>
                     <option value="500">500g</option>
                     <option value="1000">1kg</option>
@@ -261,7 +261,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     min="1" 
                     defaultValue={editingPackage.quantity_units} 
                     required 
-                    className="text-sm bg-black/40 border-white/10"
+                    className=" bg-black/40 border-white/10"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
@@ -272,14 +272,14 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     step="0.01" 
                     defaultValue={editingPackage.retail_price} 
                     required 
-                    className="text-sm bg-black/40 border-white/10" 
+                    className=" bg-black/40 border-white/10" 
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
                 <label className="data-label uppercase tracking-widest text-[--primary]">Pacote de Custos Extra</label>
-                <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-sm bg-black/40 border-white/10">
+                <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className=" bg-black/40 border-white/10">
                   <option value="">Nenhum custo extra</option>
                   {expensePackages.map((ep: any) => (
                     <option key={ep.id} value={ep.id}>{ep.name} (R$ {ep.total_cost})</option>
@@ -325,7 +325,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                                  onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
                                  className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none"
                                />
-                               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold opacity-30">UN</span>
+                               <span className="absolute right-2 top-1/2 -translate-y-1/2  font-bold opacity-30">UN</span>
                             </div>
                             <button 
                               type="button"
@@ -343,20 +343,20 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     <button 
                       type="button"
                       onClick={handleAddMaterial}
-                      className="w-full py-2.5 bg-transparent border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                      className="w-full py-2.5 bg-transparent border border-dashed border-[--primary]/30 rounded-lg  text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
                     >
                        <Plus className="w-3.5 h-3.5" /> Adicionar Insumo Extra
                     </button>
 
                     {selectedMaterials.length === 0 && (
-                      <p className="text-[10px] text-center text-[--secondary-text] italic opacity-50 py-3 border border-dashed border-white/5 rounded-lg mt-1">
+                      <p className=" text-center text-[--secondary-text] italic opacity-50 py-3 border border-dashed border-white/5 rounded-lg mt-1">
                         Nenhum insumo extra vinculado.
                       </p>
                     )}
                  </div>
               </div>
 
-              <div className="px-3 py-2 bg-[--warning]/5 rounded-lg text-[10px] text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--warning]/20">
+              <div className="px-3 py-2 bg-[--warning]/5 rounded-lg  text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--warning]/20">
                  <Package className="w-4 h-4 text-[--warning] shrink-0" />
                  <p>
                     <span className="text-[--warning] uppercase font-bold mr-1">Aviso de Estoque:</span> 
