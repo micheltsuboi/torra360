@@ -62,26 +62,26 @@ export default function FinanceDashboardClient({
         {/* Vendas Recentes */}
         <div className="glass-panel overflow-hidden">
           <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-            <h2 className="font-serif text-[--primary] flex items-center gap-2">
+            <h2 className="font-serif text-[--primary] flex items-center gap-2 text-sm">
               <TrendingUp className="w-4 h-4" /> Vendas Recentes
             </h2>
-            <a href="/dashboard/comercial" className="text-[10px] capitalize tracking-widest text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1">Ver tudo <ArrowRight className="w-3 h-3" /></a>
+            <a href="/dashboard/comercial" className="text-[9px] capitalize tracking-widest text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1">Ver tudo <ArrowRight className="w-3 h-3" /></a>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead className="text-[--secondary-text] capitalize tracking-tighter bg-black/20 font-sans">
+            <table className="w-full text-[11px]">
+              <thead className="text-[--secondary-text] capitalize tracking-widest bg-black/20 font-sans text-[9px] border-b border-white/5">
                 <tr>
-                  <th className="p-3 text-left font-bold opacity-60">Data</th>
-                  <th className="p-3 text-left font-bold opacity-60">Cliente</th>
-                  <th className="p-3 text-right font-bold opacity-60">Valor</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Cliente</th>
+                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
                 {recentSales.map((sale: any) => (
                   <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td className="p-3 opacity-60">{formatDate(sale.date)}</td>
-                    <td className="p-3 font-medium">{sale.clients?.name || 'Venda Avulsa'}</td>
-                    <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
+                    <td className="px-4 py-2 opacity-50">{formatDate(sale.date)}</td>
+                    <td className="px-4 py-2 font-medium text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
+                    <td className="px-4 py-2 text-right font-mono text-[--primary] font-bold">R$ {sale.final_amount.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -92,31 +92,31 @@ export default function FinanceDashboardClient({
         {/* Despesas Recentes */}
         <div className="glass-panel overflow-hidden">
           <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
-            <h2 className="font-serif text-[--danger] flex items-center gap-2">
+            <h2 className="font-serif text-[--danger] flex items-center gap-2 text-sm">
               <Receipt className="w-4 h-4" /> Últimas Despesas
             </h2>
             <button 
               onClick={() => setIsListModalOpen(true)}
-              className="text-[10px] capitalize tracking-widest text-[--danger] bg-[--danger]/10 border border-[--danger]/20 px-2 py-1 rounded-lg hover:bg-[--danger]/20 transition-all flex items-center gap-1 font-bold"
+              className="text-[9px] capitalize tracking-widest text-[--danger] bg-[--danger]/10 border border-[--danger]/20 px-2 py-1 rounded-lg hover:bg-[--danger]/20 transition-all flex items-center gap-1 font-bold"
             >
               Gerenciar
             </button>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-xs">
-              <thead className="text-[--secondary-text] capitalize tracking-tighter bg-black/20 font-sans">
+            <table className="w-full text-[11px]">
+              <thead className="text-[--secondary-text] capitalize tracking-widest bg-black/20 font-sans text-[9px] border-b border-white/5">
                 <tr>
-                  <th className="p-3 text-left font-bold opacity-60">Data</th>
-                  <th className="p-3 text-left font-bold opacity-60">Gasto</th>
-                  <th className="p-3 text-right font-bold opacity-60">Valor</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Gasto</th>
+                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
                 {recentExpenses.map((exp: any) => (
                   <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                    <td className="p-3 opacity-60">{formatDate(exp.date)}</td>
-                    <td className="p-3">{exp.description || exp.category || 'Despesa'}</td>
-                    <td className="p-3 text-right font-mono text-[--danger]">R$ {exp.amount.toFixed(2)}</td>
+                    <td className="px-4 py-2 opacity-50">{formatDate(exp.date)}</td>
+                    <td className="px-4 py-2 text-[--foreground]">{exp.description || exp.category || 'Despesa'}</td>
+                    <td className="px-4 py-2 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -141,22 +141,22 @@ export default function FinanceDashboardClient({
           </div>
 
           <div className="overflow-x-auto max-h-[400px] scrollbar-thin scrollbar-thumb-[--primary]/20">
-            <table className="w-full text-xs">
-              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[10px] font-sans">
+            <table className="w-full text-[11px]">
+              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[9px] font-sans border-b border-white/5">
                 <tr>
-                  <th className="p-3 text-left">Data</th>
-                  <th className="p-3 text-left">Cliente</th>
-                  <th className="p-3 text-right">Valor</th>
-                  <th className="p-3 text-center">Ação</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Cliente</th>
+                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-2 text-center font-bold opacity-40">Ação</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
                 {pendingSales.map((sale: any) => (
                   <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all font-sans">
-                    <td className="p-3 opacity-60 text-[9px]">{formatDate(sale.date)}</td>
-                    <td className="p-3 font-bold text-[--foreground] text-sm">{sale.clients?.name || 'Venda Avulsa'}</td>
-                    <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
-                    <td className="p-3">
+                    <td className="px-4 py-2 opacity-50 text-[10px]">{formatDate(sale.date)}</td>
+                    <td className="px-4 py-2 font-bold text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
+                    <td className="px-4 py-2 text-right font-mono text-[--primary] font-bold">R$ {sale.final_amount.toFixed(2)}</td>
+                    <td className="px-4 py-2">
                       <form 
                         action={async (formData: FormData) => {
                           const method = formData.get('method') as string
@@ -209,13 +209,13 @@ export default function FinanceDashboardClient({
           </div>
 
           <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-white/10">
-            <table className="w-full text-xs">
-              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-tighter text-[10px] font-sans">
+            <table className="w-full text-[11px]">
+              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[9px] font-sans border-b border-white/5">
                 <tr>
-                  <th className="p-3 text-left">Data</th>
-                  <th className="p-3 text-left">Título / Categoria</th>
-                  <th className="p-3 text-right">Valor</th>
-                  <th className="p-3 text-center">Ações</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-2 text-left font-bold opacity-40">Título / Categoria</th>
+                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-2 text-center font-bold opacity-40">Ações</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
@@ -225,18 +225,18 @@ export default function FinanceDashboardClient({
 
                   return (
                     <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
-                      <td className="p-3 opacity-60 text-[10px]">{formatDate(exp.date)}</td>
-                      <td className="p-3">
+                      <td className="px-4 py-2 opacity-50 text-[10px]">{formatDate(exp.date)}</td>
+                      <td className="px-4 py-2">
                         <div className="flex flex-col">
-                          <span className="font-bold text-[--foreground]">{title}</span>
+                          <span className="font-bold text-[--foreground] leading-tight">{title}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                             <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] capitalize">{exp.category || 'Geral'}</span>
-                             {displayNotes && <span className="text-[10px] opacity-40 italic">— {displayNotes}</span>}
+                             <span className="text-[8px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] capitalize font-bold">{exp.category || 'Geral'}</span>
+                             {displayNotes && <span className="text-[9px] opacity-40 italic">— {displayNotes}</span>}
                           </div>
                         </div>
                       </td>
-                      <td className="p-3 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
-                      <td className="p-3">
+                      <td className="px-4 py-2 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
+                      <td className="px-4 py-2">
                         <div className="flex items-center justify-center gap-0.5">
                           <button 
                             onClick={() => handleEdit(exp)}
