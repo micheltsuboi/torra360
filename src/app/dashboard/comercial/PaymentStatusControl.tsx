@@ -29,26 +29,28 @@ export default function PaymentStatusControl({ sale }: { sale: Sale }) {
 
   if (isPaid) {
     return (
-      <div className="flex items-center gap-1.5 text-[10px] bg-[--success]/10 text-[--success] px-2 py-1 rounded-full border border-[--success]/20 font-bold capitalize">
-        <CheckCircle2 className="w-3 h-3" />
-        {sale.payment_method}
+      <div className="flex justify-center">
+        <div className="flex items-center gap-1.5 text-[11px] bg-[--success]/10 text-[--success] px-2 py-0.5 rounded-full border border-[--success]/20 font-bold capitalize whitespace-nowrap">
+          <CheckCircle2 className="w-3 h-3" />
+          {sale.payment_method}
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="flex items-center gap-2">
-      <div className="flex items-center gap-1.5 text-[10px] bg-[--warning]/10 text-[--warning] px-2 py-1 rounded-full border border-[--warning]/20 font-bold whitespace-nowrap">
+    <div className="flex flex-col xl:flex-row items-center justify-center gap-2">
+      <div className="flex items-center gap-1.5 text-[11px] bg-[--warning]/10 text-[--warning] px-2 py-0.5 rounded-full border border-[--warning]/20 font-bold whitespace-nowrap">
         <Clock className="w-3 h-3" />
         Pendente
       </div>
       
-      <div className="flex items-center gap-1 bg-black/40 p-1 rounded-lg border border-white/5">
+      <div className="flex items-center gap-1 bg-black/40 p-0.5 px-1.5 rounded-lg border border-white/5 shadow-inner">
         <select 
           value={selectedMethod} 
           onChange={(e) => setSelectedMethod(e.target.value)}
           disabled={isPending}
-          className="bg-transparent text-[10px] font-bold text-[--primary] outline-none cursor-pointer focus:ring-0"
+          className="bg-transparent text-[11px] font-bold text-[--primary] outline-none cursor-pointer focus:ring-0 !p-0 border-none h-6"
         >
           <option value="Pix" className="bg-[#110D0B]">Pix</option>
           <option value="Crédito" className="bg-[#110D0B]">Crédito</option>
@@ -59,10 +61,10 @@ export default function PaymentStatusControl({ sale }: { sale: Sale }) {
         <button 
           onClick={handleConfirm}
           disabled={isPending}
-          className="bg-[--success]/20 hover:bg-[--success]/40 text-[--success] p-1 rounded transition-all disabled:opacity-50"
-          title="Marcar como Pago"
+          className="text-[--success] hover:scale-110 transition-all disabled:opacity-50 p-1"
+          title="Confirmar Recebimento"
         >
-          {isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
+          {isPending ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle2 className="w-3.5 h-3.5" />}
         </button>
       </div>
     </div>
