@@ -43,44 +43,43 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
         </div>
       </div>
 
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 shadow-2xl">
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
         <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
-           <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase font-bold flex items-center gap-3">
-             <Box className="w-4 h-4" />
+           <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase">
              Estoque de Insumos e Materiais
            </h2>
         </div>
         
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="text-[--secondary-text] text-xs capitalize border-b border-white/5 bg-white/5 tracking-tighter">
-                <th className="p-3 text-left font-bold">Insumo</th>
-                <th className="p-3 text-center font-bold border-l border-white/5">Qtd Disp.</th>
-                <th className="p-3 text-center font-bold border-l border-white/5">Custo Unit.</th>
-                <th className="p-3 text-center font-bold border-l border-white/5">Vlr Total</th>
-                <th className="p-3 text-center font-bold border-l border-white/5 w-24">Ações</th>
+              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
+                <th className="p-2 text-left font-bold">Insumo</th>
+                <th className="p-2 text-center font-bold border-l border-white/5">Qtd Disp.</th>
+                <th className="p-2 text-center font-bold border-l border-white/5">Custo Unit.</th>
+                <th className="p-2 text-center font-bold border-l border-white/5">Vlr Total</th>
+                <th className="p-2 text-center font-bold border-l border-white/5 w-24">Ações</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               {filteredItems.map((item) => (
-                <tr key={item.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
-                  <td className="p-3">
-                    <span className="text-xs font-semibold text-[--foreground] block">{item.name}</span>
+                <tr key={item.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
+                  <td className="p-2">
+                    <span className="text-sm font-semibold text-[--foreground] block">{item.name}</span>
                   </td>
-                  <td className="p-3 border-l border-white/5 text-center">
-                    <span className={`text-xs font-mono font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--foreground]'}`}>
+                  <td className="p-2 border-l border-white/5 text-center">
+                    <span className={`text-sm font-bold ${item.quantity_available < 50 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                       {item.quantity_available}
                     </span>
-                    <span className="text-[9px] opacity-30 italic ml-1">un</span>
+                    <span className="text-[10px] opacity-40 italic ml-1">un</span>
                   </td>
-                  <td className="p-3 border-l border-white/5 text-center">
-                    <span className="text-xs font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</span>
+                  <td className="p-2 border-l border-white/5 text-center">
+                    <span className="text-sm font-mono text-[--primary]">R$ {item.unit_cost.toFixed(3)}</span>
                   </td>
-                  <td className="p-3 border-l border-white/5 text-center">
-                    <span className="text-xs font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</span>
+                  <td className="p-2 border-l border-white/5 text-center">
+                    <span className="text-sm font-mono text-[--success]">R$ {(item.quantity_available * item.unit_cost).toFixed(2)}</span>
                   </td>
-                  <td className="p-3 border-l border-white/5">
+                  <td className="p-2 border-l border-white/5">
                     <div className="flex justify-center items-center gap-1">
                       <button 
                         onClick={() => setEditingItem(item)}
