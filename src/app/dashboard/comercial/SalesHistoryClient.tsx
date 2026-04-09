@@ -56,13 +56,13 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                <tbody className="text-[11px] font-sans">
                   {visibleSales.map((s) => (
                     <tr key={s.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
-                      <td className="px-8 py-6">
+                      <td className="px-8 py-10">
                          <div className="flex flex-col">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize mb-0.5">{s.client?.name || 'Cliente Avulso'}</span>
-                            <span className="text-[7px] text-[--secondary-text] opacity-30 uppercase tracking-widest">{formatDate(s.date || s.created_at)}</span>
+                            <span className="text-[7px] text-[--secondary-text] opacity-30 tracking-widest">{formatDate(s.date || s.created_at)}</span>
                          </div>
                       </td>
-                      <td className="px-8 py-6">
+                      <td className="px-8 py-10">
                          <div className="flex flex-col gap-1.5">
                            {s.sale_items?.map((item: any, idx: number) => (
                              <div key={idx} className="text-[10px] text-[--primary] font-medium leading-tight opacity-70">
@@ -72,21 +72,21 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                            ))}
                          </div>
                       </td>
-                      <td className="px-8 py-6 text-center">
+                      <td className="px-8 py-10 text-center">
                          {s.payment_status === 'pending' ? (
-                           <span className="text-[10px] text-amber-500/60 uppercase tracking-widest">À receber</span>
+                           <span className="text-[10px] text-amber-500/60 tracking-widest border border-amber-500/10 px-2 py-0.5 rounded-full">À receber</span>
                          ) : (
                            <div className="flex flex-col items-center leading-none">
-                              <span className="text-[10px] text-[--success] opacity-80 uppercase tracking-normal">
+                              <span className="text-[10px] text-[--success] opacity-80 tracking-normal">
                                  {s.payment_method} - {formatDate(s.date)}
                               </span>
                            </div>
                          )}
                       </td>
-                      <td className="px-8 py-6 text-right">
+                      <td className="px-8 py-10 text-right">
                          <span className="text-[15px] font-mono text-[--success] font-bold title-glow">R$ {s.final_amount.toFixed(2)}</span>
                       </td>
-                      <td className="px-4 py-6">
+                      <td className="px-4 py-10">
                          <SaleActions sale={s} />
                       </td>
                     </tr>
