@@ -41,11 +41,9 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
          </span>
       </div>
 
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/10">
-         <div className="px-6 py-5 bg-white/5 border-b border-white/5">
-            <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase font-bold opacity-80">
-               Histórico Recente de Operações
-            </h2>
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
+         <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
+           <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Histórico Recente de Operações</h2>
          </div>
          
          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20">
