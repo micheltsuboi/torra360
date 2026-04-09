@@ -5,7 +5,7 @@ import Modal from '@/components/ui/Modal'
 import FinanceStats from './FinanceStats'
 import { Clock, CheckCircle2, Receipt, Trash2, Pencil, Plus, Calendar, Tag, Info, DollarSign, Type, TrendingUp, ArrowRight } from 'lucide-react'
 import { formatDate } from '@/utils/date-utils'
-import { markSaleAsPaid, createExpense, updateExpense, deleteExpense } from './actions'
+import { markSaleAsPaid, createExpense, updateExpense, deleteExpense, createIncome } from './actions'
 
 interface FinanceDashboardClientProps {
   stats: any
@@ -25,6 +25,7 @@ export default function FinanceDashboardClient({
   const [isPendingModalOpen, setIsPendingModalOpen] = useState(false)
   const [isListModalOpen, setIsListModalOpen] = useState(false)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
+  const [isIncomeModalOpen, setIsIncomeModalOpen] = useState(false)
   const [editingExpense, setEditingExpense] = useState<any>(null)
 
   const handleCreateNew = () => {
@@ -55,6 +56,7 @@ export default function FinanceDashboardClient({
         stats={stats} 
         onOpenPending={() => setIsPendingModalOpen(true)} 
         onNewExpense={handleCreateNew}
+        onNewIncome={() => setIsIncomeModalOpen(true)}
         onOpenExpenses={() => setIsListModalOpen(true)}
       />
 
@@ -380,6 +382,85 @@ export default function FinanceDashboardClient({
               className="flex-[2] golden-btn py-3 text-xs font-bold"
             >
               {editingExpense ? 'Salvar Alterações' : 'Cadastrar Despesa'}
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      {/* 4. Modal de Aporte / Receita */}
+      <Modal
+        isOpen={isIncomeModalOpen}
+        onClose={() => setIsIncomeModalOpen(false)}
+        title="Registrar Aporte Financeiro"
+      >
+        <form 
+          action={async (formData: FormData) => {
+            await createIncome(formData)
+            setIsIncomeModalOpen(false)
+          }}
+          className="flex flex-col gap-4 p-2"
+        >
+          <div className="p-3 mb-2 bg-[--primary]/10 border border-[--primary]/20 rounded-lg text-xs text-[--primary] font-sans text-center leading-relaxed">
+             Aportes são entradas manuais de capital. Eles serão computados integralmente no seu faturamento mensal atual.
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
+                <Calendar className="action-icon" /> Data do Aporte
+              </label>
+              <input 
+                type="date" 
+                name="date" 
+                required 
+                defaultValue={new Date().toISOString().split('T')[0]}
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 font-sans text-[--foreground]"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
+                <DollarSign className="action-icon" /> Valor da Entrada
+              </label>
+              <input 
+                type="number" 
+                name="amount" 
+                step="0.01" 
+                required 
+                placeholder="0.00"
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 font-mono text-[--success]"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
+              <Tag className="action-icon" /> Forma / Método
+            </label>
+            <select 
+              name="payment_method" 
+              required
+              defaultValue="Pix"
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 text-[--foreground]"
+            >
+              <option value="Pix">Pix (Transferência Bancária)</option>
+              <option value="Dinheiro">Dinheiro Físico/Caixa</option>
+              <option value="Crédito">Outros Meios</option>
+            </select>
+          </div>
+
+          <div className="flex gap-3 mt-4">
+            <button 
+              type="button"
+              onClick={() => setIsIncomeModalOpen(false)}
+              className="flex-1 px-4 py-3 border border-white/10 rounded-lg text-xs font-bold hover:bg-white/5 transition-all text-[--secondary-text] font-sans"
+            >
+              Cancelar
+            </button>
+            <button 
+              type="submit"
+              className="flex-[2] golden-btn py-3 text-xs font-bold bg-[--primary]/20 text-[--primary] border-[--primary]/30"
+            >
+              Confirmar Aporte
             </button>
           </div>
         </form>

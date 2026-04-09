@@ -23,10 +23,11 @@ interface FinanceStatsProps {
   stats: Stats
   onOpenPending: () => void
   onNewExpense: () => void
+  onNewIncome: () => void
   onOpenExpenses: () => void
 }
 
-export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpenExpenses }: FinanceStatsProps) {
+export default function FinanceStats({ stats, onOpenPending, onNewExpense, onNewIncome, onOpenExpenses }: FinanceStatsProps) {
   // Garantir valores padrão para evitar quebra no toLocaleString
   const revenue = stats?.revenue ?? 0
   const productionCost = stats?.productionCost ?? 0
@@ -44,12 +45,23 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpe
       {/* 1. Faturamento */}
       <div className="glass-panel relative overflow-hidden group min-h-[140px] flex flex-col justify-center p-6 border-b-2 border-transparent hover:border-[--primary]/30 transition-all bg-[--card-bg]">
         <div className="flex justify-between items-start mb-4">
-          <div className="p-2 bg-white/5 rounded-xl border border-white/10 group-hover:scale-110 transition-transform">
-            <Banknote className="w-6 h-6 text-[--primary] opacity-80" />
+          <div className="flex items-center gap-3 relative z-10">
+            <div className="p-2 bg-white/5 rounded-xl border border-white/10 group-hover:scale-110 transition-transform">
+              <Banknote className="w-6 h-6 text-[--primary] opacity-80" />
+            </div>
+            <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${variation >= 0 ? 'bg-[--success]/10 text-[--success]' : 'bg-[--danger]/10 text-[--danger]'}`}>
+              {variation > 0 ? '+' : ''}{variation}%
+            </div>
           </div>
-          <div className={`flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold ${variation >= 0 ? 'bg-[--success]/10 text-[--success]' : 'bg-[--danger]/10 text-[--danger]'}`}>
-            {variation > 0 ? '+' : ''}{variation}%
-          </div>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              onNewIncome();
+            }}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-[--primary]/10 hover:bg-[--primary]/20 border border-[--primary]/20 rounded-lg text-[10px] text-[--primary] font-bold transition-all relative z-10"
+          >
+            <Plus className="w-3 h-3" /> Aporte
+          </button>
         </div>
         <div className="flex flex-col">
           <h2 className="text-2xl font-serif text-[--foreground] mb-0.5 tracking-tight">

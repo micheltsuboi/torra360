@@ -59,7 +59,7 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                </thead>
                <tbody className="text-[11px]">
                   {visibleSales.map((s, index) => (
-                    <tr key={s.id} className={`border-b border-white/5 hover:bg-white/[0.08] transition-colors group ${index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}>
+                    <tr key={s.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="px-6 py-8">
                          <div className="flex flex-col gap-0.5">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
