@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Pencil, Trash2, Search, ShoppingBag, Box, Plus, Trash, Package } from 'lucide-react'
+import { Pencil, Trash2, Search, ShoppingBag, Box, Plus, Trash, Package, Beaker } from 'lucide-react'
 import { updatePackage, deletePackage } from './actions'
 import Modal from '@/components/ui/Modal'
 import { formatDate } from '@/utils/date-utils'
@@ -95,8 +95,26 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                   return (
                     <tr key={p.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
                       <td className="p-2">
-                        <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
-                        <span className="text-[10px] text-[--secondary-text] opacity-60">Produzido em {formatDate(p.date)}</span>
+                        {!p.is_blend ? (
+                          <>
+                            <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
+                            <span className="text-[10px] text-[--secondary-text] opacity-60">Lote torrado em {formatDate(p.date)}</span>
+                          </>
+                        ) : (
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-1.5">
+                              <Beaker className="w-3.5 h-3.5 text-[--primary]" />
+                              <span className="text-sm font-bold text-[--foreground]">Blend Comercial</span>
+                            </div>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {p.blend_composition?.map((comp: any, i: number) => (
+                                <span key={i} className="text-[9px] bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20">
+                                  {comp.roast_batch?.green_coffee?.name}: <strong>{Math.round(comp.percentage)}%</strong>
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </td>
                       <td className="p-2 border-l border-white/5 text-center">
                         <span className="text-xs font-medium block">{p.bean_format}</span>

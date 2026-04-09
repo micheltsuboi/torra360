@@ -45,6 +45,7 @@ export async function getPackages() {
     .select(`
       *,
       roast_batch:roast_batch_id(
+        id,
         date, 
         qty_after_kg, 
         green_coffee(name)
@@ -54,6 +55,15 @@ export async function getPackages() {
         material_id,
         quantity_used,
         packaging_inventory(name, unit_cost)
+      ),
+      blend_composition:packaging_batch_blend_composition(
+        roast_batch_id,
+        quantity_kg,
+        percentage,
+        roast_batch:roast_batch_id(
+          id,
+          green_coffee(name)
+        )
       )
     `)
     .eq('tenant_id', tenantId)
@@ -65,16 +75,31 @@ export async function getPackages() {
   }
 
   // Buscar custos de torra separadamente para evitar erro de JOIN com View
-  const roastIds = Array.from(new Set(data?.map(p => p.roast_batch_id) || []))
+  const roastIds = new Set<string>()
+  data?.forEach(pkg => {
+    if (pkg.roast_batch_id) roastIds.add(pkg.roast_batch_id)
+    pkg.blend_composition?.forEach((bc: any) => roastIds.add(bc.roast_batch_id))
+  })
+
   const { data: roastCosts } = await supabase
     .from('roast_reports_view')
     .select('roast_batch_id, cost_per_kg_roasted')
-    .in('roast_batch_id', roastIds)
+    .in('roast_batch_id', Array.from(roastIds))
 
   // Calcular custos calculados no servidor
   const enrichedData = data?.map(pkg => {
-    const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === pkg.roast_batch_id)?.cost_per_kg_roasted || 0
-    const coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * pkg.quantity_units
+    let coffeeCost = 0
+    
+    if (!pkg.is_blend) {
+      const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === pkg.roast_batch_id)?.cost_per_kg_roasted || 0
+      coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * pkg.quantity_units
+    } else {
+      // Custo ponderado do blend
+      coffeeCost = pkg.blend_composition?.reduce((acc: number, comp: any) => {
+        const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === comp.roast_batch_id)?.cost_per_kg_roasted || 0
+        return acc + (comp.quantity_kg * roastCostKg)
+      }, 0) || 0
+    }
     
     const materialsCost = pkg.materials?.reduce((acc: number, m: any) => {
       return acc + (m.quantity_used * (m.packaging_inventory?.unit_cost || 0))
@@ -98,11 +123,16 @@ export async function getPackages() {
   return enrichedData || []
 }
 
+
 export async function createPackages(formData: FormData) {
   const supabase = await createClient()
   const tenantId = await getTenantId(supabase)
   
+  const isBlend = formData.get('is_blend') === 'true'
   const roast_batch_id = formData.get('roast_batch_id') as string
+  const blendComponentsJson = formData.get('blend_components') as string
+  const blendComponents = JSON.parse(blendComponentsJson || '[]')
+  
   const date = formData.get('date') as string
   const bean_format = formData.get('bean_format') as string
   const package_size_g = parseInt(formData.get('package_size_g') as string) || 0
@@ -115,30 +145,54 @@ export async function createPackages(formData: FormData) {
   const newBatchKg = (package_size_g * quantity_units) / 1000
 
   // 1. Verificar disponibilidade na torra
-  const { data: roast } = await supabase
-    .from('roast_batches')
-    .select('qty_after_kg')
-    .eq('id', roast_batch_id)
-    .single()
+  if (!isBlend) {
+    const { data: roast } = await supabase
+      .from('roast_batches')
+      .select('qty_after_kg')
+      .eq('id', roast_batch_id)
+      .single()
 
-  if (!roast) return { success: false, error: 'Lote de torra não encontrado.' }
+    if (!roast) return { success: false, error: 'Lote de torra não encontrado.' }
 
-  const { data: existingPackages } = await supabase
-    .from('packaging_batches')
-    .select('package_size_g, quantity_units')
-    .eq('roast_batch_id', roast_batch_id)
+    const { data: existingPackages } = await supabase
+      .from('packaging_batches')
+      .select('package_size_g, quantity_units')
+      .eq('roast_batch_id', roast_batch_id)
 
-  const alreadyPackagedKg = existingPackages?.reduce((acc, curr) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
-  const availableKg = roast.qty_after_kg - alreadyPackagedKg
+    const alreadyPackagedKg = existingPackages?.reduce((acc, curr) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
+    const availableKg = roast.qty_after_kg - alreadyPackagedKg
 
-  if (newBatchKg > (availableKg + 0.001)) { 
-    return { 
-      success: false, 
-      error: `Quantidade insuficiente no lote torrado. Disponível: ${availableKg.toFixed(2)}kg.` 
+    if (newBatchKg > (availableKg + 0.001)) { 
+      return { 
+        success: false, 
+        error: `Quantidade insuficiente no lote torrado. Disponível: ${availableKg.toFixed(2)}kg.` 
+      }
+    }
+  } else {
+    // Validar Blend
+    const totalBlendWeight = blendComponents.reduce((acc: number, curr: any) => acc + (curr.qty || 0), 0)
+    if (Math.abs(totalBlendWeight - newBatchKg) > 0.01) {
+      return { success: false, error: `A soma dos componentes (${totalBlendWeight.toFixed(2)}kg) deve ser igual ao peso total do lote (${newBatchKg.toFixed(2)}kg).` }
+    }
+
+    for (const comp of blendComponents) {
+      const { data: roast } = await supabase.from('roast_batches').select('qty_after_kg').eq('id', comp.roastId).single()
+      if (!roast) return { success: false, error: `Lote torrado ${comp.roastId} não encontrado.` }
+      
+      const { data: existing } = await supabase.from('packaging_batches').select('package_size_g, quantity_units').eq('roast_batch_id', comp.roastId)
+      const { data: existingInBlends } = await supabase.from('packaging_batch_blend_composition').select('quantity_kg').eq('roast_batch_id', comp.roastId)
+      
+      const packagedKg = (existing?.reduce((acc, curr) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0) +
+                         (existingInBlends?.reduce((acc, curr) => acc + (curr.quantity_kg || 0), 0) || 0)
+      
+      const available = roast.qty_after_kg - packagedKg
+      if (comp.qty > (available + 0.001)) {
+        return { success: false, error: `Estoque insuficiente no componente selecionado. Disponível: ${available.toFixed(2)}kg.` }
+      }
     }
   }
 
-  // 2. Verificar disponibilidade de INSUMOS (Embalagens)
+  // 2. Verificar disponibilidade de INSUMOS
   for (const mat of materials) {
     if (!mat.materialId) continue
     const { data: inventoryItem } = await supabase
@@ -156,27 +210,46 @@ export async function createPackages(formData: FormData) {
   }
 
   // 3. Inserir o Lote de Embalamento
-  const { data: newBatch, error } = await supabase.from('packaging_batches').insert({
+  const insertData: any = {
     tenant_id: tenantId,
-    roast_batch_id,
     date,
     bean_format,
     package_size_g,
     quantity_units,
     retail_price,
-    expense_package_id
-  }).select().single()
+    expense_package_id,
+    is_blend: isBlend
+  }
+
+  if (!isBlend) {
+    insertData.roast_batch_id = roast_batch_id
+  }
+
+  const { data: newBatch, error } = await supabase.from('packaging_batches').insert(insertData).select().single()
 
   if (error) {
     console.error('Error packaging:', error)
     return { success: false, error: 'Erro ao registrar o embalamento.' }
   }
 
-  // 4. Baixar Estoque de Insumos e Registrar Uso
+  // 4. Se for Blend, registrar composição
+  if (isBlend) {
+    for (const comp of blendComponents) {
+      const percentage = (comp.qty / newBatchKg) * 100
+      await supabase.from('packaging_batch_blend_composition').insert({
+        tenant_id: tenantId,
+        packaging_batch_id: newBatch.id,
+        roast_batch_id: comp.roastId,
+        quantity_kg: comp.qty,
+        percentage: percentage
+      })
+    }
+  }
+
+  // 5. Baixar Estoque de Insumos e Registrar Uso
   for (const mat of materials) {
     if (!mat.materialId) continue
     
-    // Registrar Uso Histórico
     await supabase.from('packaging_batch_materials').insert({
       packaging_batch_id: newBatch.id,
       material_id: mat.materialId,
@@ -184,7 +257,6 @@ export async function createPackages(formData: FormData) {
       tenant_id: tenantId
     })
 
-    // Baixa de Estoque
     const { data: current } = await supabase
       .from('packaging_inventory')
       .select('quantity_available')
@@ -200,6 +272,7 @@ export async function createPackages(formData: FormData) {
   revalidatePath('/dashboard/embalagens')
   return { success: true }
 }
+
 
 export async function deletePackage(formData: FormData) {
   const id = formData.get('id') as string

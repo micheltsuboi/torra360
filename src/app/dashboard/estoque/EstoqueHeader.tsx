@@ -1,9 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, Beaker, Plus } from 'lucide-react'
+import { Box, Plus } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
-import BlendForm from './BlendForm'
 import { createGreenCoffeeLot } from './actions'
 
 interface EstoqueHeaderProps {
@@ -22,7 +21,6 @@ export default function EstoqueHeader({
   qualityLevels 
 }: EstoqueHeaderProps) {
   const [isLoteModalOpen, setIsLoteModalOpen] = useState(false)
-  const [isBlendModalOpen, setIsBlendModalOpen] = useState(false)
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,14 +32,6 @@ export default function EstoqueHeader({
         >
           <Box className="w-5 h-5" />
           Novo Lote de Café Verde
-        </button>
-
-        <button 
-          onClick={() => setIsBlendModalOpen(true)}
-          className="primary-btn flex items-center gap-2 px-6 py-3"
-        >
-          <Beaker className="w-5 h-5" />
-          Montar Novo Blend
         </button>
       </div>
 
@@ -127,15 +117,7 @@ export default function EstoqueHeader({
           </button>
         </form>
       </Modal>
-
-      {/* Modal: Montar Blend */}
-      <Modal 
-        isOpen={isBlendModalOpen} 
-        onClose={() => setIsBlendModalOpen(false)} 
-        title="Laboratório de Blends"
-      >
-        <BlendForm lots={lots} onComplete={() => setIsBlendModalOpen(false)} />
-      </Modal>
     </div>
   )
 }
+
