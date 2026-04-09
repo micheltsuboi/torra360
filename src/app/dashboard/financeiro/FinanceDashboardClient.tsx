@@ -71,16 +71,16 @@ export default function FinanceDashboardClient({
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
-              <thead className="text-[--secondary-text] capitalize tracking-widest bg-black/20 font-sans text-[9px] border-b border-white/5">
+              <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
                 <tr>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Cliente</th>
-                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Cliente</th>
+                  <th className="px-4 py-3 text-right font-bold opacity-40">Valor</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
-                {recentSales.map((sale: any) => (
-                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                {recentSales.map((sale: any, index: number) => (
+                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-all group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                     <td className="px-4 py-2 opacity-50">{formatDate(sale.date)}</td>
                     <td className="px-4 py-2 font-medium text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
                     <td className="px-4 py-2 text-right font-mono text-[--primary] font-bold">R$ {sale.final_amount.toFixed(2)}</td>
@@ -106,16 +106,16 @@ export default function FinanceDashboardClient({
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-[11px]">
-              <thead className="text-[--secondary-text] capitalize tracking-widest bg-black/20 font-sans text-[9px] border-b border-white/5">
+              <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
                 <tr>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Gasto</th>
-                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Gasto</th>
+                  <th className="px-4 py-3 text-right font-bold opacity-40">Valor</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
-                {recentExpenses.map((exp: any) => (
-                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                {recentExpenses.map((exp: any, index: number) => (
+                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-all group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                     <td className="px-4 py-2 opacity-50">{formatDate(exp.date)}</td>
                     <td className="px-4 py-2 text-[--foreground]">{exp.description || exp.category || 'Despesa'}</td>
                     <td className="px-4 py-2 text-right font-mono text-[--danger] font-bold">R$ {exp.amount.toFixed(2)}</td>
@@ -144,17 +144,17 @@ export default function FinanceDashboardClient({
 
           <div className="overflow-x-auto max-h-[400px] scrollbar-thin scrollbar-thumb-[--primary]/20">
             <table className="w-full text-[11px]">
-              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[9px] font-sans border-b border-white/5">
+              <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
                 <tr>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Cliente</th>
-                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
-                  <th className="px-4 py-2 text-center font-bold opacity-40">Ação</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Cliente</th>
+                  <th className="px-4 py-3 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-3 text-center font-bold opacity-40">Ação</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
-                {pendingSales.map((sale: any) => (
-                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all font-sans">
+                {pendingSales.map((sale: any, index: number) => (
+                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-all font-sans group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                     <td className="px-4 py-2 opacity-50 text-[10px]">{formatDate(sale.date)}</td>
                     <td className="px-4 py-2 font-bold text-[--foreground]">{sale.clients?.name || 'Venda Avulsa'}</td>
                     <td className="px-4 py-2 text-right font-mono text-[--primary] font-bold">R$ {sale.final_amount.toFixed(2)}</td>
@@ -212,21 +212,21 @@ export default function FinanceDashboardClient({
 
           <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-white/10">
             <table className="w-full text-[11px]">
-              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[9px] font-sans border-b border-white/5">
+              <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
                 <tr>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Data</th>
-                  <th className="px-4 py-2 text-left font-bold opacity-40">Título / Categoria</th>
-                  <th className="px-4 py-2 text-right font-bold opacity-40">Valor</th>
-                  <th className="px-4 py-2 text-center font-bold opacity-40">Ações</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Data</th>
+                  <th className="px-4 py-3 text-left font-bold opacity-40">Título / Categoria</th>
+                  <th className="px-4 py-3 text-right font-bold opacity-40">Valor</th>
+                  <th className="px-4 py-3 text-center font-bold opacity-40">Ações</th>
                 </tr>
               </thead>
               <tbody className="font-sans">
-                {expensesList.map((exp: any) => {
+                {expensesList.map((exp: any, index: number) => {
                   const title = exp.description || (exp.notes?.includes('Compra de Insumo') ? exp.notes.split(':')[1]?.split('(')[0]?.trim() : 'Despesa Geral')
                   const displayNotes = exp.description ? exp.notes : cleanNotes(exp.notes)
 
                   return (
-                    <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <tr key={exp.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-all group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="px-4 py-2 opacity-50 text-[10px]">{formatDate(exp.date)}</td>
                       <td className="px-4 py-2">
                         <div className="flex flex-col">

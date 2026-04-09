@@ -52,18 +52,18 @@ export default function PackagingInventoryClient({ inventory }: { inventory: any
         
         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                <th className="p-2 text-left font-bold">Insumo</th>
-                <th className="p-2 text-center font-bold border-l border-white/5">Qtd Disp.</th>
-                <th className="p-2 text-center font-bold border-l border-white/5">Custo Unit.</th>
-                <th className="p-2 text-center font-bold border-l border-white/5">Vlr Total</th>
-                <th className="p-2 text-center font-bold border-l border-white/5 w-24">Ações</th>
+            <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
+              <tr>
+                <th className="p-2 text-left font-bold opacity-40">Insumo</th>
+                <th className="p-2 text-center font-bold opacity-40">Qtd Disp.</th>
+                <th className="p-2 text-center font-bold opacity-40">Custo Unit.</th>
+                <th className="p-2 text-center font-bold opacity-40">Vlr Total</th>
+                <th className="p-2 text-center font-bold opacity-40 w-24">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-sm">
-              {filteredItems.map((item) => (
-                <tr key={item.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
+            <tbody className="font-sans">
+              {filteredItems.map((item, index) => (
+                <tr key={item.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                   <td className="p-2">
                     <span className="text-sm font-semibold text-[--foreground] block">{item.name}</span>
                   </td>

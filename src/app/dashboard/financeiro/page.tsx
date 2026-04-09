@@ -3,18 +3,40 @@ import FinanceChart from './FinanceChart'
 import FinanceDashboardClient from './FinanceDashboardClient'
 import { formatDate } from '@/utils/date-utils'
 
-export default async function FinancePage({
+import { Suspense } from 'react'
+import { GlobalSkeleton } from '@/components/ui/Skeletons'
+
+// 1. Componente Assíncrono para paralelizar respostas do Banco de Dados no Back-End (Streaming Múltiplo).
+async function FinanceDataFetcher({ startDate, endDate }: { startDate?: string; endDate?: string }) {
+  const stats = await getFinancialStats(startDate, endDate)
+  const recentSales = await getRecentTransactions(startDate, endDate)
+  const recentExpenses = await getExpensesList(startDate, endDate)
+  const pendingSales = await getPendingSales()
+
+  return (
+    <>
+      {/* Stats, Modais e Listagens de Vendas/Despesas Recentes */}
+      <FinanceDashboardClient 
+        stats={stats} 
+        pendingSales={pendingSales} 
+        expensesList={recentExpenses}
+        recentSales={recentSales}
+        recentExpenses={recentExpenses}
+      />
+
+      {/* Gráfico Visual */}
+      <FinanceChart stats={stats} />
+    </>
+  )
+}
+
+export default function FinancePage({
   searchParams,
 }: {
   searchParams: { startDate?: string; endDate?: string }
 }) {
   const startDate = searchParams.startDate
   const endDate = searchParams.endDate
-
-  const stats = await getFinancialStats(startDate, endDate)
-  const recentSales = await getRecentTransactions(startDate, endDate)
-  const recentExpenses = await getExpensesList(startDate, endDate)
-  const pendingSales = await getPendingSales()
 
   return (
     <div className="flex flex-col gap-8 text-[--foreground] pb-10">
@@ -66,17 +88,9 @@ export default async function FinancePage({
         </div>
       </div>
 
-      {/* Stats, Modais e Listagens de Vendas/Despesas Recentes */}
-      <FinanceDashboardClient 
-        stats={stats} 
-        pendingSales={pendingSales} 
-        expensesList={recentExpenses}
-        recentSales={recentSales}
-        recentExpenses={recentExpenses}
-      />
-
-      {/* Gráfico Visual */}
-      <FinanceChart stats={stats} />
+      <Suspense fallback={<GlobalSkeleton />}>
+        <FinanceDataFetcher startDate={startDate} endDate={endDate} />
+      </Suspense>
     </div>
   )
 }

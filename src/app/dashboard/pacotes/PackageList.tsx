@@ -77,24 +77,24 @@ export default function PackageList({ packages, roasts, expensePackages, invento
         </div>
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse min-w-[900px]">
-            <thead>
-              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                <th className="p-3 font-bold text-left">Produto / Lote</th>
-                <th className="p-3 font-bold border-l border-white/5">Formato / Tam</th>
-                <th className="p-3 font-bold border-l border-white/5">Qtd</th>
-                <th className="p-3 font-bold border-l border-white/5">Custo Produção</th>
-                <th className="p-3 font-bold border-l border-white/5">Venda Unit.</th>
-                <th className="p-3 font-bold border-l border-white/5">Ações</th>
+            <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
+              <tr>
+                <th className="p-3 font-bold text-left opacity-40">Produto / Lote</th>
+                <th className="p-3 font-bold text-center opacity-40">Formato / Tam</th>
+                <th className="p-3 font-bold text-center opacity-40">Qtd</th>
+                <th className="p-3 font-bold text-center opacity-40">Custo Produção</th>
+                <th className="p-3 font-bold text-center opacity-40">Venda Unit.</th>
+                <th className="p-3 font-bold text-center opacity-40">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-sm">
+            <tbody className="font-sans">
               {filteredPackages && filteredPackages.length > 0 ? (
-                filteredPackages.map((p: any) => {
+                filteredPackages.map((p: any, index: number) => {
                   const roast = roasts.find(r => r.id === p.roast_batch_id)
                   const costs = p.calculated_costs || { total: 0, unit: 0 }
 
                   return (
-                    <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
+                    <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="p-3">
                         {!p.is_blend ? (
                           <>

@@ -40,24 +40,24 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
         
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse min-w-[700px]">
-            <thead>
-              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                <th className="p-2 font-bold">Data da Torra</th>
-                <th className="p-2 font-bold border-l border-white/5">Lote Base (Café Verde)</th>
-                <th className="p-2 font-bold text-center border-l border-white/5">Rendimento Final</th>
-                <th className="p-2 font-bold text-center border-l border-white/5">Quebra (%)</th>
-                <th className="p-2 font-bold border-l border-white/5 bg-[--primary]/5">Custo Torrado</th>
-                <th className="p-2 font-bold border-l border-white/5">Ações</th>
+            <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
+              <tr>
+                <th className="p-2 font-bold opacity-40 text-left">Data da Torra</th>
+                <th className="p-2 font-bold opacity-40 text-left">Lote Base (Café Verde)</th>
+                <th className="p-2 font-bold opacity-40 text-center">Rendimento Final</th>
+                <th className="p-2 font-bold opacity-40 text-center">Quebra (%)</th>
+                <th className="p-2 font-bold opacity-40 text-center">Custo Torrado</th>
+                <th className="p-2 font-bold opacity-40 text-center">Ações</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               {filteredBatches && filteredBatches.length > 0 ? (
-                filteredBatches.map((r: any) => {
+                filteredBatches.map((r: any, index: number) => {
                   const yieldPerc = r.yield_percentage || (r.qty_after_kg / r.qty_before_kg * 100);
                   const shrinkage = 100 - yieldPerc;
                   
                   return (
-                    <tr key={r.roast_batch_id || r.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
+                    <tr key={r.roast_batch_id || r.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="p-2">
                         <div className="flex flex-col items-center">
                           <span className="text-xs font-bold text-[--foreground]">{formatDate(r.date)}</span>

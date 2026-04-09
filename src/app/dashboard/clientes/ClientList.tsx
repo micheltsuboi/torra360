@@ -39,19 +39,19 @@ export default function ClientList({ clients }: { clients: any[] }) {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
-            <thead>
-              <tr className="text-[--secondary-text] text-xs capitalize border-b border-[--card-border]">
-                <th className="p-2 font-medium">Nome</th>
-                <th className="p-2 font-medium">Documento</th>
-                <th className="p-2 font-medium">Contato</th>
-                <th className="p-2 font-medium">Local</th>
-                <th className="p-2 font-medium">Ações</th>
+            <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
+              <tr>
+                <th className="p-2 font-bold opacity-40 text-left">Nome</th>
+                <th className="p-2 font-bold opacity-40 text-left">Documento</th>
+                <th className="p-2 font-bold opacity-40 text-left">Contato</th>
+                <th className="p-2 font-bold opacity-40 text-left">Local</th>
+                <th className="p-2 font-bold opacity-40 text-center">Ações</th>
               </tr>
             </thead>
-            <tbody className="text-sm">
+            <tbody className="font-sans">
               {filteredClients && filteredClients.length > 0 ? (
-                filteredClients.map((client: any) => (
-                  <tr key={client.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors">
+                filteredClients.map((client: any, index: number) => (
+                  <tr key={client.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                     <td className="p-2 font-medium text-[--primary]">{client.name}</td>
                     <td className="p-2 text-[--secondary-text] whitespace-nowrap">{client.cpf || '-'}</td>
                     <td className="p-2 text-[--secondary-text] whitespace-nowrap">

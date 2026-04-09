@@ -39,24 +39,24 @@ export default function InventoryList({ lots }: { lots: any[] }) {
         </div>
         <div className="responsive-table-container">
           <table className="w-full border-collapse min-w-[1000px]">
-            <thead>
-              <tr className="text-[--secondary-text] text-[10px] capitalize tracking-widest border-b border-[--card-border] bg-white/5">
-                <th className="p-2 font-bold">Lote e Procedência</th>
-                <th className="p-2 font-bold border-l border-white/5">Tipo / Qualidade</th>
-                <th className="p-2 font-bold border-l border-white/5">Verde (Total)</th>
-                <th className="p-2 font-bold border-l border-white/5">Torrado (Total)</th>
-                <th className="p-2 font-bold border-l border-white/5">Custo Verde</th>
-                <th className="p-2 font-bold border-l border-white/10 bg-[--primary]/5">Saldo Disponível</th>
-                <th className="p-2 font-bold border-l border-white/5">Ações</th>
+            <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
+              <tr>
+                <th className="p-2 font-bold text-left opacity-40">Lote e Procedência</th>
+                <th className="p-2 font-bold text-left opacity-40">Tipo / Qualidade</th>
+                <th className="p-2 font-bold text-center opacity-40">Verde (Total)</th>
+                <th className="p-2 font-bold text-center opacity-40">Torrado (Total)</th>
+                <th className="p-2 font-bold text-center opacity-40">Custo Verde</th>
+                <th className="p-2 font-bold text-center opacity-40">Saldo Disponível</th>
+                <th className="p-2 font-bold text-center opacity-40">Ações</th>
               </tr>
             </thead>
             <tbody className="text-sm">
               {filteredLots && filteredLots.length > 0 ? (
-                filteredLots.map((lot: any) => {
+                filteredLots.map((lot: any, index: number) => {
                   const costPerKgGreen = lot.total_qty_kg > 0 ? (lot.total_cost / lot.total_qty_kg) : 0;
 
                   return (
-                    <tr key={lot.id} className="border-b border-[--card-border]/50 hover:bg-white/5 transition-colors group">
+                    <tr key={lot.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="p-2">
                         <div className="flex flex-col items-center">
                           <span className="text-sm font-semibold text-[--primary]">{lot.name}</span>

@@ -30,18 +30,18 @@ export default async function FidelityPage() {
 
         <div className="overflow-x-auto">
            <table className="w-full text-sm border-collapse">
-              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px] border-b border-white/10">
+              <thead className="text-[10px] capitalize tracking-widest text-[--secondary-text] opacity-60 font-sans border-b border-white/10 bg-black/20">
                  <tr>
-                    <th className="p-4 text-center">Cliente</th>
-                    <th className="p-4 text-center border-l border-white/5">Contato</th>
-                    <th className="p-4 text-center border-l border-white/5">Total Acumulado</th>
-                    <th className="p-4 text-center border-l border-white/5">Total Resgatado</th>
-                    <th className="p-4 text-center border-l border-white/5 bg-[--primary]/5">Saldo Disponível</th>
+                    <th className="p-4 text-center font-bold opacity-40">Cliente</th>
+                    <th className="p-4 text-center font-bold opacity-40">Contato</th>
+                    <th className="p-4 text-center font-bold opacity-40">Total Acumulado</th>
+                    <th className="p-4 text-center font-bold opacity-40">Total Resgatado</th>
+                    <th className="p-4 text-center font-bold opacity-40">Saldo Disponível</th>
                  </tr>
               </thead>
-              <tbody className="text-center">
-                 {report.map((client: any) => (
-                    <tr key={client.id} className="border-b border-white/5 hover:bg-white/5 transition-all group">
+               <tbody className="text-center font-sans">
+                 {report.map((client: any, index: number) => (
+                    <tr key={client.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                        <td className="p-4 font-bold text-[--foreground]">{client.name}</td>
                        <td className="p-4 opacity-60 text-xs border-l border-white/5">
                           <div className="flex items-center justify-center gap-2">
