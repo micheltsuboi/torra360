@@ -58,8 +58,8 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                   </tr>
                </thead>
                <tbody className="text-[11px]">
-                  {visibleSales.map((s) => (
-                    <tr key={s.id} className="border-b border-white/5 even:bg-white/[0.04] odd:bg-transparent hover:bg-white/[0.08] transition-colors group">
+                  {visibleSales.map((s, index) => (
+                    <tr key={s.id} className={`border-b border-white/5 hover:bg-white/[0.08] transition-colors group ${index % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}>
                       <td className="px-6 py-8">
                          <div className="flex flex-col gap-0.5">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
@@ -108,12 +108,12 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
 
          {/* Paginador: Carregar Mais */}
          {visibleCount < filteredSales.length && (
-            <div className="p-10 bg-black/40 flex justify-center border-t border-white/5 shadow-inner">
+            <div className="p-8 bg-black/40 flex justify-center border-t border-white/5 shadow-inner">
               <button 
                 onClick={() => setVisibleCount(p => p + 20)}
-                className="flex items-center gap-4 text-[10px] uppercase font-serif tracking-[0.3em] font-bold text-[--primary] hover:text-[--foreground] transition-all group"
+                className="golden-btn flex items-center justify-center gap-2 px-6 py-3 text-sm mx-auto"
               >
-                <ChevronDown className="w-5 h-5 transition-transform group-hover:translate-y-2" />
+                <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
                 Carregar mais 20 registros
               </button>
             </div>
