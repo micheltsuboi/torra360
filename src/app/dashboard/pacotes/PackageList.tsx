@@ -57,33 +57,34 @@ export default function PackageList({ packages, roasts, expensePackages, invento
   return (
     <div className="flex flex-col gap-6">
       {/* Barra de Busca Externa */}
-      <div className="flex items-center bg-black/20 p-2 rounded-xl border border-white/5 shadow-inner w-full">
-        <div className="flex items-center w-full bg-black/60 rounded-lg border border-white/10 px-4 gap-3 focus-within:border-[--primary]/50 transition-all">
-          <Search className="w-5 h-5 text-[--primary] opacity-60 shrink-0" />
+      <div className="flex items-center bg-black/20 p-2 rounded-xl border border-white/5 shadow-inner w-full mb-2">
+        <div className="flex items-center w-full bg-black/40 rounded-lg border border-white/10 px-4 gap-3 focus-within:border-[--primary]/40 transition-all">
+          <Search className="w-5 h-5 text-[--primary] opacity-40 shrink-0" />
           <input 
             type="text"
             placeholder="Buscar por café, formato ou tamanho..."
-            className="!py-3 !bg-transparent !border-none !p-0 focus:!ring-0 w-full !text-sm font-sans outline-none text-white"
+            className="!py-3 !bg-transparent !border-none !p-0 focus:!ring-0 w-full !text-sm font-sans outline-none text-white placeholder:opacity-30"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
-        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40">
-          <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase">Lotes Embalados e Estoque</h2>
+      <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 shadow-2xl">
+        <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
+          <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase font-bold">Lotes Embalados e Estoque</h2>
+          <span className="text-[10px] text-[--secondary-text] opacity-40 uppercase tracking-widest">{filteredPackages?.length || 0} Registros</span>
         </div>
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
-          <table className="w-full border-collapse min-w-[800px]">
+          <table className="w-full border-collapse min-w-[900px]">
             <thead>
-              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
-                <th className="p-2 font-bold text-left">Produto / Lote</th>
-                <th className="p-2 font-bold border-l border-white/5">Formato / Tam</th>
-                <th className="p-2 font-bold border-l border-white/5">Qtd</th>
-                <th className="p-2 font-bold border-l border-white/5">Custo Produção</th>
-                <th className="p-2 font-bold border-l border-white/5">Venda Unit.</th>
-                <th className="p-2 font-bold border-l border-white/5">Ações</th>
+              <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-[--card-border]/50 bg-white/5 tracking-widest">
+                <th className="p-3 font-bold text-left">Produto / Lote</th>
+                <th className="p-3 font-bold border-l border-white/5">Formato / Tam</th>
+                <th className="p-3 font-bold border-l border-white/5">Qtd</th>
+                <th className="p-3 font-bold border-l border-white/5">Custo Produção</th>
+                <th className="p-3 font-bold border-l border-white/5">Venda Unit.</th>
+                <th className="p-3 font-bold border-l border-white/5">Ações</th>
               </tr>
             </thead>
             <tbody className="text-sm">
@@ -93,8 +94,8 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                   const costs = p.calculated_costs || { total: 0, unit: 0 }
 
                   return (
-                    <tr key={p.id} className="border-b border-[--card-border]/30 hover:bg-white/5 transition-colors group">
-                      <td className="p-2">
+                    <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
+                      <td className="p-3">
                         {!p.is_blend ? (
                           <>
                             <span className="text-sm font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
@@ -108,7 +109,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                             </div>
                             <div className="flex flex-wrap gap-1 mt-1">
                               {p.blend_composition?.map((comp: any, i: number) => (
-                                <span key={i} className="text-[9px] bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20">
+                                <span key={i} className="text-[9px] bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20 font-medium">
                                   {comp.roast_batch?.green_coffee?.name}: <strong>{Math.round(comp.percentage)}%</strong>
                                 </span>
                               ))}
@@ -116,40 +117,48 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                           </div>
                         )}
                       </td>
-                      <td className="p-2 border-l border-white/5 text-center">
-                        <span className="text-xs font-medium block">{p.bean_format}</span>
-                        <span className="text-[10px] opacity-40">{p.package_size_g}g</span>
+                      <td className="p-3 border-l border-white/5 text-center">
+                        <span className="text-xs font-bold block text-[--foreground]">{p.bean_format}</span>
+                        <span className="text-[10px] opacity-40 uppercase tracking-tighter">{p.package_size_g}g</span>
                       </td>
-                      <td className="p-2 border-l border-white/5 text-center">
-                        <span className={`font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
-                          {p.quantity_units}
-                        </span>
-                      </td>
-                      <td className="p-2 border-l border-white/5 text-center">
-                        <div className="flex flex-col items-center">
-                          <div className="text-[--foreground] font-bold text-sm">R$ {costs.unit.toFixed(2)}</div>
-                          <div className="text-[9px] opacity-50 text-[--secondary-text]">Total: R$ {costs.total.toFixed(2)}</div>
+                      <td className="p-3 border-l border-white/5 text-center">
+                        <div className="inline-flex flex-col items-center">
+                          <span className={`text-base font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                            {p.quantity_units}
+                          </span>
+                          <span className="text-[8px] uppercase opacity-30 font-bold -mt-1">unidades</span>
                         </div>
                       </td>
-                      <td className="p-2 border-l border-white/5 text-center">
+                      <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
-                          <div className="text-[--primary] font-bold text-sm">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                          <div className="text-[9px] opacity-30 text-[--secondary-text]">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
+                          <div className="text-[--foreground] font-bold text-sm tracking-tight">R$ {costs.unit.toFixed(2)}</div>
+                          <div className="text-[9px] opacity-40 text-[--secondary-text] uppercase font-bold">Total: R$ {costs.total.toFixed(2)}</div>
                         </div>
                       </td>
-                      <td className="p-2 border-l border-white/5">
-                        <div className="flex justify-center items-center gap-1">
+                      <td className="p-3 border-l border-white/5 text-center">
+                        <div className="flex flex-col items-center">
+                          <div className="text-[--primary] font-bold text-sm tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
+                          <div className="text-[9px] opacity-25 text-[--secondary-text] uppercase font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
+                        </div>
+                      </td>
+                      <td className="p-3 border-l border-white/5">
+                        <div className="flex justify-center items-center gap-2">
                             <button 
                               onClick={() => setEditingPackage(p)}
-                              className="action-icon-btn text-[--primary]" 
+                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[--primary]/10 text-[--primary] hover:bg-[--primary] hover:text-white transition-all shadow-sm" 
                               title="Editar"
                             >
-                               <Pencil className="action-icon" />
+                               <Pencil className="w-3.5 h-3.5" />
                             </button>
                             <form action={deletePackage} className="flex items-center">
                                <input type="hidden" name="id" value={p.id} />
-                               <button type="submit" className="action-icon-btn text-[--danger]" title="Excluir">
-                                  <Trash2 className="action-icon" />
+                               <button 
+                                 type="submit" 
+                                 className="w-8 h-8 flex items-center justify-center rounded-lg bg-[--danger]/10 text-[--danger] hover:bg-[--danger] hover:text-white transition-all shadow-sm" 
+                                 title="Excluir"
+                                 onClick={(e) => { if(!confirm('Tem certeza?')) e.preventDefault(); }}
+                               >
+                                  <Trash2 className="w-3.5 h-3.5" />
                                 </button>
                             </form>
                         </div>
@@ -159,8 +168,13 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                 })
               ) : (
                 <tr>
-                  <td colSpan={6} className="p-20 text-center text-[--secondary-text] italic opacity-40">
-                    {searchTerm ? 'Nenhum produto encontrado para esta busca.' : 'Sem produtos finais registrados.'}
+                  <td colSpan={6} className="p-24 text-center">
+                    <div className="flex flex-col items-center gap-2 opacity-30">
+                      <ShoppingBag className="w-12 h-12" />
+                      <p className="text-xs uppercase tracking-widest font-bold">
+                        {searchTerm ? 'Nenhum lote compatível.' : 'Nenhum produto em estoque.'}
+                      </p>
+                    </div>
                   </td>
                 </tr>
               )}
@@ -197,161 +211,166 @@ export default function PackageList({ packages, roasts, expensePackages, invento
               </div>
             )}
             
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="data-label text-[--primary] uppercase tracking-tighter opacity-70">Lote:</label>
-                <div className="p-2 bg-white/5 rounded text-sm border border-white/10">
-                   {roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'N/A'}
+            <div className="flex flex-col gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="data-label text-[--primary] uppercase tracking-widest">Produto Original:</label>
+                  <div className="p-3 bg-black/40 rounded-lg text-xs border border-white/5 flex items-center gap-2">
+                     <Package className="w-4 h-4 opacity-40" />
+                     <span className="font-bold">
+                       {roasts.find(r => r.id === editingPackage.roast_batch_id)?.green_coffee?.name || 'Blend Comercial'}
+                     </span>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="data-label">Data De Produção</label>
+                  <input 
+                    name="date" 
+                    type="date" 
+                    required 
+                    defaultValue={editingPackage.date} 
+                    className="text-sm bg-black/40 border-white/10"
+                  />
                 </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="data-label">Data Produção</label>
-                <input 
-                  name="date" 
-                  type="date" 
-                  required 
-                  defaultValue={editingPackage.date} 
-                  className="text-sm bg-black/40 border-white/10"
-                />
-              </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
-              <div className="flex flex-col gap-1">
-                <label className="data-label">Formato</label>
-                <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-sm bg-black/40 border-white/10">
-                  <option value="Em Grãos">Em Grãos</option>
-                  <option value="Moído">Moído</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
+                <div className="flex flex-col gap-1">
+                  <label className="data-label">Formato</label>
+                  <select name="bean_format" defaultValue={editingPackage.bean_format} required className="text-sm bg-black/40 border-white/10">
+                    <option value="Em Grãos">Em Grãos</option>
+                    <option value="Moído">Moído</option>
+                  </select>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="data-label">Tamanho (g)</label>
+                  <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-sm bg-black/40 border-white/10">
+                    <option value="250">250g</option>
+                    <option value="500">500g</option>
+                    <option value="1000">1kg</option>
+                  </select>
+                </div>
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="data-label">Tamanho (g)</label>
-                <select name="package_size_g" defaultValue={editingPackage.package_size_g} required className="text-sm bg-black/40 border-white/10">
-                  <option value="250">250g</option>
-                  <option value="500">500g</option>
-                  <option value="1000">1kg</option>
-                </select>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-1">
+                  <label className="data-label">Qtd Pacotes (Unidades)</label>
+                  <input 
+                    name="quantity_units" 
+                    type="number" 
+                    min="1" 
+                    defaultValue={editingPackage.quantity_units} 
+                    required 
+                    className="text-sm bg-black/40 border-white/10"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="data-label font-serif text-[--primary] tracking-wider uppercase">Venda Unitário (R$)</label>
+                  <input 
+                    name="retail_price" 
+                    type="number" 
+                    step="0.01" 
+                    defaultValue={editingPackage.retail_price} 
+                    required 
+                    className="text-sm bg-black/40 border-white/10" 
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="data-label">Qtd Pacotes</label>
-                <input 
-                  name="quantity_units" 
-                  type="number" 
-                  min="1" 
-                  defaultValue={editingPackage.quantity_units} 
-                  required 
-                  className="text-sm bg-black/40 border-white/10"
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value) || 0
-                    // Opcional: atualizar quantidades de materiais se desejar sync automático na edição tb
-                  }}
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <label className="data-label font-serif text-[--primary] tracking-wider">Venda (R$)</label>
-                <input 
-                  name="retail_price" 
-                  type="number" 
-                  step="0.01" 
-                  defaultValue={editingPackage.retail_price} 
-                  required 
-                  className="text-sm bg-black/40 border-white/10" 
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
-              <label className="data-label">Pacote de Custos Extra</label>
-              <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-sm bg-black/40 border-white/10">
-                <option value="">Nenhum custo extra</option>
-                {expensePackages.map((ep: any) => (
-                  <option key={ep.id} value={ep.id}>{ep.name} (R$ {ep.total_cost})</option>
-                ))}
-              </select>
-            </div>
-
-            {/* SEÇÃO DE INSUMOS (ESTOQUE) NA EDIÇÃO */}
-            <div className="border-t border-[--primary]/20 pt-4">
-               <div className="flex justify-between items-center mb-4">
-                  <div className="flex items-center gap-2">
-                     <Box className="w-4 h-4 text-[--primary]" />
-                     <h3 className="text-xs uppercase font-bold tracking-widest text-[--primary]">Insumos / Embalagens</h3>
-                  </div>
-                  <button 
-                    type="button"
-                    onClick={handleAddMaterial}
-                    className="golden-btn flex items-center gap-2 px-4 py-2 text-xs"
-                  >
-                     <Plus className="w-3 h-3" /> Adicionar Insumo
-                  </button>
-               </div>
-
-               <div className="flex flex-col gap-3">
-                  {selectedMaterials.map((sm, index) => (
-                    <div key={index} className="grid grid-cols-12 gap-2 items-end bg-white/5 p-2 rounded-lg border border-white/5">
-                      <div className="col-span-7 flex flex-col gap-1">
-                         <label className="text-[9px] uppercase opacity-40">Tipo de Insumo</label>
-                         <select 
-                            value={sm.materialId}
-                            required
-                            onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
-                            className="text-[11px] p-1.5 bg-black/60"
-                         >
-                            <option value="">Selecione...</option>
-                            {inventory.map((inv: any) => (
-                              <option key={inv.id} value={inv.id}>
-                                 {inv.name} ({inv.quantity_available} dispon.)
-                              </option>
-                            ))}
-                         </select>
-                      </div>
-                      <div className="col-span-3 flex flex-col gap-1">
-                         <label className="text-[9px] uppercase opacity-40">Qtd Uso</label>
-                         <input 
-                            type="number"
-                            value={sm.quantity}
-                            required
-                            onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
-                            className="text-[11px] p-1.5 bg-black/60 font-mono"
-                         />
-                      </div>
-                      <div className="col-span-2 flex justify-center pb-1">
-                         <button 
-                            type="button"
-                            onClick={() => removeMaterial(index)}
-                            className="action-icon-btn text-[--danger]"
-                         >
-                            <Trash className="action-icon" />
-                         </button>
-                      </div>
-                    </div>
+              <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
+                <label className="data-label uppercase tracking-widest text-[--primary]">Pacote de Custos Extra</label>
+                <select name="expense_package_id" defaultValue={editingPackage.expense_package_id || ''} className="text-sm bg-black/40 border-white/10">
+                  <option value="">Nenhum custo extra</option>
+                  {expensePackages.map((ep: any) => (
+                    <option key={ep.id} value={ep.id}>{ep.name} (R$ {ep.total_cost})</option>
                   ))}
-                  {selectedMaterials.length === 0 && (
-                    <p className="text-[10px] text-center text-[--secondary-text] italic opacity-50 py-2 border border-dashed border-white/5 rounded">
-                      Nenhum insumo extra vinculado.
-                    </p>
-                  )}
-               </div>
-            </div>
+                </select>
+              </div>
 
-            <div className="px-3 py-2 bg-[--warning]/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--warning]/20">
-               <Package className="w-4 h-4 text-[--warning] shrink-0" />
-               <p>
-                  <span className="text-[--warning] uppercase font-bold mr-1">Aviso de Estoque:</span> 
-                  Ao editar, o sistema **devolverá** os insumos anteriores ao estoque e **subtrairá** os novos. 
-                  Verifique se as quantidades estão corretas.
-               </p>
+              {/* SEÇÃO DE INSUMOS (ESTOQUE) NA EDIÇÃO */}
+              <div className="border-t border-white/5 pt-4">
+                 <div className="flex justify-between items-center mb-3 px-1">
+                    <div className="flex items-center gap-2">
+                       <Box className="w-4 h-4 text-[--primary]" />
+                       <h3 className="data-label font-bold text-[--primary] tracking-widest uppercase">Insumos / Embalagens</h3>
+                    </div>
+                 </div>
+
+                 <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-2">
+                      {selectedMaterials.map((sm, index) => (
+                        <div key={index} className="flex gap-2 items-center bg-white/5 p-2 rounded-lg border border-white/5 group transition-all hover:border-white/10">
+                          <div className="flex-1">
+                             <select 
+                                value={sm.materialId}
+                                required
+                                onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
+                                className="text-[11px] p-2 bg-black/40 border-none w-full"
+                             >
+                                <option value="">Selecionar Insumo...</option>
+                                {inventory.map((inv: any) => (
+                                  <option key={inv.id} value={inv.id}>
+                                     {inv.name} ({inv.quantity_available} disp.)
+                                  </option>
+                                ))}
+                             </select>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <div className="relative">
+                               <input 
+                                 type="number"
+                                 value={sm.quantity || ''}
+                                 placeholder="0"
+                                 required
+                                 onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
+                                 className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none"
+                               />
+                               <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold opacity-30">UN</span>
+                            </div>
+                            <button 
+                              type="button"
+                              onClick={() => removeMaterial(index)}
+                              className="p-1.5 text-[--danger] hover:bg-[--danger]/10 rounded-md transition-colors opacity-60 hover:opacity-100"
+                            >
+                              <Trash className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <button 
+                      type="button"
+                      onClick={handleAddMaterial}
+                      className="w-full py-2.5 border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                       <Plus className="w-3.5 h-3.5" /> Adicionar Insumo Extra
+                    </button>
+
+                    {selectedMaterials.length === 0 && (
+                      <p className="text-[10px] text-center text-[--secondary-text] italic opacity-50 py-3 border border-dashed border-white/5 rounded-lg mt-1">
+                        Nenhum insumo extra vinculado.
+                      </p>
+                    )}
+                 </div>
+              </div>
+
+              <div className="px-3 py-2 bg-[--warning]/5 rounded-lg text-[10px] text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--warning]/20">
+                 <Package className="w-4 h-4 text-[--warning] shrink-0" />
+                 <p>
+                    <span className="text-[--warning] uppercase font-bold mr-1">Aviso de Estoque:</span> 
+                    Ao salvar, o sistema recalculará o estoque de insumos. Verifique se as quantidades estão corretas.
+                 </p>
+              </div>
             </div>
 
             <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
-              Salvar Alterações
+              Salvar Alterações do Lote
             </button>
           </form>
         )}
       </Modal>
+
     </div>
   )
 }

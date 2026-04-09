@@ -89,121 +89,133 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
             </div>
           )}
           
-          <div className="grid grid-cols-2 gap-4">
-            <div className="flex flex-col gap-1">
-              <label className="data-label">Data De Produção</label>
-              <input 
-                name="date" 
-                type="date" 
-                required 
-                defaultValue={new Date().toISOString().split('T')[0]} 
-                className="text-sm"
-              />
-            </div>
-          <div className="flex flex-col gap-4 border-b border-white/5 pb-4">
-            <div className="flex items-center gap-2">
-              <input 
-                type="checkbox" 
-                id="is_blend" 
-                checked={isBlend} 
-                onChange={(e) => setIsBlend(e.target.checked)}
-                className="w-4 h-4 accent-[--primary]"
-              />
-              <label htmlFor="is_blend" className="data-label !mb-0 flex items-center gap-2 cursor-pointer">
-                <Beaker className="w-4 h-4 text-[--primary]" />
-                Este lote é um Blend (Mistura de Lotes)?
-              </label>
-            </div>
-
-            {!isBlend ? (
+          <div className="flex flex-col gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
-                <label className="data-label font-serif text-[--primary] tracking-wider">Lote Torrado Único</label>
-                <select name="roast_batch_id" required={!isBlend} className="text-sm bg-black/40 border-white/10 w-full">
-                  <option value="">Selecione...</option>
-                  {roasts.map((r: any) => (
-                    <option key={r.id} value={r.id}>
-                      {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg disp.)
-                    </option>
-                  ))}
-                </select>
+                <label className="data-label">Data De Produção</label>
+                <input 
+                  name="date" 
+                  type="date" 
+                  required 
+                  defaultValue={new Date().toISOString().split('T')[0]} 
+                  className="text-sm"
+                />
               </div>
-            ) : (
-              <div className="flex flex-col gap-3 p-3 bg-black/40 rounded-xl border border-[--primary]/20">
-                <label className="data-label font-serif text-[--primary] tracking-wider mb-1">Composição do Blend</label>
-                
-                {blendComponents.map((comp, index) => {
-                  const perc = totalBlendWeight > 0 ? ((comp.qty / totalBlendWeight) * 100).toFixed(1) : '0'
-                  return (
-                    <div key={index} className="flex flex-col md:flex-row gap-2 items-center bg-white/5 p-2 rounded-lg border border-white/5 group">
-                      <div className="flex-1 w-full">
-                        <select 
-                          value={comp.roastId}
-                          onChange={(e) => {
-                            const newComps = [...blendComponents]
-                            newComps[index].roastId = e.target.value
-                            setBlendComponents(newComps)
-                          }}
-                          required={isBlend}
-                          className="text-[11px] p-1.5 bg-black/60 w-full"
-                        >
-                          <option value="">Selecionar Lote...</option>
-                          {roasts.map((r: any) => (
-                            <option key={r.id} value={r.id}>
-                              {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg disp.)
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                      <div className="flex items-center gap-2 shrink-0">
-                        <div className="relative">
-                          <input 
-                            type="number"
-                            step="0.01"
-                            value={comp.qty || ''}
-                            placeholder="0.00"
-                            onChange={(e) => {
-                              const newComps = [...blendComponents]
-                              newComps[index].qty = parseFloat(e.target.value) || 0
-                              setBlendComponents(newComps)
-                            }}
-                            required={isBlend}
-                            className="text-[11px] p-1.5 bg-black/60 font-mono w-20 pr-6"
-                          />
-                          <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] opacity-40">KG</span>
-                        </div>
-                        <div className="min-w-[45px] text-center text-[--primary] text-[9px] font-bold bg-[--primary]/10 px-1 py-1 rounded border border-[--primary]/20">
-                          {perc}%
-                        </div>
-                        {blendComponents.length > 1 && (
-                          <button 
-                            type="button"
-                            onClick={() => setBlendComponents(blendComponents.filter((_, i) => i !== index))}
-                            className="p-1 text-[--danger] hover:bg-[--danger]/10 rounded"
-                          >
-                            <Trash className="w-3.5 h-3.5" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  )
-                })}
-
-                <button 
-                  type="button"
-                  onClick={() => setBlendComponents([...blendComponents, { roastId: '', qty: 0 }])}
-                  className="w-full py-2 border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase"
-                >
-                  <Plus className="w-3 h-3 inline mr-1" /> Adicionar Componente
-                </button>
-
-                <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                   <span className="text-[10px] uppercase opacity-40 font-bold">Peso Total do Blend</span>
-                   <span className="text-sm font-bold text-[--primary]">{totalBlendWeight.toFixed(2)} kg</span>
+              <div className="flex items-end pb-1.5">
+                <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg border border-white/5 w-full">
+                  <input 
+                    type="checkbox" 
+                    id="is_blend" 
+                    checked={isBlend} 
+                    onChange={(e) => setIsBlend(e.target.checked)}
+                    className="w-5 h-5 accent-[--primary] cursor-pointer"
+                  />
+                  <label htmlFor="is_blend" className="text-xs font-bold flex items-center gap-2 cursor-pointer select-none">
+                    <Beaker className="w-4 h-4 text-[--primary]" />
+                    Ativar Modo Blend (Mistura)
+                  </label>
                 </div>
               </div>
-            )}
+            </div>
+
+            <div className="flex flex-col gap-4">
+              {!isBlend ? (
+                <div className="flex flex-col gap-1">
+                  <label className="data-label font-serif text-[--primary] tracking-wider">Lote Torrado Único</label>
+                  <select name="roast_batch_id" required={!isBlend} className="text-sm bg-black/40 border-white/10 w-full">
+                    <option value="">Selecione o lote de torra...</option>
+                    {roasts.map((r: any) => (
+                      <option key={r.id} value={r.id}>
+                        {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg disponível)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3 p-4 bg-black/40 rounded-xl border border-[--primary]/20">
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="data-label font-bold text-[--primary] tracking-widest uppercase">Composição do Blend</label>
+                    <span className="text-[10px] opacity-40 italic">Selecione os lotes e defina o peso</span>
+                  </div>
+                  
+                  <div className="flex flex-col gap-2">
+                    {blendComponents.map((comp, index) => {
+                      const perc = totalBlendWeight > 0 ? ((comp.qty / totalBlendWeight) * 100).toFixed(1) : '0'
+                      return (
+                        <div key={index} className="flex gap-2 items-center bg-white/5 p-2 rounded-lg border border-white/5 group transition-all hover:border-white/10">
+                          <div className="flex-1">
+                            <select 
+                              value={comp.roastId}
+                              onChange={(e) => {
+                                const newComps = [...blendComponents]
+                                newComps[index].roastId = e.target.value
+                                setBlendComponents(newComps)
+                              }}
+                              required={isBlend}
+                              className="text-[11px] p-2 bg-black/40 border-none w-full"
+                            >
+                              <option value="">Selecionar Lote...</option>
+                              {roasts.map((r: any) => (
+                                <option key={r.id} value={r.id}>
+                                  {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg)
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <div className="relative">
+                              <input 
+                                type="number"
+                                step="0.01"
+                                value={comp.qty || ''}
+                                placeholder="0.00"
+                                onChange={(e) => {
+                                  const newComps = [...blendComponents]
+                                  newComps[index].qty = parseFloat(e.target.value) || 0
+                                  setBlendComponents(newComps)
+                                }}
+                                required={isBlend}
+                                className="text-[12px] p-2 bg-black/40 font-mono w-24 pr-8 border-none"
+                              />
+                              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold opacity-30">KG</span>
+                            </div>
+                            <div className="min-w-[50px] text-center text-[--primary] text-[10px] font-bold bg-[--primary]/10 px-2 py-1.5 rounded border border-[--primary]/20">
+                              {perc}%
+                            </div>
+                            <button 
+                              type="button"
+                              onClick={() => setBlendComponents(blendComponents.filter((_, i) => i !== index))}
+                              disabled={blendComponents.length === 1}
+                              className="p-1.5 text-[--danger] hover:bg-[--danger]/10 rounded-md transition-colors opacity-60 hover:opacity-100 disabled:hidden"
+                            >
+                              <Trash className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  <button 
+                    type="button"
+                    onClick={() => setBlendComponents([...blendComponents, { roastId: '', qty: 0 }])}
+                    className="w-full py-2.5 border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-3.5 h-3.5" /> Adicionar Componente ao Blend
+                  </button>
+
+                  <div className="flex justify-between items-center px-2 pt-2 mt-1 border-t border-white/5">
+                     <span className="text-[10px] uppercase opacity-40 font-bold tracking-wider">Massa Total do Lote</span>
+                     <div className="flex items-baseline gap-1">
+                       <span className="text-lg font-bold text-[--foreground]">{totalBlendWeight.toFixed(2)}</span>
+                       <span className="text-[10px] font-bold text-[--primary] uppercase">kg</span>
+                     </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          </div>
+
 
           <div className="grid grid-cols-2 gap-4 border-t border-white/5 pt-4">
             <div className="flex flex-col gap-1">
@@ -258,69 +270,75 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
           </div>
 
           {/* SEÇÃO DE INSUMOS (ESTOQUE) */}
-          <div className="border-t border-[--primary]/20 pt-4">
-             <div className="flex justify-between items-center mb-4">
+          <div className="border-t border-white/5 pt-4">
+             <div className="flex justify-between items-center mb-3 px-1">
                 <div className="flex items-center gap-2">
                    <Box className="w-4 h-4 text-[--primary]" />
-                   <h3 className="text-xs uppercase font-bold tracking-widest text-[--primary]">Insumos / Embalagens</h3>
+                   <h3 className="data-label font-bold text-[--primary] tracking-widest uppercase">Insumos / Embalagens</h3>
                 </div>
-                <button 
-                  type="button"
-                  onClick={handleAddMaterial}
-                  className="golden-btn flex items-center gap-2 px-4 py-2 text-xs"
-                >
-                   <Plus className="w-3 h-3" /> Adicionar Insumo
-                </button>
+                <span className="text-[10px] opacity-40 italic">Obrigatório para baixa de estoque</span>
              </div>
 
              <div className="flex flex-col gap-3">
-                {selectedMaterials.map((sm, index) => (
-                  <div key={index} className="grid grid-cols-12 gap-2 items-end bg-white/5 p-2 rounded-lg border border-white/5">
-                    <div className="col-span-7 flex flex-col gap-1">
-                       <label className="text-[9px] uppercase opacity-40">Tipo de Insumo</label>
-                       <select 
-                         value={sm.materialId}
-                         required
-                         onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
-                         className="text-[11px] p-1.5 bg-black/60"
-                       >
-                          <option value="">Selecione...</option>
-                          {inventory.map((inv: any) => (
-                            <option key={inv.id} value={inv.id} disabled={inv.quantity_available <= 0}>
-                               {inv.name} ({inv.quantity_available} dispon.)
-                            </option>
-                          ))}
-                       </select>
+                <div className="flex flex-col gap-2">
+                  {selectedMaterials.map((sm, index) => (
+                    <div key={index} className="flex gap-2 items-center bg-white/5 p-2 rounded-lg border border-white/5 group transition-all hover:border-white/10">
+                      <div className="flex-1">
+                         <select 
+                           value={sm.materialId}
+                           required
+                           onChange={(e) => updateMaterial(index, 'materialId', e.target.value)}
+                           className="text-[11px] p-2 bg-black/40 border-none w-full"
+                         >
+                            <option value="">Selecionar Insumo...</option>
+                            {inventory.map((inv: any) => (
+                              <option key={inv.id} value={inv.id} disabled={inv.quantity_available <= 0}>
+                                 {inv.name} ({inv.quantity_available} disp.)
+                              </option>
+                            ))}
+                         </select>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <div className="relative">
+                           <input 
+                             type="number"
+                             value={sm.quantity || ''}
+                             placeholder="0"
+                             required
+                             onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
+                             className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none"
+                           />
+                           <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold opacity-30">UN</span>
+                        </div>
+                        <button 
+                          type="button"
+                          onClick={() => removeMaterial(index)}
+                          className="p-1.5 text-[--danger] hover:bg-[--danger]/10 rounded-md transition-colors opacity-60 hover:opacity-100"
+                          title="Remover Insumo"
+                        >
+                          <Trash className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="col-span-3 flex flex-col gap-1">
-                       <label className="text-[9px] uppercase opacity-40">Qtd Uso</label>
-                       <input 
-                         type="number"
-                         value={sm.quantity}
-                         required
-                         onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
-                         className="text-[11px] p-1.5 bg-black/60 font-mono"
-                       />
-                    </div>
-                    <div className="col-span-2 flex justify-center pb-1">
-                       <button 
-                         type="button"
-                         onClick={() => removeMaterial(index)}
-                         className="action-icon-btn text-[--danger]"
-                         title="Remover Insumo"
-                       >
-                         <Trash className="action-icon" />
-                       </button>
-                    </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                <button 
+                  type="button"
+                  onClick={handleAddMaterial}
+                  className="w-full py-2.5 border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                >
+                   <Plus className="w-3.5 h-3.5" /> Adicionar Insumo Extra
+                </button>
+
                 {selectedMaterials.length === 0 && (
-                  <p className="text-[10px] text-center text-[--secondary-text] italic opacity-50 py-2 border border-dashed border-white/5 rounded">
+                  <p className="text-[10px] text-center text-[--secondary-text] italic opacity-50 py-3 border border-dashed border-white/5 rounded-lg mt-1">
                     Nenhum insumo extra vinculado a este lote.
                   </p>
                 )}
              </div>
           </div>
+
 
           <div className="px-3 py-2 bg-[--success]/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--success]/20">
              <Package className="w-4 h-4 text-[--success] shrink-0" />
