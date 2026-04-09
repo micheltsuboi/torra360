@@ -100,7 +100,10 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                 />
               </div>
               <div className="flex items-end pb-1.5 col-span-1">
-                <div className="flex items-center gap-2 bg-black/40 px-2 py-1.5 rounded-lg border border-white/5 cursor-pointer hover:bg-black/60 transition-all" onClick={() => setIsBlend(!isBlend)}>
+                <div 
+                  className="flex items-center gap-2 bg-black/40 px-2 py-1.5 rounded-lg border border-white/5 cursor-pointer hover:bg-black/60 transition-all" 
+                  onClick={() => setIsBlend(!isBlend)}
+                >
                    <input 
                      type="checkbox" 
                      id="is_blend" 
@@ -108,7 +111,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                      onChange={(e) => setIsBlend(e.target.checked)}
                      className="w-3 h-3 accent-[--primary] cursor-pointer"
                    />
-                   <label htmlFor="is_blend" className="text-[9px] uppercase font-bold text-[--primary] cursor-pointer tracking-wide whitespace-nowrap">Modo Blend</label>
+                   <label htmlFor="is_blend" className="text-[8px] uppercase font-bold text-[--primary] cursor-pointer tracking-wider whitespace-nowrap opacity-80">Modo Blend</label>
                 </div>
               </div>
             </div>
@@ -158,7 +161,8 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                             </select>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <div className="relative">
+                            {/* Grupo de Input Peso (KG) - Reconstruído para evitar sobreposição */}
+                            <div className="flex items-center bg-black/40 rounded-md border border-white/10 overflow-hidden h-9">
                               <input 
                                 type="number"
                                 step="0.01"
@@ -170,21 +174,25 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                                   setBlendComponents(newComps)
                                 }}
                                 required={isBlend}
-                                className="text-[12px] p-2 bg-black/40 font-mono w-28 pr-10 border-none rounded-md"
+                                className="!bg-transparent !border-none text-[12px] font-mono w-20 px-2 text-right focus:!ring-0 h-full"
                               />
-                              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold opacity-30 text-[--primary]">KG</span>
+                              <div className="bg-white/5 px-2 h-full flex items-center border-l border-white/10">
+                                <span className="text-[9px] font-bold text-[--primary] opacity-50">KG</span>
+                              </div>
                             </div>
-                            <div className="min-w-[45px] text-center">
-                               <span className="text-[11px] font-bold text-[--primary]">{perc}%</span>
+
+                            <div className="min-w-[40px] text-center">
+                               <span className="text-[10px] font-bold text-[--primary]">{perc}%</span>
                             </div>
+
                             <button 
                               type="button"
                               onClick={() => setBlendComponents(blendComponents.filter((_, i) => i !== index))}
                               disabled={blendComponents.length === 1}
-                              className="w-9 h-9 flex items-center justify-center rounded-lg bg-[--danger]/5 text-[--danger] hover:bg-[--danger]/20 transition-all disabled:hidden border border-[--danger]/10"
+                              className="action-icon-btn text-[--danger] disabled:hidden hover:scale-110 transition-transform p-1"
                               title="Remover Lote"
                             >
-                              <Trash2 className="w-4 h-4" />
+                              <Trash2 className="w-5 h-5" />
                             </button>
                           </div>
                         </div>
@@ -194,8 +202,9 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
 
                   <button 
                     type="button"
-                     onClick={() => setBlendComponents([...blendComponents, { roastId: '', qty: 0 }])}
-                    className="w-full py-3 bg-[#1a1411] border border-dashed border-[--primary]/40 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/5 transition-all uppercase tracking-widest flex items-center justify-center gap-2 !shadow-none"
+                    onClick={() => setBlendComponents([...blendComponents, { roastId: '', qty: 0 }])}
+                    style={{ backgroundColor: '#1a1411' }}
+                    className="w-full py-3 border border-dashed border-[--primary]/40 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/5 transition-all uppercase tracking-widest flex items-center justify-center gap-2 !shadow-none"
                   >
                     <Plus className="w-4 h-4" /> Adicionar Componente ao Blend
                   </button>
