@@ -178,7 +178,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
           {cart.length === 0 && (
             <div className="m-auto text-center flex flex-col items-center gap-2 py-10">
               <ShoppingCart className="w-12 h-12 text-[--primary] opacity-10" />
-              <p className="text-xs text-[--secondary-text] leading-relaxed max-w-[150px] opacity-40 uppercase tracking-widest text-[10px]">
+              <p className="text-xs text-[--secondary-text] leading-relaxed max-w-[150px] opacity-40 capitalize tracking-widest text-[10px]">
                 O carrinho está vazio.
               </p>
             </div>
@@ -193,7 +193,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             <select 
               value={selectedClient} 
               onChange={e => setSelectedClient(e.target.value)}
-              className="bg-transparent border-0 text-[11px] font-bold uppercase tracking-widest flex-1 text-[--foreground] focus:ring-0 p-0 cursor-pointer"
+              className="bg-transparent border-0 text-[11px] font-bold capitalize tracking-widest flex-1 text-[--foreground] focus:ring-0 p-0 cursor-pointer"
             >
               <option value="" className="bg-[#110D0B]">Consumidor Final</option>
               {clients.map(c => (
@@ -216,7 +216,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
           <div className="flex items-center gap-4 border-t border-white/5 pt-3">
             <div className="flex items-center gap-2">
               <Tag className="w-3.5 h-3.5 text-[--primary] opacity-50" />
-              <span className="text-[10px] uppercase tracking-widest font-bold text-[--secondary-text]">Desconto:</span>
+              <span className="text-[10px] capitalize tracking-widest font-bold text-[--secondary-text]">Desconto:</span>
               <select value={discountType} onChange={e => setDiscountType(e.target.value)} className="bg-black/40 text-[10px] p-1 border border-white/5 rounded focus:outline-none text-[--primary] font-bold">
                  <option value="valor" className="bg-[#110D0B]">R$</option>
                  <option value="%" className="bg-[#110D0B]">%</option>
@@ -234,7 +234,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             {clientBalance > 0 && (
               <div className="flex items-center gap-2 ml-auto bg-[--primary]/5 px-2 py-1 rounded border border-[--primary]/10">
                 <Gift className="w-3 h-3 text-[--primary] opacity-60" />
-                <span className="text-[9px] font-bold text-[--primary] uppercase tracking-tighter opacity-60">Resgatar R$ {clientBalance.toFixed(2)}?</span>
+                <span className="text-[9px] font-bold text-[--primary] capitalize tracking-tighter opacity-60">Resgatar R$ {clientBalance.toFixed(2)}?</span>
                 <input 
                   type="checkbox" 
                   checked={useCashback} 
@@ -246,7 +246,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
           </div>
 
           <div className="flex justify-between items-center pt-1">
-            <span className="text-[10px] uppercase tracking-widest font-bold text-[--secondary-text]">Método Pgto:</span>
+            <span className="text-[10px] capitalize tracking-widest font-bold text-[--secondary-text]">Método Pgto:</span>
             <select value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)} className="bg-black/40 text-[11px] p-1 py-0.5 font-bold rounded border border-white/5 text-[--primary] outline-none cursor-pointer focus:ring-0">
                <option value="Pix" className="bg-[#110D0B]">Pix</option>
                <option value="Crédito" className="bg-[#110D0B]">Crédito</option>
@@ -259,35 +259,35 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
           <div className="border-t border-white/10 pt-3 flex justify-between items-end">
             <div className="text-[--secondary-text] space-y-0.5">
               <div className="flex gap-2 items-center">
-                <span className="text-[10px] uppercase tracking-widest font-bold opacity-40">Subtotal:</span>
+                <span className="text-[10px] capitalize tracking-widest font-bold opacity-40">Subtotal:</span>
                 <span className="text-xs font-mono">R$ {subtotal.toFixed(2)}</span>
               </div>
               {discountAmount > 0 && (
                 <div className="flex gap-2 items-center">
-                   <span className="text-[10px] uppercase tracking-widest font-bold text-[--danger]/60">Desconto:</span>
+                   <span className="text-[10px] capitalize tracking-widest font-bold text-[--danger]/60">Desconto:</span>
                    <span className="text-xs font-mono text-[--danger]">- R$ {discountAmount.toFixed(2)}</span>
                 </div>
               )}
               {cashbackRedeemed > 0 && (
                 <div className="flex gap-2 items-center">
-                   <span className="text-[10px] uppercase tracking-widest font-bold text-[--primary]/60">Cashback:</span>
+                   <span className="text-[10px] capitalize tracking-widest font-bold text-[--primary]/60">Cashback:</span>
                    <span className="text-xs font-mono text-[--primary] font-bold">- R$ {cashbackRedeemed.toFixed(2)}</span>
                 </div>
               )}
             </div>
             
             <div className="flex flex-col items-end">
-              <span className="text-[9px] text-[--primary] font-bold uppercase tracking-widest opacity-40 mb-1">
+              <span className="text-[9px] text-[--primary] font-bold capitalize tracking-widest opacity-40 mb-1">
                 + Acumula: R$ {(finalTotal * (loyaltySettings?.cashback_percentage / 100 || 0)).toFixed(2)} cashback
               </span>
               <div className="text-right flex flex-col items-end">
-                <span className="text-[10px] uppercase tracking-widest font-bold text-[--primary] opacity-50 leading-none mb-1">Total Final</span>
+                <span className="text-[10px] capitalize tracking-widest font-bold text-[--primary] opacity-50 leading-none mb-1">Total Final</span>
                 <span className="text-xl font-serif text-[--success] title-glow">R$ {finalTotal.toFixed(2)}</span>
               </div>
             </div>
           </div>
 
-          <button onClick={handleCheckout} className="primary-btn w-full mt-2 py-4 bg-gradient-to-r from-[--success] to-emerald-800 border-none !shadow-[--success] text-base uppercase tracking-widest font-bold">
+          <button onClick={handleCheckout} className="primary-btn w-full mt-2 py-4 bg-gradient-to-r from-[--success] to-emerald-800 border-none !shadow-[--success] text-base capitalize tracking-widest font-bold">
             Finalizar Venda
           </button>
         </div>
