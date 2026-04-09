@@ -143,24 +143,24 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5">
                         <div className="flex justify-center items-center gap-2">
-                            <button 
-                              onClick={() => setEditingPackage(p)}
-                              className="w-8 h-8 flex items-center justify-center rounded-lg bg-[--primary]/10 text-[--primary] hover:bg-[--primary] hover:text-white transition-all shadow-sm" 
-                              title="Editar"
-                            >
-                               <Pencil className="w-3.5 h-3.5" />
-                            </button>
-                            <form action={deletePackage} className="flex items-center">
-                               <input type="hidden" name="id" value={p.id} />
-                               <button 
-                                 type="submit" 
-                                 className="w-8 h-8 flex items-center justify-center rounded-lg bg-[--danger]/10 text-[--danger] hover:bg-[--danger] hover:text-white transition-all shadow-sm" 
-                                 title="Excluir"
-                                 onClick={(e) => { if(!confirm('Tem certeza?')) e.preventDefault(); }}
-                               >
-                                  <Trash2 className="w-3.5 h-3.5" />
-                                </button>
-                            </form>
+                          <button 
+                            onClick={() => setEditingPackage(p)}
+                            className="action-icon-btn text-[--primary]" 
+                            title="Editar"
+                          >
+                             <Pencil className="action-icon" />
+                          </button>
+                          <form action={deletePackage} className="flex items-center">
+                             <input type="hidden" name="id" value={p.id} />
+                             <button 
+                               type="submit" 
+                               className="action-icon-btn text-[--danger]" 
+                               title="Excluir"
+                               onClick={(e) => { if(!confirm('Tem certeza?')) e.preventDefault(); }}
+                             >
+                                <Trash2 className="action-icon" />
+                              </button>
+                          </form>
                         </div>
                       </td>
                     </tr>
