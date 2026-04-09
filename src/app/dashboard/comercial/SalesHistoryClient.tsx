@@ -46,65 +46,61 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
            <h2 className="font-serif text-[--primary] text-lg tracking-normal">Histórico Recente de Operações</h2>
          </div>
          
-         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20">
-            <table className="w-full border-collapse">
+         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20 p-2">
+            <table className="w-full border-separate border-spacing-y-6">
                <thead>
-                  <tr className="bg-black/30 text-[--secondary-text] text-[10px] capitalize border-b border-white/10 font-sans tracking-widest">
-                     <th className="px-8 py-5 text-left font-bold opacity-30">Data/Cliente</th>
-                     <th className="px-8 py-5 text-left font-bold opacity-30">Itens Vendidos</th>
-                     <th className="px-8 py-5 text-center font-bold opacity-30">Status / Recebimento</th>
-                     <th className="px-8 py-5 text-right font-bold opacity-30">Total Final</th>
-                     <th className="px-4 py-5 text-center font-bold opacity-30">Ações</th>
+                  <tr className="text-[--secondary-text] text-[10px] capitalize tracking-widest opacity-60">
+                     <th className="px-6 py-2 text-left font-bold">Data/Cliente</th>
+                     <th className="px-6 py-2 text-left font-bold">Itens Vendidos</th>
+                     <th className="px-6 py-2 text-center font-bold">Status / Recebimento</th>
+                     <th className="px-6 py-2 text-right font-bold transition-all">Total Final</th>
+                     <th className="px-4 py-2 text-center font-bold w-32">Ações</th>
                   </tr>
                </thead>
-               <tbody className="text-[11px] font-sans">
+               <tbody className="text-[11px]">
                   {visibleSales.map((s) => (
-                    <tr key={s.id} className="border-b border-white/[0.05] hover:bg-white/[0.03] transition-colors group">
-                      <td className="px-8 py-24">
-                         <div className="flex flex-col gap-2">
-                            <span className="text-base font-extrabold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
-                            <span className="text-[8px] text-[--secondary-text] opacity-20 tracking-[0.3em] font-medium">{formatDate(s.date || s.created_at)}</span>
+                    <tr key={s.id} className="bg-white/[0.03] hover:bg-white/[0.06] transition-colors group">
+                      <td className="px-6 py-6 rounded-l-xl border-y border-l border-white/5">
+                         <div className="flex flex-col">
+                            <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
+                            <span className="text-[9px] text-[--secondary-text] opacity-30 mt-0.5">{formatDate(s.date || s.created_at)}</span>
                          </div>
                       </td>
-                      <td className="px-8 py-24 text-left">
-                         <div className="flex flex-col gap-3">
+                      <td className="px-6 py-6 border-y border-white/5">
+                         <div className="flex flex-col gap-1.5">
                            {s.sale_items?.map((item: any, idx: number) => (
-                             <div key={idx} className="text-[11px] text-[--primary] font-medium leading-tight opacity-70 flex items-center gap-2">
-                               <span className="bg-[--primary]/10 px-2 py-0.5 rounded border border-[--primary]/20 text-[10px] font-bold text-[--primary]">{item.quantity}x</span> 
-                               <span>
-                                 {item.pkg?.roast_batch?.green_coffee?.name || 'Produto'}
-                                 <span className="text-[9px] opacity-30 ml-2 italic font-normal">({item.pkg?.bean_format})</span>
-                               </span>
+                             <div key={idx} className="text-[10px] text-[--primary] font-medium leading-tight opacity-70">
+                               <span className="bg-[--primary]/10 px-2 py-0.5 rounded border border-[--primary]/20 mr-2 text-[9px] font-bold">{item.quantity}x</span> 
+                               {item.pkg?.roast_batch?.green_coffee?.name || 'Produto'}
+                               <span className="text-[8px] opacity-30 ml-1 italic font-normal">({item.pkg?.bean_format})</span>
                              </div>
                            ))}
                          </div>
                       </td>
-                      <td className="px-8 py-24 text-center">
+                      <td className="px-6 py-6 text-center border-y border-white/5">
                          {s.payment_status === 'pending' ? (
-                           <span className="text-[10px] text-amber-500/60 tracking-widest border border-amber-500/20 px-5 py-2 rounded-full bg-amber-500/5 shadow-[0_0_15px_rgba(245,158,11,0.05)]">À receber</span>
+                           <span className="text-[10px] text-[#f59e0b] tracking-wider border border-[#f59e0b]/20 px-4 py-1.5 rounded-full bg-[#f59e0b]/5">À receber</span>
                          ) : (
-                           <div className="flex flex-col items-center leading-none gap-2.5">
-                              <span className="text-[11px] text-[--success] opacity-80 tracking-wide font-bold">
+                           <div className="flex flex-col items-center leading-none gap-1">
+                              <span className="text-[10px] text-[--success] opacity-80 tracking-normal font-normal">
                                  {s.payment_method}
                               </span>
-                              <span className="text-[9px] opacity-20 tracking-widest font-medium">
+                              <span className="text-[8px] text-[--secondary-text] opacity-20">
                                  {formatDate(s.date)}
                               </span>
                            </div>
                          )}
                       </td>
-                      <td className="px-8 py-24 text-right">
-                         <span className="text-2xl font-mono text-[--success] font-black title-glow tracking-tighter">R$ {s.final_amount.toFixed(2)}</span>
+                      <td className="px-6 py-6 text-right border-y border-white/5">
+                         <span className="text-lg font-mono text-[--success] font-bold title-glow">R$ {s.final_amount.toFixed(2)}</span>
                       </td>
-                      <td className="px-4 py-24">
-                         <div className="scale-125 transition-transform hover:scale-150">
-                            <SaleActions sale={s} />
-                         </div>
+                      <td className="px-4 py-6 text-center rounded-r-xl border-y border-r border-white/5">
+                         <SaleActions sale={s} />
                       </td>
                     </tr>
                   ))}
                   {filteredSales.length === 0 && (
-                    <tr><td colSpan={5} className="p-48 text-center text-lg text-[--secondary-text] italic opacity-40 font-serif">Nenhuma venda encontrada para os critérios de busca.</td></tr>
+                    <tr><td colSpan={5} className="p-40 text-center text-sm text-[--secondary-text] italic opacity-40">Nenhuma venda encontrada para os critérios de busca.</td></tr>
                   )}
                </tbody>
             </table>
@@ -115,9 +111,9 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
             <div className="p-10 bg-black/40 flex justify-center border-t border-white/5 shadow-inner">
               <button 
                 onClick={() => setVisibleCount(p => p + 20)}
-                className="flex items-center gap-4 text-[11px] uppercase font-serif tracking-[0.3em] font-bold text-[--primary] hover:text-[--foreground] transition-all group"
+                className="flex items-center gap-4 text-[10px] uppercase font-serif tracking-[0.3em] font-bold text-[--primary] hover:text-[--foreground] transition-all group"
               >
-                <ChevronDown className="w-6 h-6 transition-transform group-hover:translate-y-2" />
+                <ChevronDown className="w-5 h-5 transition-transform group-hover:translate-y-2" />
                 Carregar mais 20 registros
               </button>
             </div>
