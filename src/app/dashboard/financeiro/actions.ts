@@ -242,3 +242,33 @@ export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string)
   revalidatePath('/dashboard/financeiro')
   revalidatePath('/dashboard/comercial')
 }
+
+export async function createIncome(formData: FormData) {
+  const supabase = await createClient()
+  const tenantId = await getTenantId(supabase)
+
+  const date = formData.get('date') as string
+  const method = formData.get('payment_method') as string
+  const amountStr = formData.get('amount') as string
+  const amount = parseFloat(amountStr) || 0
+  
+  if (amount <= 0) return
+
+  const { error } = await supabase
+    .from('sale_transactions')
+    .insert({
+      tenant_id: tenantId,
+      final_amount: amount,
+      total_amount: amount,
+      discount_amount: 0,
+      payment_method: method,
+      payment_status: 'paid',
+      date: date
+    })
+
+  if (error) throw error
+  
+  const { revalidatePath } = require('next/cache')
+  revalidatePath('/dashboard/financeiro')
+  revalidatePath('/dashboard/comercial')
+}
