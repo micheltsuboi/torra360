@@ -46,8 +46,10 @@ export default async function ComercialPage() {
                     {salesHistory.map((s: any) => (
                       <tr key={s.id} className="border-b border-white/5 hover:bg-white/5 transition-colors group">
                         <td className="px-4 py-3">
-                           <span className="block opacity-50">{formatDate(s.date || s.created_at)}</span>
-                           <span className="text-xs font-bold text-[--foreground]">{s.client?.name || 'Cliente Avulso'}</span>
+                           <div className="flex flex-col">
+                              <span className="text-[10px] opacity-30 leading-none mb-0.5">{formatDate(s.date || s.created_at)}</span>
+                              <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
+                           </div>
                         </td>
                         <td className="px-4 py-3">
                            <div className="flex flex-col gap-0.5">
@@ -61,9 +63,12 @@ export default async function ComercialPage() {
                         </td>
                         <td className="px-4 py-3 text-center">
                            {s.payment_status === 'pending' ? (
-                             <span className="text-[10px] font-bold text-[--warning] py-1 px-2 bg-[--warning]/5 rounded-full border border-[--warning]/10 whitespace-nowrap">À receber</span>
+                             <span className="text-[10px] text-amber-500/80 capitalize">À receber</span>
                            ) : (
-                             <span className="text-[10px] font-bold text-[--success] py-1 px-2 bg-[--success]/5 rounded-full border border-[--success]/10 whitespace-nowrap">{s.payment_method}</span>
+                             <div className="flex flex-col items-center leading-none gap-1">
+                                <span className="text-[10px] text-[--success] opacity-80 capitalize">{s.payment_method}</span>
+                                <span className="text-[8px] opacity-25 whitespace-nowrap">Pago em {formatDate(s.date)}</span>
+                             </div>
                            )}
                         </td>
                         <td className="px-4 py-3 text-right">
