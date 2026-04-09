@@ -111,7 +111,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                      onChange={(e) => setIsBlend(e.target.checked)}
                      className="w-3 h-3 accent-[--primary] cursor-pointer"
                    />
-                   <label htmlFor="is_blend" className="text-[8px] uppercase font-bold text-[--primary] cursor-pointer tracking-wider whitespace-nowrap opacity-80">Modo Blend</label>
+                   <label htmlFor="is_blend" className="text-[8px] capitalize font-bold text-[--primary] cursor-pointer tracking-wider whitespace-nowrap opacity-80">Modo Blend</label>
                 </div>
               </div>
             </div>
@@ -132,7 +132,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
               ) : (
                 <div className="flex flex-col gap-3 p-4 bg-black/40 rounded-xl border border-[--primary]/20">
                   <div className="flex items-center justify-between mb-1">
-                    <label className="data-label font-bold text-[--primary] tracking-widest uppercase">Composição do Blend</label>
+                    <label className="data-label font-bold text-[--primary] tracking-widest capitalize">Composição do Blend</label>
                     <span className="text-[10px] opacity-40 italic">Selecione os lotes e defina o peso</span>
                   </div>
                   
@@ -177,7 +177,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                                 className="!bg-transparent !border-none text-[12px] font-mono w-20 px-2 text-right focus:!ring-0 h-full"
                               />
                               <div className="bg-white/5 px-2 h-full flex items-center border-l border-white/10">
-                                <span className="text-[9px] font-bold text-[--primary] opacity-50">KG</span>
+                                <span className="text-[9px] font-bold text-[--primary] opacity-50">kg</span>
                               </div>
                             </div>
 
@@ -204,16 +204,16 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                     type="button"
                     onClick={() => setBlendComponents([...blendComponents, { roastId: '', qty: 0 }])}
                     style={{ backgroundColor: '#1a1411' }}
-                    className="w-full py-3 border border-dashed border-[--primary]/40 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/5 transition-all uppercase tracking-widest flex items-center justify-center gap-2 !shadow-none"
+                    className="w-full py-3 border border-dashed border-[--primary]/40 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/5 transition-all capitalize tracking-widest flex items-center justify-center gap-2 !shadow-none"
                   >
                     <Plus className="w-4 h-4" /> Adicionar Componente ao Blend
                   </button>
 
                   <div className="flex justify-between items-center px-2 pt-2 mt-1 border-t border-white/5">
-                     <span className="text-[10px] uppercase opacity-40 font-bold tracking-wider">Massa Total do Lote</span>
+                     <span className="text-[10px] capitalize opacity-40 font-bold tracking-wider">Massa Total do Lote</span>
                      <div className="flex items-baseline gap-1">
                        <span className="text-lg font-bold text-[--foreground]">{totalBlendWeight.toFixed(2)}</span>
-                       <span className="text-[10px] font-bold text-[--primary] uppercase">kg</span>
+                       <span className="text-[10px] font-bold text-[--primary]">kg</span>
                      </div>
                   </div>
                 </div>

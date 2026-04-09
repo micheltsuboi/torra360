@@ -72,13 +72,13 @@ export default function PackageList({ packages, roasts, expensePackages, invento
 
       <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 shadow-2xl">
         <div className="p-4 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
-          <h2 className="font-serif text-[--primary] text-sm tracking-widest uppercase font-bold">Lotes Embalados e Estoque</h2>
-          <span className="text-[10px] text-[--secondary-text] opacity-40 uppercase tracking-widest">{filteredPackages?.length || 0} Registros</span>
+          <h2 className="font-serif text-[--primary] text-sm tracking-widest capitalize font-bold">Lotes Embalados e Estoque</h2>
+          <span className="text-[10px] text-[--secondary-text] opacity-40 capitalize tracking-widest">{filteredPackages?.length || 0} Registros</span>
         </div>
         <div className="responsive-table-container scrollbar-thin scrollbar-thumb-[--primary]/20">
           <table className="w-full border-collapse min-w-[900px]">
             <thead>
-              <tr className="text-[--secondary-text] text-[10px] uppercase border-b border-[--card-border]/50 bg-white/5 tracking-widest">
+              <tr className="text-[--secondary-text] text-[10px] capitalize border-b border-[--card-border]/50 bg-white/5 tracking-widest">
                 <th className="p-3 font-bold text-left">Produto / Lote</th>
                 <th className="p-3 font-bold border-l border-white/5">Formato / Tam</th>
                 <th className="p-3 font-bold border-l border-white/5">Qtd</th>
@@ -119,26 +119,26 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <span className="text-xs font-bold block text-[--foreground]">{p.bean_format}</span>
-                        <span className="text-[10px] opacity-40 uppercase tracking-tighter">{p.package_size_g}g</span>
+                        <span className="text-[10px] opacity-40 capitalize tracking-tighter">{p.package_size_g}g</span>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="inline-flex flex-col items-center">
                           <span className={`text-base font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                             {p.quantity_units}
                           </span>
-                          <span className="text-[8px] uppercase opacity-30 font-bold -mt-1">unidades</span>
+                          <span className="text-[8px] capitalize opacity-30 font-bold -mt-1">unidades</span>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
                           <div className="text-[--foreground] font-bold text-sm tracking-tight">R$ {costs.unit.toFixed(2)}</div>
-                          <div className="text-[9px] opacity-40 text-[--secondary-text] uppercase font-bold">Total: R$ {costs.total.toFixed(2)}</div>
+                          <div className="text-[9px] opacity-40 text-[--secondary-text] capitalize font-bold">Total: R$ {costs.total.toFixed(2)}</div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
                           <div className="text-[--primary] font-bold text-sm tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                          <div className="text-[9px] opacity-25 text-[--secondary-text] uppercase font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
+                          <div className="text-[9px] opacity-25 text-[--secondary-text] capitalize font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5">
