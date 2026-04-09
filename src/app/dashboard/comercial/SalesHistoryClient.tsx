@@ -47,26 +47,26 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
          </div>
          
          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[--primary]/20 p-2">
-            <table className="w-full border-separate border-spacing-y-6">
+            <table className="w-full border-collapse">
                <thead>
-                  <tr className="text-[--secondary-text] text-[10px] capitalize tracking-widest opacity-60">
-                     <th className="px-6 py-2 text-left font-bold">Data/Cliente</th>
-                     <th className="px-6 py-2 text-left font-bold">Itens Vendidos</th>
-                     <th className="px-6 py-2 text-center font-bold">Status / Recebimento</th>
-                     <th className="px-6 py-2 text-right font-bold transition-all">Total Final</th>
-                     <th className="px-4 py-2 text-center font-bold w-32">Ações</th>
+                  <tr className="text-[--secondary-text] text-[10px] capitalize tracking-widest opacity-60 border-b border-white/10">
+                     <th className="px-6 py-4 text-left font-bold">Data/Cliente</th>
+                     <th className="px-6 py-4 text-left font-bold">Itens Vendidos</th>
+                     <th className="px-6 py-4 text-center font-bold">Status / Recebimento</th>
+                     <th className="px-6 py-4 text-right font-bold transition-all">Total Final</th>
+                     <th className="px-4 py-4 text-center font-bold w-32">Ações</th>
                   </tr>
                </thead>
                <tbody className="text-[11px]">
                   {visibleSales.map((s) => (
-                    <tr key={s.id} className="even:bg-white/[0.04] odd:bg-black/20 hover:bg-white/[0.08] transition-colors group">
-                      <td className="px-6 py-6 rounded-l-xl border-y border-l border-white/5">
-                         <div className="flex flex-col">
+                    <tr key={s.id} className="border-b border-white/5 even:bg-white/[0.04] odd:bg-transparent hover:bg-white/[0.08] transition-colors group">
+                      <td className="px-6 py-8">
+                         <div className="flex flex-col gap-0.5">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
-                            <span className="text-[9px] text-[--secondary-text] opacity-30 mt-0.5">{formatDate(s.date || s.created_at)}</span>
+                            <span className="text-[8px] text-[--secondary-text] opacity-40">{formatDate(s.date || s.created_at)}</span>
                          </div>
                       </td>
-                      <td className="px-6 py-6 border-y border-white/5">
+                      <td className="px-6 py-8">
                          <div className="flex flex-col gap-1.5">
                            {s.sale_items?.map((item: any, idx: number) => (
                              <div key={idx} className="text-[10px] text-[--primary] font-medium leading-tight opacity-70">
@@ -77,24 +77,24 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                            ))}
                          </div>
                       </td>
-                      <td className="px-6 py-6 text-center border-y border-white/5">
+                      <td className="px-6 py-8 text-center">
                          {s.payment_status === 'pending' ? (
-                           <span className="text-[10px] text-[#f59e0b] tracking-wider border border-[#f59e0b]/20 px-4 py-1.5 rounded-full bg-[#f59e0b]/5">À receber</span>
+                           <span className="text-[10px] text-amber-500 tracking-wider border border-amber-500/20 px-3 py-1 rounded-full bg-amber-500/10">À receber</span>
                          ) : (
-                           <div className="flex flex-col items-center leading-none gap-1">
-                              <span className="text-[10px] text-[--success] opacity-80 tracking-normal font-normal">
+                           <div className="flex flex-col items-center leading-none gap-0.5">
+                              <span className="text-[10px] text-[--success] opacity-80 font-medium">
                                  {s.payment_method}
                               </span>
-                              <span className="text-[8px] text-[--secondary-text] opacity-20">
+                              <span className="text-[8px] text-[--secondary-text] opacity-40">
                                  {formatDate(s.date)}
                               </span>
                            </div>
                          )}
                       </td>
-                      <td className="px-6 py-6 text-right border-y border-white/5">
+                      <td className="px-6 py-8 text-right">
                          <span className="text-lg font-mono text-[--success] font-bold title-glow">R$ {s.final_amount.toFixed(2)}</span>
                       </td>
-                      <td className="px-4 py-6 text-center rounded-r-xl border-y border-r border-white/5">
+                      <td className="px-4 py-8 text-center">
                          <SaleActions sale={s} />
                       </td>
                     </tr>
