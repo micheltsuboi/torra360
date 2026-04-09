@@ -330,9 +330,10 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                             <button 
                               type="button"
                               onClick={() => removeMaterial(index)}
-                              className="p-1.5 text-[--danger] hover:bg-[--danger]/10 rounded-md transition-colors opacity-60 hover:opacity-100"
+                              className="action-icon-btn text-[--danger] hover:bg-[--danger]/10 !opacity-100"
+                              title="Remover Insumo"
                             >
-                              <Trash className="w-4 h-4" />
+                              <Trash2 className="action-icon" />
                             </button>
                           </div>
                         </div>
@@ -342,7 +343,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     <button 
                       type="button"
                       onClick={handleAddMaterial}
-                      className="w-full py-2.5 border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
+                      className="w-full py-2.5 bg-transparent border border-dashed border-[--primary]/30 rounded-lg text-[10px] text-[--primary] font-bold hover:bg-[--primary]/10 transition-all uppercase tracking-widest flex items-center justify-center gap-2"
                     >
                        <Plus className="w-3.5 h-3.5" /> Adicionar Insumo Extra
                     </button>
