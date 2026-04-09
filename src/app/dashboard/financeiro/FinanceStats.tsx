@@ -55,7 +55,7 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpe
           <h2 className="text-2xl font-serif text-[--foreground] mb-0.5 tracking-tight">
             R$ {revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
           </h2>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Faturamento</span>
+          <span className="text-[10px] capitalize tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Faturamento</span>
         </div>
         <div className="absolute top-0 right-0 p-8 bg-[--primary]/5 blur-3xl rounded-full -mr-10 -mt-10" />
       </div>
@@ -83,7 +83,7 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpe
           <h2 className="text-2xl font-serif text-[--danger] mb-0.5 tracking-tight group-hover:scale-[1.02] origin-left transition-transform">
             R$ {totalExpenses.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
           </h2>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-[--danger] opacity-60 font-bold">Despesas</span>
+          <span className="text-[10px] capitalize tracking-[0.2em] text-[--danger] opacity-60 font-bold">Despesas</span>
         </div>
         <div className="absolute top-0 right-0 p-8 bg-[--danger]/5 blur-3xl rounded-full -mr-10 -mt-10" />
       </div>
@@ -103,7 +103,7 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpe
           <h2 className={`text-2xl font-serif mb-0.5 tracking-tight ${isPositiveProfit ? 'text-[--success]' : 'text-[--danger]'}`}>
             R$ {profit.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
           </h2>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Lucro Líquido</span>
+          <span className="text-[10px] capitalize tracking-[0.2em] text-[--secondary-text] font-bold opacity-60">Lucro líquido</span>
         </div>
         <div className={`absolute top-0 right-0 p-8 blur-3xl rounded-full -mr-10 -mt-10 ${isPositiveProfit ? 'bg-[--success]/5' : 'bg-[--danger]/5'}`} />
       </div>
@@ -122,7 +122,7 @@ export default function FinanceStats({ stats, onOpenPending, onNewExpense, onOpe
           <h2 className="text-2xl font-serif text-[--warning] mb-0.5 tracking-tight group-hover:scale-[1.02] origin-left transition-transform">
             R$ {pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
           </h2>
-          <span className="text-[10px] uppercase tracking-[0.2em] text-[--warning] opacity-60 font-bold">A Receber</span>
+          <span className="text-[10px] capitalize tracking-[0.2em] text-[--warning] opacity-60 font-bold">A receber</span>
         </div>
         <div className="absolute top-0 right-0 p-8 bg-[--warning]/5 blur-3xl rounded-full -mr-10 -mt-10" />
       </div>

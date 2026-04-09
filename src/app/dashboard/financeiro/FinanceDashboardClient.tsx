@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Modal from '@/components/ui/Modal'
 import FinanceStats from './FinanceStats'
-import { Clock, CheckCircle2, Receipt, Trash2, Pencil, Plus, Calendar, Tag, Info, DollarSign, Type } from 'lucide-react'
+import { Clock, CheckCircle2, Receipt, Trash2, Pencil, Plus, Calendar, Tag, Info, DollarSign, Type, TrendingUp, ArrowRight } from 'lucide-react'
 import { formatDate } from '@/utils/date-utils'
 import { markSaleAsPaid, createExpense, updateExpense, deleteExpense } from './actions'
 
@@ -11,9 +11,17 @@ interface FinanceDashboardClientProps {
   stats: any
   pendingSales: any[]
   expensesList: any[]
+  recentSales: any[]
+  recentExpenses: any[]
 }
 
-export default function FinanceDashboardClient({ stats, pendingSales, expensesList }: FinanceDashboardClientProps) {
+export default function FinanceDashboardClient({ 
+  stats, 
+  pendingSales, 
+  expensesList,
+  recentSales,
+  recentExpenses 
+}: FinanceDashboardClientProps) {
   const [isPendingModalOpen, setIsPendingModalOpen] = useState(false)
   const [isListModalOpen, setIsListModalOpen] = useState(false)
   const [isFormModalOpen, setIsFormModalOpen] = useState(false)
@@ -35,7 +43,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
     }
   }
 
-  // Função para limpar observações repetitivas (Ex: "Compra de Insumo: Pacote Kraft (1000 un)" -> "1000 un")
+  // Função para limpar observações repetitivas
   const cleanNotes = (notes: string) => {
     if (!notes) return ''
     return notes.replace(/Compra de Insumo:.*?\(|\)$|Compra de Insumo:/gi, '').trim()
@@ -50,6 +58,73 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
         onOpenExpenses={() => setIsListModalOpen(true)}
       />
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Vendas Recentes */}
+        <div className="glass-panel overflow-hidden">
+          <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+            <h2 className="font-serif text-[--primary] flex items-center gap-2">
+              <TrendingUp className="w-4 h-4" /> Vendas Recentes
+            </h2>
+            <a href="/dashboard/comercial" className="text-[10px] capitalize tracking-widest text-[--secondary-text] hover:text-[--primary] transition-all flex items-center gap-1">Ver tudo <ArrowRight className="w-3 h-3" /></a>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="text-[--secondary-text] capitalize tracking-tighter bg-black/20 font-sans">
+                <tr>
+                  <th className="p-3 text-left font-bold opacity-60">Data</th>
+                  <th className="p-3 text-left font-bold opacity-60">Cliente</th>
+                  <th className="p-3 text-right font-bold opacity-60">Valor</th>
+                </tr>
+              </thead>
+              <tbody className="font-sans">
+                {recentSales.map((sale: any) => (
+                  <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td className="p-3 opacity-60">{formatDate(sale.date)}</td>
+                    <td className="p-3 font-medium">{sale.clients?.name || 'Venda Avulsa'}</td>
+                    <td className="p-3 text-right font-mono text-[--primary]">R$ {sale.final_amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Despesas Recentes */}
+        <div className="glass-panel overflow-hidden">
+          <div className="p-4 border-b border-white/5 bg-white/5 flex items-center justify-between">
+            <h2 className="font-serif text-[--danger] flex items-center gap-2">
+              <Receipt className="w-4 h-4" /> Últimas Despesas
+            </h2>
+            <button 
+              onClick={() => setIsListModalOpen(true)}
+              className="text-[10px] capitalize tracking-widest text-[--danger] bg-[--danger]/10 border border-[--danger]/20 px-2 py-1 rounded-lg hover:bg-[--danger]/20 transition-all flex items-center gap-1 font-bold"
+            >
+              Gerenciar
+            </button>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs">
+              <thead className="text-[--secondary-text] capitalize tracking-tighter bg-black/20 font-sans">
+                <tr>
+                  <th className="p-3 text-left font-bold opacity-60">Data</th>
+                  <th className="p-3 text-left font-bold opacity-60">Gasto</th>
+                  <th className="p-3 text-right font-bold opacity-60">Valor</th>
+                </tr>
+              </thead>
+              <tbody className="font-sans">
+                {recentExpenses.map((exp: any) => (
+                  <tr key={exp.id} className="border-b border-white/5 hover:bg-white/5 transition-all">
+                    <td className="p-3 opacity-60">{formatDate(exp.date)}</td>
+                    <td className="p-3">{exp.description || exp.category || 'Despesa'}</td>
+                    <td className="p-3 text-right font-mono text-[--danger]">R$ {exp.amount.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       {/* 1. Modal de Contas a Receber */}
       <Modal 
         isOpen={isPendingModalOpen} 
@@ -60,14 +135,14 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           <div className="p-3 bg-[--primary]/10 rounded-lg border border-[--primary]/20 flex items-center gap-3">
             <Clock className="w-5 h-5 text-[--primary]" />
             <div>
-              <p className="text-[10px] text-[--secondary-text] uppercase tracking-widest font-bold">Total Pendente</p>
+              <p className="text-[10px] text-[--secondary-text] capitalize tracking-widest font-bold">Total Pendente</p>
               <p className="text-lg font-serif text-[--primary]">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</p>
             </div>
           </div>
 
           <div className="overflow-x-auto max-h-[400px] scrollbar-thin scrollbar-thumb-[--primary]/20">
             <table className="w-full text-xs">
-              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-widest text-[10px]">
+              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-widest text-[10px] font-sans">
                 <tr>
                   <th className="p-3 text-left">Data</th>
                   <th className="p-3 text-left">Cliente</th>
@@ -75,7 +150,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                   <th className="p-3 text-center">Ação</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="font-sans">
                 {pendingSales.map((sale: any) => (
                   <tr key={sale.id} className="border-b border-white/5 hover:bg-white/5 transition-all font-sans">
                     <td className="p-3 opacity-60 text-[9px]">{formatDate(sale.date)}</td>
@@ -123,7 +198,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           <div className="flex justify-between items-center mb-2">
             <div className="flex items-center gap-2">
               <Receipt className="w-5 h-5 text-[--danger]" />
-              <span className="text-sm font-serif uppercase tracking-widest text-[--primary]">Lista de Despesas</span>
+              <span className="text-sm font-serif capitalize tracking-widest text-[--primary]">Lista de Despesas</span>
             </div>
             <button 
               onClick={handleCreateNew}
@@ -135,7 +210,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
 
           <div className="overflow-x-auto max-h-[500px] scrollbar-thin scrollbar-thumb-white/10">
             <table className="w-full text-xs">
-              <thead className="bg-white/5 text-[--secondary-text] uppercase tracking-tighter text-[10px]">
+              <thead className="bg-white/5 text-[--secondary-text] capitalize tracking-tighter text-[10px] font-sans">
                 <tr>
                   <th className="p-3 text-left">Data</th>
                   <th className="p-3 text-left">Título / Categoria</th>
@@ -143,9 +218,8 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                   <th className="p-3 text-center">Ações</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="font-sans">
                 {expensesList.map((exp: any) => {
-                  // Fallback para despesas antigas: se não tem description, tenta tirar do notes
                   const title = exp.description || (exp.notes?.includes('Compra de Insumo') ? exp.notes.split(':')[1]?.split('(')[0]?.trim() : 'Despesa Geral')
                   const displayNotes = exp.description ? exp.notes : cleanNotes(exp.notes)
 
@@ -156,7 +230,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                         <div className="flex flex-col">
                           <span className="font-bold text-[--foreground]">{title}</span>
                           <div className="flex items-center gap-1.5 mt-0.5">
-                             <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] uppercase">{exp.category || 'Geral'}</span>
+                             <span className="text-[9px] px-1.5 py-0.5 bg-white/5 rounded border border-white/5 text-[--secondary-text] capitalize">{exp.category || 'Geral'}</span>
                              {displayNotes && <span className="text-[10px] opacity-40 italic">— {displayNotes}</span>}
                           </div>
                         </div>
@@ -214,7 +288,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           {editingExpense && <input type="hidden" name="id" value={editingExpense.id} />}
           
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+            <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
               <Type className="action-icon" /> Título / Descrição
             </label>
             <input 
@@ -223,13 +297,13 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
               required 
               placeholder="Ex: Aluguel Unidade Matriz"
               defaultValue={editingExpense?.description || (editingExpense?.notes?.includes('Compra de Insumo') ? editingExpense.notes.split(':')[1]?.split('(')[0]?.trim() : '')}
-              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 focus:border-[--primary]/50 outline-none transition-all"
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 focus:border-[--primary]/50 outline-none transition-all font-sans text-[--foreground]"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+              <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
                 <Calendar className="action-icon" /> Data
               </label>
               <input 
@@ -237,11 +311,11 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                 name="date" 
                 required 
                 defaultValue={editingExpense?.date || new Date().toISOString().split('T')[0]}
-                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 font-sans text-[--foreground]"
               />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+              <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
                 <DollarSign className="action-icon" /> Valor
               </label>
               <input 
@@ -251,20 +325,20 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
                 required 
                 placeholder="0.00"
                 defaultValue={editingExpense?.amount}
-                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+                className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 font-mono text-[--foreground]"
               />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+            <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
               <Tag className="action-icon" /> Categoria
             </label>
             <select 
               name="category" 
               required
               defaultValue={editingExpense?.category || 'Geral'}
-              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5"
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 text-[--foreground]"
             >
               <option value="Luz">Luz</option>
               <option value="Água">Água</option>
@@ -281,14 +355,14 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <label className="text-[10px] uppercase font-bold text-[--secondary-text] ml-1 flex items-center gap-1">
+            <label className="text-[10px] capitalize font-bold text-[--secondary-text] ml-1 flex items-center gap-1 font-sans">
               <Info className="action-icon" /> Observações (Opcional)
             </label>
             <textarea 
               name="notes" 
               rows={2}
               defaultValue={editingExpense?.notes}
-              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 resize-none outline-none focus:border-[--primary]/50 transition-all font-sans"
+              className="bg-black/40 border border-white/10 text-sm rounded-lg p-2.5 resize-none outline-none focus:border-[--primary]/50 transition-all font-sans text-[--foreground]"
               placeholder="Detalhes adicionais..."
             />
           </div>
@@ -297,7 +371,7 @@ export default function FinanceDashboardClient({ stats, pendingSales, expensesLi
             <button 
               type="button"
               onClick={() => setIsFormModalOpen(false)}
-              className="flex-1 px-4 py-3 border border-white/10 rounded-lg text-xs font-bold hover:bg-white/5 transition-all text-[--secondary-text]"
+              className="flex-1 px-4 py-3 border border-white/10 rounded-lg text-xs font-bold hover:bg-white/5 transition-all text-[--secondary-text] font-sans"
             >
               Cancelar
             </button>

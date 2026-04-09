@@ -18,8 +18,8 @@ export default function FinanceChart({ stats }: ChartProps) {
   return (
     <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20 mb-8 max-w-6xl w-full">
       <div className="p-3 px-5 border-b border-white/5 bg-black/40 wood-texture backdrop-blur-sm flex justify-between items-center">
-         <span className="text-[10px] uppercase tracking-widest text-[--primary] font-bold opacity-80">Resumo Financeiro (Fluxo)</span>
-         <div className="flex gap-4 text-[9px] font-bold uppercase tracking-widest">
+         <span className="text-[10px] capitalize tracking-widest text-[--primary] font-bold opacity-80">Resumo financeiro (Fluxo)</span>
+         <div className="flex gap-4 text-[9px] font-bold capitalize tracking-widest">
             <div className="flex items-center gap-1.5 opacity-60">
                <div className="w-2 h-2 rounded bg-[--success]" />
                <span>Receitas</span>
@@ -70,11 +70,11 @@ export default function FinanceChart({ stats }: ChartProps) {
             {/* Resumo Complementar */}
             <div className="grid grid-cols-2 gap-4">
                 <div className="bg-black/20 p-4 border border-white/5 rounded-lg flex flex-col items-center">
-                   <span className="text-[8px] text-[--secondary-text] font-bold opacity-40 uppercase tracking-widest mb-1">Custo Indireto</span>
+                   <span className="text-[8px] text-[--secondary-text] font-bold opacity-40 capitalize tracking-widest mb-1">Custo indireto</span>
                    <span className="text-lg font-serif text-[--primary]">{((stats.expenses / (totalCosts || 1)) * 100).toFixed(0)}%</span>
                 </div>
                 <div className="bg-black/20 p-4 border border-white/5 rounded-lg flex flex-col items-center">
-                   <span className="text-[8px] text-[--secondary-text] font-bold opacity-40 uppercase tracking-widest mb-1">Custo Matéria</span>
+                   <span className="text-[8px] text-[--secondary-text] font-bold opacity-40 capitalize tracking-widest mb-1">Custo matéria</span>
                    <span className="text-lg font-serif text-[--primary]">{((stats.productionCost / (totalCosts || 1)) * 100).toFixed(0)}%</span>
                 </div>
             </div>
