@@ -63,7 +63,7 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                       <td className="px-6 py-8">
                          <div className="flex flex-col gap-0.5">
                             <span className="text-sm font-bold text-[--foreground] leading-tight capitalize">{s.client?.name || 'Cliente Avulso'}</span>
-                            <span className="text-[8px] text-[--secondary-text] opacity-40">{formatDate(s.date || s.created_at)}</span>
+                            <span className="text-[8px] text-[--secondary-text] opacity-40">{formatDate(s.created_at)}</span>
                          </div>
                       </td>
                       <td className="px-6 py-8">
@@ -86,7 +86,7 @@ export default function SalesHistoryClient({ salesHistory }: { salesHistory: any
                                  {s.payment_method}
                               </span>
                               <span className="text-[8px] text-[--secondary-text] opacity-40">
-                                 {formatDate(s.date)}
+                                 {formatDate(s.payment_date)}
                               </span>
                            </div>
                          )}

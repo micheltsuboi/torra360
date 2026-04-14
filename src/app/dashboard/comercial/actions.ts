@@ -58,7 +58,8 @@ export async function createPDVSale(payload: any) {
     discount_amount,
     final_amount,
     payment_method,
-    payment_status: payment_method === 'À receber' ? 'pending' : 'paid'
+    payment_status: payment_method === 'À receber' ? 'pending' : 'paid',
+    payment_date: payment_method === 'À receber' ? null : new Date().toISOString()
   }).select('id').single()
 
   if (saleError || !saleData) {
@@ -264,7 +265,7 @@ export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string)
     .update({ 
       payment_status: 'paid',
       payment_method: finalPaymentMethod,
-      date: new Date().toISOString().split('T')[0]
+      payment_date: new Date().toISOString()
     })
     .eq('id', saleId)
     .eq('tenant_id', tenantId)
@@ -281,7 +282,7 @@ export async function updateSale(saleId: string, data: any) {
   
   const updateData = { ...data }
   if (data.payment_status === 'paid') {
-     updateData.date = new Date().toISOString().split('T')[0]
+     updateData.payment_date = new Date().toISOString()
   }
 
   const { error } = await supabase

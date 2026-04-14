@@ -52,7 +52,8 @@ export default function SaleActions({ sale }: { sale: Sale }) {
     startTransition(async () => {
       await updateSale(sale.id, {
         payment_status: 'pending',
-        payment_method: 'À receber'
+        payment_method: 'À receber',
+        payment_date: null
       })
       setActiveModal(null)
     })
