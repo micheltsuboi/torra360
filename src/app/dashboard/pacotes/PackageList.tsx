@@ -130,9 +130,14 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
-                        <div className="flex flex-col items-center">
-                          <div className="text-[--foreground] font-bold tracking-tight">R$ {costs.unit.toFixed(2)}</div>
-                          <div className="opacity-40 text-[--secondary-text] capitalize font-bold">Total: R$ {costs.total.toFixed(2)}</div>
+                        <div className="flex flex-col items-center gap-0.5">
+                          <div className="text-[--foreground] font-bold tracking-tight">
+                             R$ {costs.unit.toFixed(2)} 
+                             <span className="text-[9px] opacity-40 ml-1 font-normal tracking-tighter">/unid</span>
+                          </div>
+                          <div className="opacity-30 text-[--secondary-text] text-[9px] uppercase font-bold tracking-tighter whitespace-nowrap">
+                             Custo Lote ({p.initial_quantity || p.quantity_units || 0} pct): R$ {costs.total.toFixed(2)}
+                          </div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
@@ -152,16 +157,20 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                                 <div className="text-[12px] text-[--primary] font-bold tracking-tight">
                                   {price > 0 ? `R$ ${price.toFixed(2)}` : <span className="opacity-30 text-[9px] italic">Preço não definido</span>}
                                 </div>
-                                <div className="flex flex-col gap-0.5 mt-1">
-                                  <div className={`text-[10px] font-bold flex items-center justify-center gap-1 ${isPositive ? 'text-[--success]' : unitMargin < 0 ? 'text-[--danger]' : 'text-[--secondary-text] opacity-40'}`}>
-                                    <span>Margem:</span>
-                                    <span>R$ {unitMargin.toFixed(2)}</span>
-                                    {price > 0 && <span className="opacity-60 text-[8px]">({marginPct.toFixed(1)}%)</span>}
-                                  </div>
-                                  <div className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-40">
-                                    {unitsProduced > 0 ? `LOTE: R$ ${totalLotMargin.toFixed(2)}` : <span className="text-[8px] opacity-20 italic">Sem produção</span>}
-                                  </div>
-                                </div>
+                                 <div className="flex flex-col gap-0.5 mt-1">
+                                   <div className={`text-[10px] font-bold flex items-center justify-center gap-1 ${isPositive ? 'text-[--success]' : unitMargin < 0 ? 'text-[--danger]' : 'text-[--secondary-text] opacity-40'}`}>
+                                     <span className="opacity-60">Margem:</span>
+                                     <span>R$ {unitMargin.toFixed(2)}</span>
+                                     {price > 0 && <span className="opacity-40 text-[8px] font-normal">({marginPct.toFixed(1)}%)</span>}
+                                   </div>
+                                   <div className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-40 tracking-tighter">
+                                     {unitsProduced > 0 ? (
+                                       <>Lucro Lote: <span className={isPositive ? 'text-[--success]/60' : 'text-[--danger]/60'}>R$ {totalLotMargin.toFixed(2)}</span></>
+                                     ) : (
+                                       <span className="text-[8px] opacity-20 italic">Sem produção registrada</span>
+                                     )}
+                                   </div>
+                                 </div>
                               </>
                             );
                           })()}
