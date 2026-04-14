@@ -48,6 +48,7 @@ export async function getPackages() {
       bean_format,
       package_size_g,
       quantity_units,
+      initial_quantity,
       retail_price,
       is_blend,
       roast_batch_id,
@@ -100,18 +101,23 @@ export async function getPackages() {
   const enrichedData = data?.map(pkg => {
     let coffeeCost = 0
     
+    // Usar initial_quantity para cálculos de custo/lucro totais do lote
+    const initialQty = pkg.initial_quantity || pkg.quantity_units || 1
+
     if (!pkg.is_blend) {
       const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === pkg.roast_batch_id)?.cost_per_kg_roasted || 0
-      coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * pkg.quantity_units
+      coffeeCost = (pkg.package_size_g / 1000) * roastCostKg * initialQty
     } else {
-      // Custo ponderado do blend
+      // Custo ponderado do blend (calculado sobre a produção inicial)
       coffeeCost = pkg.blend_composition?.reduce((acc: number, comp: any) => {
         const roastCostKg = roastCosts?.find((rc: any) => rc.roast_batch_id === comp.roast_batch_id)?.cost_per_kg_roasted || 0
+        // Para blends, o comp.quantity_kg já é o peso total usado na produção inicial
         return acc + (comp.quantity_kg * roastCostKg)
       }, 0) || 0
     }
     
     const materialsCost = pkg.materials?.reduce((acc: number, m: any) => {
+      // m.quantity_used já reflete o total usado na produção inicial
       return acc + (m.quantity_used * (m.packaging_inventory?.unit_cost || 0))
     }, 0) || 0
     
@@ -125,7 +131,7 @@ export async function getPackages() {
         materials: materialsCost,
         extra: extraBatchCost,
         total: totalProductionCost,
-        unit: totalProductionCost / (pkg.quantity_units || 1)
+        unit: totalProductionCost / initialQty
       }
     }
   })
@@ -226,6 +232,7 @@ export async function createPackages(formData: FormData) {
     bean_format,
     package_size_g,
     quantity_units,
+    initial_quantity: quantity_units,
     retail_price,
     expense_package_id,
     is_blend: isBlend
@@ -305,6 +312,7 @@ export async function updatePackage(formData: FormData) {
   const bean_format = formData.get('bean_format') as string
   const package_size_g = parseInt(formData.get('package_size_g') as string) || 0
   const quantity_units = parseInt(formData.get('quantity_units') as string) || 0
+  const initial_quantity = parseInt(formData.get('initial_quantity') as string) || quantity_units
   const retail_price = parseFloat((formData.get('retail_price') as string).replace('R$ ', '').replace(',', '.')) || 0
   const expense_package_id = formData.get('expense_package_id') as string || null
   const materialsJson = formData.get('materials') as string
@@ -377,6 +385,7 @@ export async function updatePackage(formData: FormData) {
       bean_format,
       package_size_g,
       quantity_units,
+      initial_quantity,
       retail_price,
       expense_package_id
     })

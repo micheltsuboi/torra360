@@ -123,10 +123,10 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="inline-flex flex-col items-center">
-                          <span className={` font-bold ${p.quantity_units < 10 ? 'text-[--danger]' : 'text-[--primary]'}`}>
-                            {p.quantity_units}
+                          <span className={` font-bold ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                            {p.quantity_units} / <span className="opacity-40">{p.initial_quantity || p.quantity_units}</span>
                           </span>
-                          <span className=" capitalize opacity-30 font-bold -mt-1">unidades</span>
+                          <span className=" capitalize opacity-30 font-bold -mt-1 text-[9px]">unidades</span>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
@@ -140,11 +140,11 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                           {(() => {
                             const price = Number(p.retail_price || 0);
                             const unitCost = Number(costs.unit || 0);
-                            const units = Number(p.quantity_units || 0);
+                            const unitsProduced = Number(p.initial_quantity || p.quantity_units || 0);
                             
                             const unitMargin = price - unitCost;
                             const marginPct = price > 0 ? (unitMargin / price) * 100 : 0;
-                            const totalMargin = unitMargin * units;
+                            const totalLotMargin = unitMargin * unitsProduced;
                             const isPositive = unitMargin > 0;
 
                             return (
@@ -159,7 +159,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                                     {price > 0 && <span className="opacity-60 text-[8px]">({marginPct.toFixed(1)}%)</span>}
                                   </div>
                                   <div className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-40">
-                                    {units > 0 ? `Lote: R$ ${totalMargin.toFixed(2)}` : <span className="text-[8px] opacity-20 italic">Sem unidades</span>}
+                                    {unitsProduced > 0 ? `LOTE: R$ ${totalLotMargin.toFixed(2)}` : <span className="text-[8px] opacity-20 italic">Sem produção</span>}
                                   </div>
                                 </div>
                               </>
@@ -281,20 +281,31 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div className="flex flex-col gap-1">
-                  <label className="data-label">Qtd Pacotes (Unidades)</label>
+                  <label className="data-label">Estoque Atual</label>
                   <input 
                     name="quantity_units" 
                     type="number" 
-                    min="1" 
+                    min="0" 
                     defaultValue={editingPackage.quantity_units} 
                     required 
                     className=" bg-black/40 border-white/10"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="data-label font-serif text-[--primary] tracking-wider uppercase">Venda Unitário (R$)</label>
+                  <label className="data-label">Produção Total</label>
+                  <input 
+                    name="initial_quantity" 
+                    type="number" 
+                    min="1" 
+                    defaultValue={editingPackage.initial_quantity || editingPackage.quantity_units} 
+                    required 
+                    className=" bg-black/40 border-white/10"
+                  />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="data-label font-serif text-[--primary] tracking-wider uppercase">Venda Unit.</label>
                   <input 
                     name="retail_price" 
                     type="number" 
