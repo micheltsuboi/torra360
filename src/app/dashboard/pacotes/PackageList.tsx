@@ -137,10 +137,29 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center">
-                          <div className="text-[--primary] font-bold  tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
-                          <div className=" opacity-25 text-[--secondary-text] capitalize font-bold">Margem: R$ {(p.retail_price - costs.unit).toFixed(2)}</div>
+                          <div className="text-[--primary] font-bold tracking-tight">R$ {(p.retail_price || 0).toFixed(2)}</div>
+                          {(() => {
+                            const unitMargin = (p.retail_price || 0) - (costs.unit || 0);
+                            const marginPct = p.retail_price > 0 ? (unitMargin / p.retail_price) * 100 : 0;
+                            const totalMargin = unitMargin * (p.quantity_units || 0);
+                            const isPositive = unitMargin > 0;
+
+                            return (
+                              <div className="flex flex-col gap-0.5 mt-1">
+                                <div className={`text-[10px] font-bold flex items-center justify-center gap-1 ${isPositive ? 'text-[--success]' : 'text-[--danger]'}`}>
+                                  <span>Margem:</span>
+                                  <span>R$ {unitMargin.toFixed(2)}</span>
+                                  <span className="opacity-60 text-[8px]">({marginPct.toFixed(1)}%)</span>
+                                </div>
+                                <div className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-30">
+                                  Lote: R$ {totalMargin.toFixed(2)}
+                                </div>
+                              </div>
+                            );
+                          })()}
                         </div>
                       </td>
+
                       <td className="p-3 border-l border-white/5">
                         <div className="flex justify-center items-center gap-2">
                           <button 
