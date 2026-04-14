@@ -124,7 +124,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                     <option value="">Selecione o lote de torra...</option>
                     {roasts.map((r: any) => (
                       <option key={r.id} value={r.id}>
-                        {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg disponível)
+                        {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.qty_after_kg.toFixed(2)}kg disponível)
                       </option>
                     ))}
                   </select>
@@ -155,7 +155,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                               <option value="">Selecionar Lote...</option>
                               {roasts.map((r: any) => (
                                 <option key={r.id} value={r.id}>
-                                  {r.green_coffee?.name} ({r.qty_after_kg.toFixed(2)}kg)
+                                  {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.qty_after_kg.toFixed(2)}kg)
                                 </option>
                               ))}
                             </select>
