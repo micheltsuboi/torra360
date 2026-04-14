@@ -97,19 +97,32 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                     <tr key={p.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
                       <td className="p-3">
                         {!p.is_blend ? (
-                          <>
-                            <span className=" font-semibold text-[--primary] block">{roast?.green_coffee?.name || 'N/A'}</span>
-                            <span className=" text-[--secondary-text] opacity-60">Lote torrado em {formatDate(p.date)}</span>
-                          </>
+                          <div className="flex flex-col gap-0.5">
+                            <span className="font-bold text-[--primary] block text-[12px]">{roast?.green_coffee?.name || 'N/A'}</span>
+                            <div className="flex flex-col text-[10px] leading-tight text-[--secondary-text] opacity-70">
+                               <div className="flex items-center gap-1">
+                                  <span className="font-semibold opacity-50">Embalamento:</span> {formatDate(p.date)}
+                               </div>
+                               <div className="flex items-center gap-1">
+                                  <span className="font-semibold opacity-50">Lote Torrado:</span> {formatDate(roast?.date)}
+                               </div>
+                               <div className="text-[--primary] font-bold mt-0.5 opacity-90 tracking-widest">
+                                  Lote: #{roast?.id?.slice(-6).toUpperCase() || 'N/A'}
+                               </div>
+                            </div>
+                          </div>
                         ) : (
                           <div className="flex flex-col">
-                            <div className="flex items-center gap-1.5">
+                            <div className="flex items-center gap-1.5 leading-none">
                               <Beaker className="w-3.5 h-3.5 text-[--primary]" />
                               <span className=" font-bold text-[--foreground]">Blend Comercial</span>
                             </div>
-                            <div className="flex flex-wrap gap-1 mt-1">
+                            <div className="text-[9px] text-[--secondary-text] opacity-50 font-bold mb-1">
+                               EMBALAMENTO: {formatDate(p.date)}
+                            </div>
+                            <div className="flex flex-wrap gap-1 mt-0.5">
                               {p.blend_composition?.map((comp: any, i: number) => (
-                                <span key={i} className=" bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20 font-medium">
+                                <span key={i} className=" bg-[--primary]/10 text-[--primary] px-1.5 py-0.5 rounded border border-[--primary]/20 font-medium text-[9px]">
                                   {comp.roast_batch?.green_coffee?.name}: <strong>{Math.round(comp.percentage)}%</strong>
                                 </span>
                               ))}
