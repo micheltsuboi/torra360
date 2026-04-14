@@ -98,15 +98,15 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       <td className="p-3">
                         {!p.is_blend ? (
                           <div className="flex flex-col gap-0.5">
-                            <span className="font-bold text-[--primary] block text-[12px]">{roast?.green_coffee?.name || 'N/A'}</span>
-                            <div className="flex flex-col text-[10px] leading-tight text-[--secondary-text] opacity-70">
+                            <span className="font-bold text-[--primary] block text-[12px] leading-tight">{roast?.green_coffee?.name || 'N/A'}</span>
+                            <div className="flex flex-col text-[9px] leading-tight text-[--secondary-text] opacity-60">
                                <div className="flex items-center gap-1">
-                                  <span className="font-semibold opacity-50">Embalamento:</span> {formatDate(p.date)}
+                                  <span className="opacity-80">Embalamento:</span> {formatDate(p.date)}
                                </div>
                                <div className="flex items-center gap-1">
-                                  <span className="font-semibold opacity-50">Lote Torrado:</span> {formatDate(roast?.date)}
+                                  <span className="opacity-80">Lote Torrado:</span> {formatDate(roast?.date)}
                                </div>
-                               <div className="text-[--primary] font-bold mt-0.5 opacity-90 tracking-widest">
+                               <div className="text-[--primary] mt-0.5 opacity-80 tracking-widest font-medium">
                                   Lote: #{roast?.id?.slice(-6).toUpperCase() || 'N/A'}
                                </div>
                             </div>
@@ -136,19 +136,19 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="inline-flex flex-col items-center">
-                          <span className={` font-bold ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                          <span className={` font-bold text-[13px] tracking-tight ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                             {p.quantity_units} / <span className="opacity-40">{p.initial_quantity || p.quantity_units}</span>
                           </span>
-                          <span className=" capitalize opacity-30 font-bold -mt-1 text-[9px]">unidades</span>
+                          <span className=" capitalize opacity-30 text-[9px] -mt-0.5">unidades</span>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center gap-0.5">
                           <div className="text-[--foreground] font-bold tracking-tight">
                              R$ {costs.unit.toFixed(2)} 
-                             <span className="text-[9px] opacity-40 ml-1 font-normal tracking-tighter">/unid</span>
+                             <span className="text-[9px] opacity-40 ml-0.5 font-normal tracking-tighter">/unid</span>
                           </div>
-                          <div className="opacity-30 text-[--secondary-text] text-[9px] uppercase font-bold tracking-tighter whitespace-nowrap">
+                          <div className="opacity-30 text-[--secondary-text] text-[9px] uppercase tracking-tighter whitespace-nowrap">
                              Custo Lote ({p.initial_quantity || p.quantity_units || 0} pct): R$ {costs.total.toFixed(2)}
                           </div>
                         </div>
@@ -171,14 +171,14 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                                   {price > 0 ? `R$ ${price.toFixed(2)}` : <span className="opacity-30 text-[9px] italic">Preço não definido</span>}
                                 </div>
                                  <div className="flex flex-col gap-0.5 mt-1">
-                                   <div className={`text-[10px] font-bold flex items-center justify-center gap-1 ${isPositive ? 'text-[--success]' : unitMargin < 0 ? 'text-[--danger]' : 'text-[--secondary-text] opacity-40'}`}>
-                                     <span className="opacity-60">Margem:</span>
+                                   <div className={`text-[10px] items-center justify-center gap-1 ${isPositive ? 'text-[--success] font-bold' : unitMargin < 0 ? 'text-[--danger] font-bold' : 'text-[--secondary-text] opacity-40'}`}>
+                                     <span className="opacity-60 font-medium mr-1">Margem:</span>
                                      <span>R$ {unitMargin.toFixed(2)}</span>
                                      {price > 0 && <span className="opacity-40 text-[8px] font-normal">({marginPct.toFixed(1)}%)</span>}
                                    </div>
-                                   <div className="text-[9px] uppercase font-bold text-[--secondary-text] opacity-40 tracking-tighter">
+                                   <div className="text-[9px] uppercase text-[--secondary-text] opacity-40 tracking-tighter">
                                      {unitsProduced > 0 ? (
-                                       <>Lucro Lote: <span className={isPositive ? 'text-[--success]/60' : 'text-[--danger]/60'}>R$ {totalLotMargin.toFixed(2)}</span></>
+                                       <>Lucro Lote: <span className={`${isPositive ? 'text-[--success]/60' : 'text-[--danger]/60'} font-medium`}>R$ {totalLotMargin.toFixed(2)}</span></>
                                      ) : (
                                        <span className="text-[8px] opacity-20 italic">Sem produção registrada</span>
                                      )}
