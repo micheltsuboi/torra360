@@ -121,7 +121,7 @@ export async function getPackages() {
       return acc + (m.quantity_used * (m.packaging_inventory?.unit_cost || 0))
     }, 0) || 0
     
-    const extraBatchCost = pkg.expense_package?.total_cost || 0
+    const extraBatchCost = (pkg.expense_package as any)?.[0]?.total_cost || 0
     const totalProductionCost = coffeeCost + materialsCost + extraBatchCost
     
     return {

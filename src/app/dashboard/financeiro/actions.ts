@@ -231,7 +231,7 @@ export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string)
     .update({ 
       payment_status: 'paid',
       payment_method: finalPaymentMethod,
-      date: new Date().toISOString().split('T')[0] // Opcional: atualizar para a data do recebimento?
+      payment_date: new Date().toISOString()
     })
     .eq('id', saleId)
     .eq('tenant_id', tenantId)
