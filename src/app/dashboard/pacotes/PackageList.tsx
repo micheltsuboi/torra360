@@ -99,7 +99,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                         {!p.is_blend ? (
                           <div className="flex flex-col gap-0.5 mt-0.5">
                             <span className="font-bold text-[--primary] block text-[12px] leading-tight mb-0.5">{roast?.green_coffee?.name || 'N/A'}</span>
-                            <div className="flex flex-col leading-tight text-[--secondary-text] opacity-60 tracking-tighter" style={{ fontSize: '6.5px' }}>
+                            <div className="flex flex-col text-[9px] leading-tight text-[--secondary-text] opacity-60 tracking-tighter">
                                <div className="flex items-center gap-1">
                                   <span className="opacity-80">Embalamento:</span> {formatDate(p.date)}
                                </div>
@@ -139,16 +139,16 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                           <div className={`font-bold text-[13px] tracking-tight whitespace-nowrap ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
                             {p.quantity_units}/<span className="opacity-40">{p.initial_quantity || p.quantity_units}</span>
                           </div>
-                          <div className="opacity-30 mt-0.5 tracking-tighter lowercase" style={{ fontSize: '6.5px' }}>unidades</div>
+                          <div className="opacity-30 text-[9px] mt-0.5 tracking-tighter lowercase">unidades</div>
                         </div>
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center gap-0.5 leading-none">
                           <div className="text-[--foreground] font-bold tracking-tight text-[12px]">
                              R$ {costs.unit.toFixed(2)} 
-                             <span className="opacity-40 ml-0.5 font-normal tracking-tighter" style={{ fontSize: '6.5px' }}>/unid</span>
+                             <span className="opacity-40 ml-0.5 font-normal tracking-tighter text-[9px]">/unid</span>
                           </div>
-                          <div className="opacity-30 text-[--secondary-text] tracking-tighter whitespace-nowrap" style={{ fontSize: '6.5px' }}>
+                          <div className="opacity-30 text-[--secondary-text] text-[9px] tracking-tighter whitespace-nowrap">
                              Custo lote ({p.initial_quantity || p.quantity_units || 0} pct): R$ {costs.total.toFixed(2)}
                           </div>
                         </div>
@@ -172,11 +172,11 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                                 </div>
                                  <div className="flex flex-col gap-0.5 mt-1">
                                    <div className={`text-[10px] items-center justify-center gap-1 ${isPositive ? 'text-[--success] font-bold' : unitMargin < 0 ? 'text-[--danger] font-bold' : 'text-[--secondary-text] opacity-40'}`}>
-                                     <span className="opacity-60 font-medium mr-1" style={{ fontSize: '6.5px' }}>Margem:</span>
+                                     <span className="opacity-60 font-medium mr-1 text-[9px]">Margem:</span>
                                      <span className="text-[9px]">R$ {unitMargin.toFixed(2)}</span>
-                                     {price > 0 && <span className="opacity-40 font-normal" style={{ fontSize: '6.5px' }}>({marginPct.toFixed(1)}%)</span>}
+                                     {price > 0 && <span className="opacity-40 font-normal text-[8px]">({marginPct.toFixed(1)}%)</span>}
                                    </div>
-                                   <div className="opacity-40 text-[--secondary-text] tracking-tighter" style={{ fontSize: '6.5px' }}>
+                                   <div className="opacity-40 text-[--secondary-text] text-[9px] tracking-tighter">
                                      {unitsProduced > 0 ? (
                                        <>Lucro lote: <span className={`${isPositive ? 'text-[--success]/60' : 'text-[--danger]/60'} font-bold`}>R$ {totalLotMargin.toFixed(2)}</span></>
                                      ) : (
