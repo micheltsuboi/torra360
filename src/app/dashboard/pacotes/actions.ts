@@ -43,7 +43,16 @@ export async function getPackages() {
   const { data, error } = await supabase
     .from('packaging_batches')
     .select(`
-      *,
+      id,
+      date,
+      bean_format,
+      package_size_g,
+      quantity_units,
+      retail_price,
+      is_blend,
+      roast_batch_id,
+      expense_package_id,
+      created_at,
       roast_batch:roast_batch_id(
         id,
         date, 
@@ -66,6 +75,7 @@ export async function getPackages() {
         )
       )
     `)
+
     .eq('tenant_id', tenantId)
     .order('created_at', { ascending: false })
 
