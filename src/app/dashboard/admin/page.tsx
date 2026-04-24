@@ -136,7 +136,7 @@ export default async function AdminMasterPage() {
                       <span className="text-sm font-bold text-[--foreground]">{u.name}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="text-xs text-[--secondary-text] opacity-60">{u.tenants?.name}</span>
+                      <span className="text-xs text-[--secondary-text] opacity-60">{u.tenants?.[0]?.name || 'N/A'}</span>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <span className={`text-[9px] uppercase font-bold px-2 py-1 rounded ${
