@@ -146,8 +146,8 @@ export default async function DashboardIndex() {
             <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Faturamento</h2>
           </div>
           <div className="px-6 py-6 flex flex-col">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-[--foreground] tracking-tight">R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-3xl font-bold text-[--foreground] tracking-tight">R$ {stats.revenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
             </div>
             <div className="mt-5 pt-4 border-t border-white/5 flex flex-col gap-1">
               <span className="text-[9px] font-normal text-[--secondary-text] opacity-40 uppercase tracking-widest">Acumulado 30 dias</span>
@@ -163,8 +163,8 @@ export default async function DashboardIndex() {
             <h2 className="font-serif text-[--warning] text-base tracking-widest uppercase">A Receber</h2>
           </div>
           <div className="px-6 py-6 flex flex-col">
-            <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-[--warning] tracking-tight">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+            <div className="flex items-center gap-1.5">
+              <span className="text-3xl font-bold text-[--warning] tracking-tight">R$ {stats.pendingRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
             </div>
             <div className="mt-5 pt-4 border-t border-white/5 flex flex-col gap-1">
               <span className="text-[9px] font-normal text-[--secondary-text] opacity-40 uppercase tracking-widest">Saldo Pendente</span>
@@ -180,7 +180,7 @@ export default async function DashboardIndex() {
             <h2 className="font-serif text-[--success] text-base tracking-widest uppercase">Clientes</h2>
           </div>
           <div className="px-6 py-6 flex flex-col">
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-center gap-2">
               <span className="text-3xl font-bold text-[--foreground] leading-none">{clients.length}</span>
               <span className="text-[10px] font-medium text-[--secondary-text] opacity-30 uppercase tracking-widest">Ativos</span>
             </div>
@@ -198,7 +198,7 @@ export default async function DashboardIndex() {
             <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Vendas</h2>
           </div>
           <div className="px-6 py-6 flex flex-col">
-            <div className="flex items-baseline gap-2">
+            <div className="flex items-center gap-2">
               <span className="text-3xl font-bold text-[--foreground] leading-none">{stats.salesCount}</span>
               <span className="text-[10px] font-medium text-[--secondary-text] opacity-30 uppercase tracking-widest">Pedidos</span>
             </div>
