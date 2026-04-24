@@ -1,7 +1,4 @@
 import { getRoastBatches } from './torra/actions'
-import { formatDate } from '@/utils/date-utils'
-
-import { getRoastBatches } from './torra/actions'
 import { getFinancialStats } from './financeiro/actions'
 import { getClients } from './clientes/actions'
 import { getGreenCoffeeLots } from './estoque/actions'
