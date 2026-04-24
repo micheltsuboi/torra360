@@ -4,6 +4,8 @@ import { getClients } from './clientes/actions'
 import { getGreenCoffeeLots } from './estoque/actions'
 import { getPackages } from './pacotes/actions'
 import { formatDate } from '@/utils/date-utils'
+import { isAdmin } from '@/utils/auth'
+import { redirect } from 'next/navigation'
 import { 
   TrendingUp, 
   Users, 
@@ -16,6 +18,11 @@ import {
 } from 'lucide-react'
 
 export default async function DashboardIndex() {
+  // Redireciona se for Admin Master
+  if (await isAdmin()) {
+    redirect('/dashboard/admin')
+  }
+
   const now = new Date()
   const thirtyDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30).toISOString()
   
