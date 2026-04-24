@@ -102,6 +102,7 @@ input, select {
   font-family: var(--font-sans);
   transition: all 0.2s ease;
   width: 100%;
+  color-scheme: dark;
 }
 
 input:focus, select:focus {

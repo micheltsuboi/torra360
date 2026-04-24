@@ -2,6 +2,7 @@ import { getFinancialStats, getRecentTransactions, getExpensesList, getPendingSa
 import FinanceChart from './FinanceChart'
 import FinanceDashboardClient from './FinanceDashboardClient'
 import { formatDate } from '@/utils/date-utils'
+import { Calendar } from 'lucide-react'
 
 import { Suspense } from 'react'
 import { GlobalSkeleton } from '@/components/ui/Skeletons'
@@ -30,13 +31,12 @@ async function FinanceDataFetcher({ startDate, endDate }: { startDate?: string; 
   )
 }
 
-export default function FinancePage({
+export default async function FinancePage({
   searchParams,
 }: {
-  searchParams: { startDate?: string; endDate?: string }
+  searchParams: Promise<{ startDate?: string; endDate?: string }>
 }) {
-  const startDate = searchParams.startDate
-  const endDate = searchParams.endDate
+  const { startDate, endDate } = await searchParams
 
   return (
     <div className="flex flex-col gap-8 text-[--foreground] pb-10">
@@ -48,9 +48,11 @@ export default function FinancePage({
         </div>
 
         {/* Filtros de Data */}
-        <form className="flex flex-wrap items-center gap-3 bg-black/20 p-2 rounded-xl border border-white/5">
+        <form className="flex flex-wrap items-center gap-3 bg-black/20 p-2 rounded-xl border border-white/5" method="GET">
            <div className="flex flex-col">
-              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] ml-1 mb-1">Início</span>
+              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] ml-1 mb-1 flex items-center gap-1">
+                <Calendar className="w-2.5 h-2.5 text-[--primary]" /> Início
+              </span>
               <input 
                 type="date" 
                 name="startDate" 
@@ -59,7 +61,9 @@ export default function FinancePage({
               />
            </div>
            <div className="flex flex-col">
-              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] ml-1 mb-1">Fim</span>
+              <span className="text-[9px] capitalize tracking-widest text-[--secondary-text] ml-1 mb-1 flex items-center gap-1">
+                <Calendar className="w-2.5 h-2.5 text-[--primary]" /> Fim
+              </span>
               <input 
                 type="date" 
                 name="endDate" 
