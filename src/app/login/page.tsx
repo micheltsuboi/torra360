@@ -48,13 +48,18 @@ export default function LoginPage({
             <div className="p-3 text-sm text-[--danger] danger-bg border danger-border rounded-md text-center">
               {searchParams.error === 'tenant_inactive' ? (
                 <div className="flex flex-col gap-1">
-                  <span className="font-bold">Acesso Bloqueado</span>
-                  <span className="opacity-80">Sua organização está inativa. Entre em contato com o suporte para regularizar o acesso.</span>
+                  <span className="font-bold text-lg">Acesso Suspenso</span>
+                  <span className="opacity-80 text-xs">Sua organização está temporariamente inativa em nossa plataforma. Para regularizar seu acesso ao Torra 360, por favor, entre em contato com nossa equipe de suporte.</span>
                 </div>
               ) : searchParams.error === 'reset_sent' ? (
-                <div className="flex flex-col gap-1 text-[--success] bg-[--success]/10 border-[--success]/20">
+                <div className="flex flex-col gap-1 text-emerald-500">
                   <span className="font-bold">E-mail Enviado!</span>
-                  <span className="opacity-80">Verifique sua caixa de entrada para resetar a senha.</span>
+                  <span className="opacity-80 text-xs">Verifique sua caixa de entrada para redefinir sua senha.</span>
+                </div>
+              ) : searchParams.error === 'password_updated' ? (
+                <div className="flex flex-col gap-1 text-emerald-500">
+                  <span className="font-bold">Senha Atualizada!</span>
+                  <span className="opacity-80 text-xs">Sua nova senha já está valendo. Pode fazer o login agora.</span>
                 </div>
               ) : (
                 "Dados de acesso inválidos ou erro no servidor."
