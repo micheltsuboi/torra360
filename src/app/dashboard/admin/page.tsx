@@ -27,7 +27,7 @@ export default async function AdminMasterPage() {
       </div>
 
       {/* Stats Simplificado */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 w-full gap-6">
         <div className="glass-panel p-8 flex flex-col gap-3 border-t-2 border-[--primary]/30 relative overflow-hidden group wood-texture">
           <div className="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
             <Building2 className="w-5 h-5 text-[--primary]" />

@@ -150,10 +150,10 @@ export default function AdminClient({ initialTenants }: { initialTenants: Tenant
                     <button
                       onClick={() => handleToggleStatus(t.id, t.active)}
                       disabled={loadingId === t.id}
-                      className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-lg transition-all flex items-center gap-2 ml-auto border ${
+                      className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-lg transition-all flex items-center gap-2 ml-auto border h-fit ${
                         t.active 
-                          ? 'border-red-500/30 text-red-500 hover:bg-red-500/10' 
-                          : 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10'
+                          ? 'border-red-500 text-red-500 bg-red-500/10 hover:bg-red-500/20' 
+                          : 'border-emerald-500 text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/20'
                       } disabled:opacity-30`}
                     >
                       {loadingId === t.id ? (

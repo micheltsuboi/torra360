@@ -366,6 +366,13 @@ table tr td:first-child, table tr th:first-child {
 .text-\[\-\-danger\] { color: var(--danger); }
 .text-\[\-\-success\] { color: var(--success); }
 
+.text-red-500 { color: #ef4444 !important; }
+.text-emerald-500 { color: #10b981 !important; }
+.border-red-500 { border-color: #ef4444 !important; }
+.border-emerald-500 { border-color: #10b981 !important; }
+.bg-red-500\/10 { background-color: rgba(239, 68, 68, 0.1) !important; }
+.bg-emerald-500\/10 { background-color: rgba(16, 185, 129, 0.1) !important; }
+
 .border { border-width: 1px; border-style: solid; border-color: transparent;}
 .border-t { border-top-width: 1px; border-top-style: solid;}
 .border-b { border-bottom-width: 1px; border-bottom-style: solid;}
