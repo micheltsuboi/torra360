@@ -58,21 +58,38 @@ function LoginFormContent() {
             </label>
             <a href="/login/forgot-password" className="text-[10px] text-[--primary] hover:underline opacity-60 hover:opacity-100 transition-opacity">Esqueci minha senha</a>
           </div>
-          <div className="relative w-full flex items-center">
+          <div className="relative">
             <input
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
               required
               placeholder="••••••••"
-              className="bg-black/40 border-white/5 text-white placeholder:text-white/10 pr-12 focus:border-[--primary]/50 transition-all w-full h-11 block"
+              className="bg-black/40 border-white/5 text-white placeholder:text-white/10 pr-14 focus:border-[--primary]/50 transition-all w-full h-11"
+              style={{ paddingRight: '3.5rem' }}
             />
             <button
               type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-0 inset-y-0 w-12 flex items-center justify-center text-[--primary] hover:text-white transition-all cursor-pointer outline-none z-30 bg-transparent border-none p-0"
-              style={{ background: 'transparent', border: 'none', appearance: 'none' }}
-              title={showPassword ? "Esconder senha" : "Ver senha"}
+              onClick={(e) => {
+                e.preventDefault()
+                setShowPassword(!showPassword)
+              }}
+              className="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-[--primary] hover:text-white transition-all cursor-pointer z-50 bg-transparent border-none outline-none"
+              style={{ 
+                background: 'none', 
+                border: 'none', 
+                padding: '0', 
+                margin: '0',
+                position: 'absolute',
+                right: '0',
+                top: '0',
+                bottom: '0',
+                width: '3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                appearance: 'none'
+              }}
             >
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
