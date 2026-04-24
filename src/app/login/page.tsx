@@ -31,7 +31,10 @@ export default function LoginPage({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-sm text-left text-[--secondary-text]">Senha</label>
+            <div className="flex justify-between items-center">
+              <label htmlFor="password" className="text-sm text-left text-[--secondary-text]">Senha</label>
+              <a href="/login/forgot-password" className="text-[10px] text-[--primary] hover:underline opacity-70">Esqueci minha senha</a>
+            </div>
             <input
               id="password"
               name="password"
@@ -47,6 +50,11 @@ export default function LoginPage({
                 <div className="flex flex-col gap-1">
                   <span className="font-bold">Acesso Bloqueado</span>
                   <span className="opacity-80">Sua organização está inativa. Entre em contato com o suporte para regularizar o acesso.</span>
+                </div>
+              ) : searchParams.error === 'reset_sent' ? (
+                <div className="flex flex-col gap-1 text-[--success] bg-[--success]/10 border-[--success]/20">
+                  <span className="font-bold">E-mail Enviado!</span>
+                  <span className="opacity-80">Verifique sua caixa de entrada para resetar a senha.</span>
                 </div>
               ) : (
                 "Dados de acesso inválidos ou erro no servidor."

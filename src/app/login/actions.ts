@@ -58,3 +58,33 @@ export async function logout() {
   revalidatePath('/', 'layout')
   redirect('/login')
 }
+
+export async function resetPassword(formData: FormData) {
+  const supabase = await createClient()
+  const email = formData.get('email') as string
+  
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/login/update-password`,
+  })
+
+  if (error) {
+    redirect('/login/forgot-password?error=Erro ao enviar e-mail')
+  }
+
+  redirect('/login?error=reset_sent')
+}
+
+export async function updatePassword(formData: FormData) {
+  const supabase = await createClient()
+  const password = formData.get('password') as string
+  
+  const { error } = await supabase.auth.updateUser({
+    password: password
+  })
+
+  if (error) {
+    redirect('/login/update-password?error=Erro ao atualizar senha')
+  }
+
+  redirect('/login?error=password_updated')
+}

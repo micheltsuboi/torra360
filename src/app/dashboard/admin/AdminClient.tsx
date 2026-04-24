@@ -152,8 +152,8 @@ export default function AdminClient({ initialTenants }: { initialTenants: Tenant
                       disabled={loadingId === t.id}
                       className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2 rounded-lg transition-all flex items-center gap-2 ml-auto border ${
                         t.active 
-                          ? 'border-[--danger]/30 text-[--danger] hover:bg-[--danger]/10' 
-                          : 'border-[--success]/30 text-[--success] hover:bg-[--success]/10'
+                          ? 'border-red-500/30 text-red-500 hover:bg-red-500/10' 
+                          : 'border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10'
                       } disabled:opacity-30`}
                     >
                       {loadingId === t.id ? (
@@ -161,12 +161,12 @@ export default function AdminClient({ initialTenants }: { initialTenants: Tenant
                       ) : t.active ? (
                         <>
                           <XCircle className="w-3 h-3" />
-                          Bloquear Acesso
+                          Bloquear Empresa
                         </>
                       ) : (
                         <>
                           <CheckCircle2 className="w-3 h-3" />
-                          Reativar Empresa
+                          Ativar Empresa
                         </>
                       )}
                     </button>
