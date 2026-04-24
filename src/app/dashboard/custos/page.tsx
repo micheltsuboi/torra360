@@ -22,7 +22,7 @@ export default async function CustosPage() {
         {/* Listagem de Pacotes */}
         {packages.map((pkg: any) => (
           <div key={pkg.id} className="glass-panel overflow-hidden flex flex-col border-t-2 border-[--primary] shadow-lg hover:shadow-2xl transition-all duration-300">
-             <div className="p-4 border-b border-[--card-border] flex justify-between items-start card-texture-header bg-black/20">
+             <div className="p-4 border-b border-[--card-border] flex justify-between items-start wood-texture bg-black/40">
                 <div className="flex-1">
                    <form action={updateExpensePackage} className="flex items-center gap-2 group/title">
                       <input type="hidden" name="id" value={pkg.id} />

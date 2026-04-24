@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getGreenCoffeeLots() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data, error } = await supabase
     .from('green_coffee')
@@ -42,7 +30,7 @@ export async function getGreenCoffeeLots() {
 
 export async function createGreenCoffeeLot(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const name = formData.get('name') as string
   const total_qty_kg = parseFloat(formData.get('total_qty_kg') as string)
@@ -79,7 +67,7 @@ export async function createGreenCoffeeLot(formData: FormData) {
 
 export async function updateGreenCoffeeLot(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const id = formData.get('id') as string
   const name = formData.get('name') as string
@@ -139,7 +127,7 @@ export async function deleteGreenCoffeeLot(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   // Verificar se há torras vinculadas para evitar erro brusco de FK
   const { count } = await supabase
@@ -167,7 +155,7 @@ export async function createBlend(data: {
   components: { lotId: string, qty: number }[]
 }) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const lotIds = data.components.map(c => c.lotId)
   const { data: lots, error: fetchError } = await supabase

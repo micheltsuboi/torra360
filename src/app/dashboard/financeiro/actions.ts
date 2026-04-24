@@ -2,23 +2,10 @@
 
 import { createClient } from '@/utils/supabase/server'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getFinancialStats(startDate?: string, endDate?: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   // 1. Faturamento (Vendas)
   let salesQuery = supabase
@@ -100,7 +87,7 @@ export async function getFinancialStats(startDate?: string, endDate?: string) {
 
 export async function getRecentTransactions(startDate?: string, endDate?: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   let query = supabase
     .from('sale_transactions')
@@ -118,7 +105,7 @@ export async function getRecentTransactions(startDate?: string, endDate?: string
 
 export async function getExpensesList(startDate?: string, endDate?: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   let query = supabase
     .from('expenses')
@@ -136,7 +123,7 @@ export async function getExpensesList(startDate?: string, endDate?: string) {
 
 export async function createExpense(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const amount = parseFloat(formData.get('amount') as string)
   const date = formData.get('date') as string
@@ -164,7 +151,7 @@ export async function createExpense(formData: FormData) {
 
 export async function updateExpense(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const id = formData.get('id') as string
   const amount = parseFloat(formData.get('amount') as string)
@@ -194,7 +181,7 @@ export async function updateExpense(formData: FormData) {
 
 export async function deleteExpense(id: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const { error } = await supabase
     .from('expenses')
@@ -210,7 +197,7 @@ export async function deleteExpense(id: string) {
 
 export async function getPendingSales() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data: pendingSales } = await supabase
     .from('sale_transactions')
@@ -224,7 +211,7 @@ export async function getPendingSales() {
 
 export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { error } = await supabase
     .from('sale_transactions')
@@ -245,7 +232,7 @@ export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string)
 
 export async function createIncome(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const date = formData.get('date') as string
   const method = formData.get('payment_method') as string

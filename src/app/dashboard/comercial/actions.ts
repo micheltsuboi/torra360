@@ -2,25 +2,13 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 // ====== BUSCA DE DADOS PRO PDV ======
 export async function getPDVData() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   // Clientes
   const { data: clients } = await supabase
@@ -46,7 +34,7 @@ export async function getPDVData() {
 // ====== SALVAR VENDA PDV ======
 export async function createPDVSale(payload: any) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { client_id, total_amount, discount_amount, final_amount, payment_method, items, cashback_redeemed } = payload
 
@@ -145,7 +133,7 @@ export async function createPDVSale(payload: any) {
 
 export async function getClientLoyaltyBalance(clientId: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data } = await supabase
     .from('loyalty_transactions')
@@ -159,7 +147,7 @@ export async function getClientLoyaltyBalance(clientId: string) {
 
 export async function getLoyaltySettings() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data } = await supabase.from('loyalty_settings').select('*').eq('tenant_id', tenantId).single()
   return data
 }
@@ -167,7 +155,7 @@ export async function getLoyaltySettings() {
 // ====== HISTÓRICO ======
 export async function getSalesHistory() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const { data, error } = await supabase
     .from('sale_transactions')
@@ -186,7 +174,7 @@ export async function getSalesHistory() {
 // ====== DESPESAS ======
 export async function getExpenses() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data } = await supabase
     .from('expenses')
     .select('*')
@@ -197,7 +185,7 @@ export async function getExpenses() {
 
 export async function createExpense(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const category = formData.get('category') as string
   const date = formData.get('date') as string
@@ -220,7 +208,7 @@ export async function deleteSale(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   // 1. Buscar itens da venda para devolver ao estoque
   const { data: items } = await supabase
@@ -258,7 +246,7 @@ export async function deleteSale(formData: FormData) {
 
 export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { error } = await supabase
     .from('sale_transactions')
@@ -278,7 +266,7 @@ export async function markSaleAsPaid(saleId: string, finalPaymentMethod: string)
 
 export async function updateSale(saleId: string, data: any) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const updateData = { ...data }
   if (data.payment_status === 'paid') {

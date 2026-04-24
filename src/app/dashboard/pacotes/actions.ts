@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getRoastBatchesAvailable() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data, error } = await supabase
     .from('roast_batches')
@@ -38,7 +26,7 @@ export async function getRoastBatchesAvailable() {
 
 export async function getPackages() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data, error } = await supabase
     .from('packaging_batches')
@@ -142,7 +130,7 @@ export async function getPackages() {
 
 export async function createPackages(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const isBlend = formData.get('is_blend') === 'true'
   const roast_batch_id = formData.get('roast_batch_id') as string
@@ -296,7 +284,7 @@ export async function deletePackage(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('packaging_batches').delete().eq('id', id).eq('tenant_id', tenantId)
   
@@ -305,7 +293,7 @@ export async function deletePackage(formData: FormData) {
 
 export async function updatePackage(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const id = formData.get('id') as string
   const date = formData.get('date') as string

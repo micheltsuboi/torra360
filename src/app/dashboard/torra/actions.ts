@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getRoastBatches() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   // Tenta consultar a view primeiro
   const { data: viewData, error: viewError } = await supabase
@@ -57,7 +45,7 @@ export async function getRoastBatches() {
 
 export async function getAvailableGreenLots() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data } = await supabase
     .from('green_coffee')
@@ -70,7 +58,7 @@ export async function getAvailableGreenLots() {
 
 export async function createRoastBatch(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const green_coffee_id = formData.get('green_coffee_id') as string
   const date = formData.get('date') as string
@@ -125,7 +113,7 @@ export async function createRoastBatch(formData: FormData) {
 
 export async function updateRoastBatch(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const id = formData.get('id') as string
   const green_coffee_id = formData.get('green_coffee_id') as string
@@ -256,7 +244,7 @@ export async function deleteRoastBatch(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   // 1. Buscar detalhes antes de excluir para devolver ao estoque
   const { data: batch } = await supabase

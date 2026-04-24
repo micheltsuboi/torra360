@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getClients() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data, error } = await supabase
     .from('clients')
@@ -36,7 +24,7 @@ export async function getClients() {
 
 export async function createClientRecord(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const name = formData.get('name') as string
   const phone = formData.get('phone') as string
@@ -65,7 +53,7 @@ export async function createClientRecord(formData: FormData) {
 
 export async function updateClientRecord(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const id = formData.get('id') as string
   const name = formData.get('name') as string
@@ -95,7 +83,7 @@ export async function deleteClientRecord(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   await supabase.from('clients').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/clientes')

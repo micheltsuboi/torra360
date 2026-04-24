@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getExpensePackages() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   const { data } = await supabase
     .from('expense_packages')
@@ -31,7 +19,7 @@ export async function getExpensePackages() {
 
 export async function createExpensePackage(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const name = formData.get('name') as string
   if (!name) return
@@ -50,7 +38,7 @@ export async function createExpensePackage(formData: FormData) {
 
 export async function updateExpensePackage(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const id = formData.get('id') as string
   const name = formData.get('name') as string
@@ -65,7 +53,7 @@ export async function deleteExpensePackage(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   await supabase.from('expense_packages').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/custos')
@@ -73,7 +61,7 @@ export async function deleteExpensePackage(formData: FormData) {
 
 export async function addExpenseItem(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const package_id = formData.get('package_id') as string
   const name = formData.get('name') as string
@@ -102,7 +90,7 @@ export async function addExpenseItem(formData: FormData) {
 
 export async function updateExpenseItem(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const id = formData.get('id') as string
   const package_id = formData.get('package_id') as string
@@ -127,7 +115,7 @@ export async function updateExpenseItem(formData: FormData) {
 
 export async function removeExpenseItem(formData: FormData) {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
 
   const id = formData.get('id') as string
   const package_id = formData.get('package_id') as string

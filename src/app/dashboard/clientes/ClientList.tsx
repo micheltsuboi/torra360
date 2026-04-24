@@ -34,7 +34,7 @@ export default function ClientList({ clients }: { clients: any[] }) {
       </div>
 
       <div className="glass-panel overflow-hidden border-t-2 border-[--primary]/20">
-        <div className="p-3 border-b border-[--card-border] card-texture-header bg-black/20">
+        <div className="p-3 border-b border-[--card-border] wood-texture bg-black/40 flex items-center">
           <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Listagem de Clientes</h2>
         </div>
         <div className="overflow-x-auto">

@@ -2,24 +2,12 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { getCachedTenantId } from '@/utils/tenant'
 
-async function getTenantId(supabase: any) {
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Usuário não autenticado')
-  
-  const { data: profile } = await supabase
-    .from('users')
-    .select('tenant_id')
-    .eq('id', user.id)
-    .single()
-    
-  if (!profile) throw new Error('Perfil não encontrado')
-  return profile.tenant_id
-}
 
 export async function getCoffeeTypes() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data, error } = await supabase
     .from('coffee_types')
     .select('*')
@@ -38,7 +26,7 @@ export async function createCoffeeType(formData: FormData) {
   if (!name) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('coffee_types').insert({ tenant_id: tenantId, name })
   revalidatePath('/dashboard/parametros')
@@ -50,7 +38,7 @@ export async function deleteCoffeeType(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('coffee_types').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')
@@ -59,7 +47,7 @@ export async function deleteCoffeeType(formData: FormData) {
 
 export async function getQualityLevels() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data, error } = await supabase
     .from('quality_levels')
     .select('*')
@@ -78,7 +66,7 @@ export async function createQualityLevel(formData: FormData) {
   if (!name) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('quality_levels').insert({ tenant_id: tenantId, name })
   revalidatePath('/dashboard/parametros')
@@ -90,7 +78,7 @@ export async function deleteQualityLevel(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('quality_levels').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')
@@ -99,7 +87,7 @@ export async function deleteQualityLevel(formData: FormData) {
 
 export async function getProviders() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data, error } = await supabase
     .from('providers')
     .select('*')
@@ -118,7 +106,7 @@ export async function createProvider(formData: FormData) {
   if (!name) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('providers').insert({ tenant_id: tenantId, name })
   revalidatePath('/dashboard/parametros')
@@ -130,7 +118,7 @@ export async function deleteProvider(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('providers').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')
@@ -139,7 +127,7 @@ export async function deleteProvider(formData: FormData) {
 
 export async function getOrigins() {
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   const { data, error } = await supabase
     .from('origins')
     .select('*')
@@ -158,7 +146,7 @@ export async function createOrigin(formData: FormData) {
   if (!name) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('origins').insert({ tenant_id: tenantId, name })
   revalidatePath('/dashboard/parametros')
@@ -170,7 +158,7 @@ export async function deleteOrigin(formData: FormData) {
   if (!id) return
 
   const supabase = await createClient()
-  const tenantId = await getTenantId(supabase)
+  const tenantId = await getCachedTenantId()
   
   await supabase.from('origins').delete().eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')

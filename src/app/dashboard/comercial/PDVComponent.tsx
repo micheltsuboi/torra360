@@ -99,7 +99,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full h-full">
       {/* Esquerda: Catálogo de Produtos para Venda */}
       <div className="glass-panel overflow-hidden flex flex-col h-full max-h-[600px]">
-        <div className="p-2 border-b border-[--card-border] card-texture-header">
+        <div className="p-2 border-b border-[--card-border] wood-texture bg-black/40">
            <h2 className="font-serif text-[--primary]">Estoque</h2>
         </div>
         <div className="p-2 overflow-y-auto">
@@ -130,7 +130,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
 
       {/* Direita: Carrinho e Checkout */}
       <div className="glass-panel overflow-hidden flex flex-col h-full bg-[#1a1411]">
-        <div className="p-2 border-b border-[--card-border] flex justify-between items-center card-texture-header">
+        <div className="p-2 border-b border-[--card-border] flex justify-between items-center wood-texture bg-black/40">
            <h2 className="font-serif text-[--foreground] flex items-center gap-2">
              <ShoppingCart className="w-5 h-5 text-[--primary]" />
              Balcão / Carrinho

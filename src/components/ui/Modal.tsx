@@ -34,8 +34,8 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="card-texture-header p-4 flex justify-between items-center sticky top-0 z-30">
-          <h2 className="text-xl font-serif text-[--primary] mb-0">{title}</h2>
+        <div className="wood-texture bg-black/60 p-4 flex justify-between items-center sticky top-0 z-30">
+          <h2 className="text-xl font-serif text-[--primary] mb-0 tracking-widest">{title}</h2>
           <button 
             onClick={onClose}
             className="p-2 hover:bg-white/10 rounded-full transition-colors text-[--secondary-text] hover:text-[--foreground]"
