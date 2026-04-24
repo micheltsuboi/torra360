@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@/utils/supabase/server'
-
+import { getCachedTenantId } from '@/utils/tenant'
 
 export async function getFinancialStats(startDate?: string, endDate?: string) {
   const supabase = await createClient()
