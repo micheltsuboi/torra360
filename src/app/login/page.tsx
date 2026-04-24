@@ -58,19 +58,20 @@ function LoginFormContent() {
             </label>
             <a href="/login/forgot-password" className="text-[10px] text-[--primary] hover:underline opacity-60 hover:opacity-100 transition-opacity">Esqueci minha senha</a>
           </div>
-          <div className="relative group">
+          <div className="relative flex items-center">
             <input
               id="password"
               name="password"
               type={showPassword ? "text" : "password"}
               required
               placeholder="••••••••"
-              className="bg-black/40 border-white/5 text-white placeholder:text-white/10 pr-12 focus:border-[--primary]/50 transition-all"
+              className="bg-black/40 border-white/5 text-white placeholder:text-white/10 pr-12 focus:border-[--primary]/50 transition-all w-full"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-0 top-0 h-full w-12 flex items-center justify-center text-white/30 hover:text-[--primary] transition-all group-focus-within:text-white/50"
+              className="absolute right-3 p-2 bg-transparent border-none text-white/30 hover:text-[--primary] transition-all cursor-pointer flex items-center justify-center outline-none"
+              style={{ background: 'transparent', border: 'none', appearance: 'none' }}
               title={showPassword ? "Esconder senha" : "Ver senha"}
             >
               {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
