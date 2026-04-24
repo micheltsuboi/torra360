@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
 import { logout } from '@/app/login/actions'
 import SidebarNav from './SidebarNav'
+import { isAdmin as checkIsAdmin } from '@/utils/auth'
 import { 
   LogOut, 
   ChevronDown,
@@ -18,6 +19,8 @@ export default async function DashboardLayout({
   if (!user) {
     redirect('/login')
   }
+
+  const isAdmin = await checkIsAdmin()
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -41,7 +44,7 @@ export default async function DashboardLayout({
           />
         </div>
 
-        <SidebarNav />
+        <SidebarNav isAdmin={isAdmin} />
 
         {/* User Profile / Logout */}
         <div className="w-full pt-4 border-t border-[--card-border] mt-auto">

@@ -11,10 +11,11 @@ import {
   Users,
   Coins,
   BarChart3,
-  Star
+  Star,
+  ShieldCheck
 } from 'lucide-react'
 
-export default function SidebarNav() {
+export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname()
 
   const navItems = [
@@ -31,22 +32,32 @@ export default function SidebarNav() {
     { name: 'Custos', href: '/dashboard/custos', icon: Coins },
   ]
 
+  // Adiciona o item de Admin Master se o usuário tiver permissão
+  if (isAdmin) {
+    navItems.push({ name: 'Admin Master', href: '/dashboard/admin', icon: ShieldCheck })
+  }
+
   return (
     <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
       {navItems.map((item) => {
         const Icon = item.icon
         const isActive = pathname === item.href
+        const isAdminItem = item.href === '/dashboard/admin'
 
         return (
           <a 
             key={item.href}
             href={item.href} 
             className={`flex items-center gap-2 p-2 w-full rounded-md transition-all nav-item-glow ${
-              isActive ? 'nav-active' : 'hover:bg-[--primary]/10 hover:text-[--primary]'
+              isActive 
+                ? 'nav-active' 
+                : isAdminItem 
+                  ? 'hover:bg-[--primary]/10 text-[--primary] border border-[--primary]/20' 
+                  : 'hover:bg-[--primary]/10 hover:text-[--primary]'
             }`}
           >
             <Icon className={`w-5 h-5 ${isActive ? '' : 'opacity-80'}`} />
-            <span className="hidden lg:block text-sm font-medium">{item.name}</span>
+            <span className={`hidden lg:block text-sm font-medium ${isAdminItem ? 'font-bold' : ''}`}>{item.name}</span>
           </a>
         )
       })}
