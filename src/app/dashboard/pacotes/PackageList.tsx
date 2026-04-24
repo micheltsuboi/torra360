@@ -136,7 +136,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                       </td>
                       <td className="p-3 border-l border-white/5 text-center">
                         <div className="flex flex-col items-center justify-center leading-none">
-                          <div className={`font-bold text-[13px] tracking-tight whitespace-nowrap ${p.quantity_units < 5 ? 'text-[--danger]' : 'text-[--primary]'}`}>
+                          <div className={`font-bold text-[13px] tracking-tight whitespace-nowrap ${p.quantity_units > 0 ? 'text-[--success]' : 'text-[--danger]'}`}>
                             {p.quantity_units}/<span className="opacity-40">{p.initial_quantity || p.quantity_units}</span>
                           </div>
                           <div className="opacity-30 text-[9px] mt-0.5 tracking-tighter lowercase">unidades</div>
