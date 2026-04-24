@@ -2,11 +2,12 @@ import { login, signup } from './actions'
 import ErrorModal from './ErrorModal'
 import { Suspense } from 'react'
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams: { error: string }
+export default async function LoginPage(props: {
+  searchParams: Promise<{ error: string }>
 }) {
+  const searchParams = await props.searchParams
+  const errorMsg = searchParams?.error
+  
   return (
     <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
       {/* Background Decor */}
@@ -52,20 +53,22 @@ export default function LoginPage({
             />
           </div>
 
-          {searchParams?.error && searchParams.error !== 'tenant_inactive' && (
+          {errorMsg && errorMsg !== 'tenant_inactive' && (
             <div className="p-3 text-sm text-[--danger] danger-bg border danger-border rounded-md text-center">
-              {searchParams.error === 'reset_sent' ? (
+              {errorMsg === 'reset_sent' ? (
                 <div className="flex flex-col gap-1 text-emerald-500">
                   <span className="font-bold">E-mail Enviado!</span>
                   <span className="opacity-80 text-xs">Verifique sua caixa de entrada para redefinir sua senha.</span>
                 </div>
-              ) : searchParams.error === 'password_updated' ? (
+              ) : errorMsg === 'password_updated' ? (
                 <div className="flex flex-col gap-1 text-emerald-500">
                   <span className="font-bold">Senha Atualizada!</span>
                   <span className="opacity-80 text-xs">Sua nova senha já está valendo. Pode fazer o login agora.</span>
                 </div>
+              ) : errorMsg === 'Invalid login credentials' ? (
+                "E-mail ou senha incorretos."
               ) : (
-                "Dados de acesso inválidos ou erro no servidor."
+                errorMsg || "Dados de acesso inválidos ou erro no servidor."
               )}
             </div>
           )}

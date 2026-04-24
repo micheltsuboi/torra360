@@ -10,14 +10,15 @@ export async function login(formData: FormData) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
-    email: formData.get('email') as string,
+    email: (formData.get('email') as string).trim(),
     password: formData.get('password') as string,
   }
 
   const { error } = await supabase.auth.signInWithPassword(data)
 
   if (error) {
-    redirect('/login?error=Invalid login credentials')
+    // Retorna a mensagem de erro específica do Supabase para facilitar o diagnóstico
+    redirect(`/login?error=${encodeURIComponent(error.message)}`)
   }
 
   revalidatePath('/', 'layout')
