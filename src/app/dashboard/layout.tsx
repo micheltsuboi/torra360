@@ -76,7 +76,7 @@ export default async function DashboardLayout({
         </header>
 
         {/* Content Render */}
-        <div className="p-6 pt-0 max-w-7xl mx-auto">
+        <div className="p-8 pt-0 w-full">
           {children}
         </div>
       </main>

@@ -40,11 +40,11 @@ export default async function DashboardIndex() {
     : "0.0"
 
   return (
-    <div className="flex flex-col pt-12 pb-24 max-w-[1500px] mx-auto min-h-full">
-      {/* Header da Página - Mais respiro no topo */}
-      <div className="flex flex-col gap-2 px-2 mb-16">
-        <h1 className="text-4xl font-serif text-[--foreground] tracking-tight">Visão Geral</h1>
-        <p className="text-[11px] uppercase tracking-[0.5em] text-[--secondary-text] opacity-40 font-medium">Monitoramento analítico da operação</p>
+    <div className="flex flex-col pb-32 w-full max-w-[1600px] mx-auto min-h-screen">
+      {/* Header da Página - Mais respiro no topo e margem de fundo massiva */}
+      <div className="flex flex-col gap-3 px-4 mt-8 mb-20">
+        <h1 className="text-5xl font-serif text-[--foreground] tracking-tight">Visão Geral</h1>
+        <p className="text-[12px] uppercase tracking-[0.6em] text-[--secondary-text] opacity-50 font-semibold">Monitoramento Analítico & Operacional</p>
       </div>
 
       {/* BLOCO SUPERIOR: Performance e Lotes - ESPAÇO EXPLÍCITO ABAIXO */}
