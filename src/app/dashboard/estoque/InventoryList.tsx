@@ -88,7 +88,7 @@ export default function InventoryList({ lots }: { lots: any[] }) {
                         </div>
                       </td>
                       <td className="p-2 border-l border-white/10 bg-[--primary]/5">
-                        <div className={`flex flex-col ${lot.available_qty_kg < 10 ? 'text-[--danger]' : 'text-[--success]'}`}>
+                        <div className={`flex flex-col ${lot.available_qty_kg > 0 ? 'text-[--success]' : 'text-[--danger]'}`}>
                           <span className="text-lg font-bold">{lot.available_qty_kg.toFixed(2)} kg</span>
                           <span className="text-[9px] opacity-60 font-bold">em estoque</span>
                         </div>
