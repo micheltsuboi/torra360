@@ -18,8 +18,11 @@ import {
 export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
   const pathname = usePathname()
 
-  const navItems = [
+  const commonItems = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  ]
+
+  const roasteryItems = [
     { name: 'Configurações', href: '/dashboard/parametros', icon: Settings },
     { name: 'Café Verde', href: '/dashboard/estoque', icon: Leaf },
     { name: 'Produção / Torra', href: '/dashboard/torra', icon: Flame },
@@ -32,10 +35,16 @@ export default function SidebarNav({ isAdmin }: { isAdmin?: boolean }) {
     { name: 'Custos', href: '/dashboard/custos', icon: Coins },
   ]
 
-  // Adiciona o item de Admin Master se o usuário tiver permissão
-  if (isAdmin) {
-    navItems.push({ name: 'Admin Master', href: '/dashboard/admin', icon: ShieldCheck })
-  }
+  // Se for Admin Master, mostramos um menu muito reduzido
+  const navItems = isAdmin 
+    ? [
+        ...commonItems,
+        { name: 'Admin Master', href: '/dashboard/admin', icon: ShieldCheck }
+      ]
+    : [
+        ...commonItems,
+        ...roasteryItems
+      ]
 
   return (
     <nav className="flex-1 w-full flex flex-col gap-2 items-center lg:items-start text-[--secondary-text] overflow-y-auto pr-2 scrollbar-hide">
