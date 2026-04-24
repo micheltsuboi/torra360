@@ -42,8 +42,15 @@ export default function LoginPage({
           </div>
 
           {searchParams?.error && (
-            <div className="p-3 text-sm text-[--danger] danger-bg border danger-border rounded-md">
-              {searchParams.error}
+            <div className="p-3 text-sm text-[--danger] danger-bg border danger-border rounded-md text-center">
+              {searchParams.error === 'tenant_inactive' ? (
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold">Acesso Bloqueado</span>
+                  <span className="opacity-80">Sua organização está inativa. Entre em contato com o suporte para regularizar o acesso.</span>
+                </div>
+              ) : (
+                "Dados de acesso inválidos ou erro no servidor."
+              )}
             </div>
           )}
 
