@@ -33,6 +33,19 @@ export async function createCoffeeType(formData: FormData) {
   revalidatePath('/dashboard/estoque')
 }
 
+export async function updateCoffeeType(formData: FormData) {
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+  
+  await supabase.from('coffee_types').update({ name }).eq('id', id).eq('tenant_id', tenantId)
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
 export async function deleteCoffeeType(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
@@ -69,6 +82,19 @@ export async function createQualityLevel(formData: FormData) {
   const tenantId = await getCachedTenantId()
   
   await supabase.from('quality_levels').insert({ tenant_id: tenantId, name })
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
+export async function updateQualityLevel(formData: FormData) {
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+  
+  await supabase.from('quality_levels').update({ name }).eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')
   revalidatePath('/dashboard/estoque')
 }
@@ -113,6 +139,19 @@ export async function createProvider(formData: FormData) {
   revalidatePath('/dashboard/estoque')
 }
 
+export async function updateProvider(formData: FormData) {
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+  
+  await supabase.from('providers').update({ name }).eq('id', id).eq('tenant_id', tenantId)
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
 export async function deleteProvider(formData: FormData) {
   const id = formData.get('id') as string
   if (!id) return
@@ -149,6 +188,19 @@ export async function createOrigin(formData: FormData) {
   const tenantId = await getCachedTenantId()
   
   await supabase.from('origins').insert({ tenant_id: tenantId, name })
+  revalidatePath('/dashboard/parametros')
+  revalidatePath('/dashboard/estoque')
+}
+
+export async function updateOrigin(formData: FormData) {
+  const id = formData.get('id') as string
+  const name = formData.get('name') as string
+  if (!id || !name) return
+
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+  
+  await supabase.from('origins').update({ name }).eq('id', id).eq('tenant_id', tenantId)
   revalidatePath('/dashboard/parametros')
   revalidatePath('/dashboard/estoque')
 }
