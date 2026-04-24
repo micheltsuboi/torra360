@@ -40,33 +40,36 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  if (user && isAuthRoute) {
-    const url = request.nextUrl.clone()
-    url.pathname = '/dashboard'
-    return NextResponse.redirect(url)
-  }
-
-  // Verificação de Tenant Ativo para rotas protegidas
-  if (user && isProtectedRoute) {
+  // Verificação de Tenant e Redirecionamento para usuários logados
+  if (user) {
     const { data: userData } = await supabase
       .from('users')
       .select('role, tenants(active)')
       .eq('id', user.id)
       .single();
 
-    // Se não for admin e o tenant estiver inativo, bloqueia o acesso
     const isTenantInactive = userData?.tenants && 
       (Array.isArray(userData.tenants) ? userData.tenants[0]?.active === false : (userData.tenants as any).active === false);
 
+    // Se o tenant estiver inativo e não for admin
     if (userData && userData.role !== 'admin' && isTenantInactive) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/login'
-      url.searchParams.set('error', 'tenant_inactive')
+      if (isProtectedRoute) {
+        const url = request.nextUrl.clone()
+        url.pathname = '/login'
+        url.searchParams.set('error', 'tenant_inactive')
+        return NextResponse.redirect(url)
+      }
       
-      // Opcional: Limpar cookies da sessão para forçar logout no cliente
-      const response = NextResponse.redirect(url)
-      response.cookies.delete('sb-access-token') // Exemplo, o Supabase gerencia isso, mas forçar o redirect já ajuda
-      return response
+      // Se estiver em rota de auth mas com tenant inativo, não redireciona para o dashboard
+      // Apenas retorna a resposta padrão (mantém no login/signup)
+      return supabaseResponse
+    }
+
+    // Se o usuário está logado e o tenant está ATIVO (ou é admin)
+    if (isAuthRoute) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/dashboard'
+      return NextResponse.redirect(url)
     }
   }
 

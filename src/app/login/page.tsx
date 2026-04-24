@@ -1,4 +1,6 @@
 import { login, signup } from './actions'
+import ErrorModal from './ErrorModal'
+import { Suspense } from 'react'
 
 export default function LoginPage({
   searchParams,
@@ -10,6 +12,10 @@ export default function LoginPage({
       {/* Background Decor */}
       <div className="absolute top-0 left-0 w-full h-full wood-texture opacity-10 pointer-events-none" />
       
+      <Suspense fallback={null}>
+        <ErrorModal />
+      </Suspense>
+
       <div className="relative z-10 w-full max-w-md p-8 glass-panel">
         <div className="text-center mb-10 flex flex-col items-center">
           <div className="w-full max-w-[240px] px-2 mb-4">
@@ -27,6 +33,7 @@ export default function LoginPage({
               type="email"
               required
               placeholder="voce@exemplo.com"
+              className="bg-black/20 border-white/10 text-white placeholder:text-white/20"
             />
           </div>
 
@@ -41,17 +48,13 @@ export default function LoginPage({
               type="password"
               required
               placeholder="••••••••"
+              className="bg-black/20 border-white/10 text-white placeholder:text-white/20"
             />
           </div>
 
-          {searchParams?.error && (
+          {searchParams?.error && searchParams.error !== 'tenant_inactive' && (
             <div className="p-3 text-sm text-[--danger] danger-bg border danger-border rounded-md text-center">
-              {searchParams.error === 'tenant_inactive' ? (
-                <div className="flex flex-col gap-1">
-                  <span className="font-bold text-lg">Acesso Suspenso</span>
-                  <span className="opacity-80 text-xs">Sua organização está temporariamente inativa em nossa plataforma. Para regularizar seu acesso ao Torra 360, por favor, entre em contato com nossa equipe de suporte.</span>
-                </div>
-              ) : searchParams.error === 'reset_sent' ? (
+              {searchParams.error === 'reset_sent' ? (
                 <div className="flex flex-col gap-1 text-emerald-500">
                   <span className="font-bold">E-mail Enviado!</span>
                   <span className="opacity-80 text-xs">Verifique sua caixa de entrada para redefinir sua senha.</span>
