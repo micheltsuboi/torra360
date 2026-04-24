@@ -27,26 +27,23 @@ export default async function AdminMasterPage() {
       </div>
 
       {/* Stats Simplificado */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="glass-panel p-6 flex flex-col gap-2 border-t-2 border-[--primary]/30 relative overflow-hidden group">
-          <div className="flex items-center gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
-            <Building2 className="w-4 h-4 text-[--primary]" />
-            <span className="text-xs uppercase tracking-widest font-bold">Total de Empresas</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="glass-panel p-8 flex flex-col gap-3 border-t-2 border-[--primary]/30 relative overflow-hidden group wood-texture">
+          <div className="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+            <Building2 className="w-5 h-5 text-[--primary]" />
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Total de Empresas</span>
           </div>
-          <div className="text-4xl font-serif text-[--primary]">{tenants.length}</div>
-          <div className="text-[10px] text-[--secondary-text] opacity-40 uppercase font-bold tracking-tighter">Empresas Cadastradas no Sistema</div>
-          <div className="absolute top-0 right-0 p-4 opacity-5">
-             <Building2 className="w-16 h-16" />
-          </div>
+          <div className="text-5xl font-serif text-[--primary] drop-shadow-glow">{tenants.length}</div>
+          <div className="text-[10px] text-[--secondary-text] opacity-40 uppercase font-bold tracking-widest">Base global cadastrada</div>
         </div>
 
-        <div className="glass-panel p-6 flex flex-col gap-2 border-t-2 border-[--success]/30 relative overflow-hidden group">
-          <div className="flex items-center gap-2 opacity-40 group-hover:opacity-100 transition-opacity">
-            <Building2 className="w-4 h-4 text-[--success]" />
-            <span className="text-xs uppercase tracking-widest font-bold">Empresas Ativas</span>
+        <div className="glass-panel p-8 flex flex-col gap-3 border-t-2 border-[--success]/30 relative overflow-hidden group wood-texture">
+          <div className="flex items-center gap-3 opacity-60 group-hover:opacity-100 transition-opacity">
+            <ShieldCheck className="w-5 h-5 text-[--success]" />
+            <span className="text-[10px] uppercase tracking-[0.2em] font-bold">Operações Ativas</span>
           </div>
-          <div className="text-4xl font-serif text-[--success]">{tenants.filter(t => t.active).length}</div>
-          <div className="text-[10px] text-[--secondary-text] opacity-40 uppercase font-bold tracking-tighter">Operando Atualmente</div>
+          <div className="text-5xl font-serif text-[--success] drop-shadow-glow">{tenants.filter(t => t.active).length}</div>
+          <div className="text-[10px] text-[--secondary-text] opacity-40 uppercase font-bold tracking-widest">Licenças em vigor</div>
         </div>
       </div>
 
