@@ -46,38 +46,38 @@ export default function RoastParameterList({ initialParameters = [], onChange }:
         <button
           type="button"
           onClick={addParameter}
-          className="flex items-center gap-1 text-[10px] uppercase tracking-tighter bg-[--primary]/10 hover:bg-[--primary]/20 text-[--primary] px-2 py-1 rounded transition-colors"
+          className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest bg-[--primary]/20 hover:bg-[--primary] text-[--primary] hover:text-[--background] px-4 py-2 rounded-lg border border-[--primary]/30 transition-all outline-none cursor-pointer shadow-sm"
         >
-          <Plus className="w-3 h-3" />
+          <Plus className="w-4 h-4" />
           Adicionar Parâmetro
         </button>
       </div>
 
       {parameters.length === 0 && (
-        <div className="text-[10px] text-[--secondary-text] opacity-40 italic p-4 border border-dashed border-white/10 rounded-lg text-center">
+        <div className="text-[10px] text-[--secondary-text] opacity-40 italic p-6 border border-dashed border-white/10 rounded-xl text-center">
           Nenhum parâmetro adicionado. Clique acima para adicionar.
         </div>
       )}
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-4">
         {parameters.map((param, index) => (
-          <div key={param.id} className="group bg-black/20 rounded-xl border border-white/5 overflow-hidden transition-all hover:border-white/10">
-            <div className="flex items-center justify-between px-3 py-2 bg-white/5 border-b border-white/5">
+          <div key={param.id} className="group bg-black/40 rounded-xl border border-white/5 overflow-hidden transition-all hover:border-[--primary]/20">
+            <div className="flex items-center justify-between px-4 py-2 bg-white/5 border-b border-white/5">
               <input
                 value={param.title}
                 onChange={(e) => updateParameter(param.id, { title: e.target.value })}
-                className="bg-transparent border-none p-0 text-xs font-bold text-[--primary] focus:ring-0 w-full"
+                className="!bg-transparent !border-none !p-0 text-xs font-bold text-[--primary] focus:!ring-0 w-full outline-none"
                 placeholder="Título do parâmetro..."
               />
               <button
                 type="button"
                 onClick={() => removeParameter(param.id)}
-                className="text-[--danger] opacity-40 hover:opacity-100 transition-opacity p-1"
+                className="action-icon-btn text-[--danger] !opacity-40 hover:!opacity-100"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
-            <div className="p-3">
+            <div className="p-4">
               <RichTextEditor
                 value={param.content}
                 onChange={(content) => updateParameter(param.id, { content })}
