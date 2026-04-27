@@ -561,3 +561,31 @@ table tr td:first-child, table tr th:first-child {
   text-shadow: 0 0 10px rgba(195, 153, 103, 0.3);
   font-weight: 600;
 }
+
+/* Custom Rich Text Styles */
+.custom-rich-text {
+  line-height: 1.6;
+}
+
+.custom-rich-text b, .custom-rich-text strong {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.custom-rich-text ul, .custom-rich-text ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.custom-rich-text li {
+  margin-bottom: 0.5rem;
+}
+
+.custom-rich-text font[color="#c39967"] {
+  color: var(--primary) !important;
+}
+
+.custom-rich-text font[color="#ffffff"] {
+  color: #ffffff !important;
+}
+

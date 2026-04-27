@@ -5,11 +5,14 @@ import { Trash2, Pencil, Flame, Search } from 'lucide-react'
 import { deleteRoastBatch, updateRoastBatch } from './actions'
 import Modal from '@/components/ui/Modal'
 import { formatDate } from '@/utils/date-utils'
+import RoastParameterList from '@/components/ui/RoastParameterList'
 
 export default function RoastList({ roastBatches, greenLots }: { roastBatches: any[], greenLots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [editingRoast, setEditingRoast] = useState<any | null>(null)
+  const [viewingRoast, setViewingRoast] = useState<any | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [parameters, setParameters] = useState<any[]>([])
 
   const filteredBatches = roastBatches?.filter(r => 
     r.green_coffee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -57,7 +60,12 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                   const shrinkage = 100 - yieldPerc;
                   
                   return (
-                    <tr key={r.roast_batch_id || r.id} className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group" style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}>
+                    <tr 
+                      key={r.roast_batch_id || r.id} 
+                      className="border-b border-white/5 hover:bg-white/[0.08] transition-colors group cursor-pointer" 
+                      style={{ backgroundColor: index % 2 === 0 ? 'rgba(255, 255, 255, 0.05)' : 'transparent' }}
+                      onClick={() => setViewingRoast(r)}
+                    >
                       <td className="p-2">
                         <div className="flex flex-col items-center">
                           <span className="font-bold text-[--foreground]">{formatDate(r.date)}</span>
@@ -93,12 +101,20 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                       <td className="p-2 border-l border-white/5">
                         <div className="flex justify-center items-center gap-2">
                           <button 
-                            onClick={() => setEditingRoast(r)}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setParameters(r.roast_parameters || [])
+                              setEditingRoast(r)
+                            }}
                             className="action-icon-btn text-[--primary]"
                           >
                             <Pencil className="action-icon" />
                           </button>
-                          <form action={deleteRoastBatch} className="flex items-center">
+                          <form 
+                            action={deleteRoastBatch} 
+                            className="flex items-center"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <input type="hidden" name="id" value={r.id} />
                             <button type="submit" className="action-icon-btn text-[--danger]">
                                 <Trash2 className="action-icon" />
@@ -183,10 +199,86 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
               </div>
             </div>
 
+            <div className="border-t border-white/5 pt-4">
+              <RoastParameterList 
+                initialParameters={editingRoast.roast_parameters || []} 
+                onChange={setParameters} 
+              />
+              <input type="hidden" name="roast_parameters" value={JSON.stringify(parameters)} />
+            </div>
+
             <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
               Salvar Alterações
             </button>
           </form>
+        )}
+      </Modal>
+
+      {/* Modal de Visualização */}
+      <Modal
+        isOpen={viewingRoast !== null}
+        onClose={() => setViewingRoast(null)}
+        title="Detalhes da Sessão de Torra"
+      >
+        {viewingRoast && (
+          <div className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin">
+            <div className="grid grid-cols-2 gap-6 bg-black/20 p-4 rounded-xl border border-white/5">
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-widest text-[--secondary-text] opacity-60">Data</span>
+                <span className="text-lg font-serif text-[--primary]">{formatDate(viewingRoast.date)}</span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-widest text-[--secondary-text] opacity-60">Lote de Origem</span>
+                <span className="text-lg font-serif text-[--foreground]">{viewingRoast.green_coffee?.name || viewingRoast.green_coffee_name}</span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
+                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Entrada</span>
+                <span className="text-xl font-bold text-[--primary]">{viewingRoast.qty_before_kg}kg</span>
+              </div>
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
+                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Saída</span>
+                <span className="text-xl font-bold text-[--success]">{viewingRoast.qty_after_kg}kg</span>
+              </div>
+              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
+                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Quebra</span>
+                <span className="text-xl font-bold text-[--danger]">{(100 - (viewingRoast.qty_after_kg / viewingRoast.qty_before_kg * 100)).toFixed(1)}%</span>
+              </div>
+            </div>
+
+            <div className="bg-[--primary]/5 p-4 rounded-xl border border-[--primary]/20">
+              <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] mb-3">Custos Processados</h3>
+              <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
+                <span className="text-xs text-[--secondary-text]">Custo Operacional</span>
+                <span className="text-sm font-bold">R$ {viewingRoast.operational_cost?.toFixed(2) || viewingRoast.operational_cost_per_kg?.toFixed(2)} /kg</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="text-xs text-[--secondary-text]">Custo Final Torrado</span>
+                <span className="text-lg font-bold text-[--primary]">R$ {viewingRoast.total_torra_cost?.toFixed(2) || viewingRoast.total_roast_cost?.toFixed(2)}</span>
+              </div>
+            </div>
+
+            {viewingRoast.roast_parameters && viewingRoast.roast_parameters.length > 0 && (
+              <div className="flex flex-col gap-4">
+                <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Parâmetros de Torra</h3>
+                <div className="flex flex-col gap-3">
+                  {viewingRoast.roast_parameters.map((param: any) => (
+                    <div key={param.id} className="bg-black/30 rounded-xl border border-white/10 overflow-hidden">
+                      <div className="px-3 py-2 bg-white/5 border-b border-white/5">
+                        <span className="text-xs font-bold text-[--primary]">{param.title}</span>
+                      </div>
+                      <div 
+                        className="p-4 text-sm text-[--foreground] custom-rich-text"
+                        dangerouslySetInnerHTML={{ __html: param.content }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         )}
       </Modal>
     </div>

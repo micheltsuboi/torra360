@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Flame } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
 import { createRoastBatch } from './actions'
+import RoastParameterList from '@/components/ui/RoastParameterList'
 
 interface TorraHeaderProps {
   greenLots: any[]
@@ -12,6 +13,7 @@ interface TorraHeaderProps {
 export default function TorraHeader({ greenLots }: TorraHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [parameters, setParameters] = useState<any[]>([])
 
   return (
     <div className="flex flex-col gap-6">
@@ -19,6 +21,7 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
         <button 
           onClick={() => {
             setError(null)
+            setParameters([])
             setIsModalOpen(true)
           }}
           className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
@@ -89,6 +92,11 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
 
           <div className="px-3 py-2 bg-white/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight opacity-70">
             <span className="text-[--primary] uppercase tracking-tighter mr-1">Nota:</span> Rendimento e custos processados automaticamente com base no custo operacional informado.
+          </div>
+
+          <div className="border-t border-white/5 pt-4">
+            <RoastParameterList onChange={setParameters} />
+            <input type="hidden" name="roast_parameters" value={JSON.stringify(parameters)} />
           </div>
 
           <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">

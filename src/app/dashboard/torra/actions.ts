@@ -88,7 +88,8 @@ export async function createRoastBatch(formData: FormData) {
     date,
     qty_before_kg,
     qty_after_kg,
-    operational_cost
+    operational_cost,
+    roast_parameters: JSON.parse(formData.get('roast_parameters') as string || '[]')
   });
 
   if (insertError) {
@@ -173,7 +174,8 @@ export async function updateRoastBatch(formData: FormData) {
       date,
       qty_before_kg,
       qty_after_kg,
-      operational_cost
+      operational_cost,
+      roast_parameters: JSON.parse(formData.get('roast_parameters') as string || '[]')
     })
     .eq('id', id)
     .eq('tenant_id', tenantId)
