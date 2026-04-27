@@ -35,52 +35,47 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
 
   return (
     <div className={`relative flex flex-col rounded-lg border transition-all ${isFocused ? 'border-[--primary] ring-1 ring-[--primary]/20' : 'border-white/10'} bg-black/40 overflow-hidden`}>
-      <div className="flex items-center gap-1 p-1 border-b border-white/5 bg-white/5">
+      <div className="flex items-center gap-3 p-2 border-b border-white/5 bg-white/5">
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); execCommand('bold'); }}
-          className="p-1.5 rounded hover:bg-white/10 text-[--secondary-text] hover:text-[--primary] transition-colors cursor-pointer flex items-center justify-center outline-none"
-          style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', cursor: 'pointer', borderRadius: '4px' }}
+          className="action-icon-btn"
           title="Negrito"
         >
-          <Bold className="w-4 h-4" />
+          <Bold className="w-3.5 h-3.5" />
         </button>
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); execCommand('italic'); }}
-          className="p-1.5 rounded hover:bg-white/10 text-[--secondary-text] hover:text-[--primary] transition-colors cursor-pointer flex items-center justify-center outline-none"
-          style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', cursor: 'pointer', borderRadius: '4px' }}
+          className="action-icon-btn"
           title="Itálico"
         >
-          <Italic className="w-4 h-4" />
+          <Italic className="w-3.5 h-3.5" />
         </button>
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); execCommand('insertUnorderedList'); }}
-          className="p-1.5 rounded hover:bg-white/10 text-[--secondary-text] hover:text-[--primary] transition-colors cursor-pointer flex items-center justify-center outline-none"
-          style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', cursor: 'pointer', borderRadius: '4px' }}
+          className="action-icon-btn"
           title="Lista"
         >
-          <List className="w-4 h-4" />
+          <List className="w-3.5 h-3.5" />
         </button>
-        <div className="w-[1px] h-4 bg-white/10 mx-1" />
+        <div className="w-[1px] h-3.5 bg-white/10 mx-1" />
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); execCommand('foreColor', '#c39967'); }}
-          className="p-1.5 rounded hover:bg-white/10 text-[--primary] transition-colors cursor-pointer flex items-center justify-center outline-none"
-          style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', cursor: 'pointer', borderRadius: '4px' }}
+          className="action-icon-btn text-[--primary] !opacity-80 hover:!opacity-100"
           title="Cor Dourada"
         >
-          <Palette className="w-4 h-4" />
+          <Palette className="w-3.5 h-3.5" />
         </button>
         <button
           type="button"
           onMouseDown={(e) => { e.preventDefault(); execCommand('foreColor', '#ffffff'); }}
-          className="p-1.5 rounded hover:bg-white/10 text-white transition-colors cursor-pointer flex items-center justify-center outline-none"
-          style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', cursor: 'pointer', borderRadius: '4px' }}
+          className="action-icon-btn text-white !opacity-80 hover:!opacity-100"
           title="Cor Branca"
         >
-          <Type className="w-4 h-4" />
+          <Type className="w-3.5 h-3.5" />
         </button>
       </div>
       <div className="relative">

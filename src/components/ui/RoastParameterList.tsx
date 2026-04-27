@@ -46,9 +46,26 @@ export default function RoastParameterList({ initialParameters = [], onChange }:
         <button
           type="button"
           onClick={addParameter}
-          className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest bg-[--primary]/20 hover:bg-[--primary] text-[--primary] hover:text-[--background] px-4 py-2 rounded-lg border border-[--primary]/30 transition-all outline-none cursor-pointer shadow-sm"
+          style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '6px', 
+            fontSize: '10px', 
+            fontWeight: 'bold', 
+            textTransform: 'uppercase', 
+            letterSpacing: '0.05em', 
+            background: 'rgba(195, 153, 103, 0.1)', 
+            color: 'var(--primary)', 
+            border: '1px solid rgba(195, 153, 103, 0.3)', 
+            padding: '6px 12px', 
+            borderRadius: '6px', 
+            cursor: 'pointer',
+            transition: 'all 0.2s ease'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(195, 153, 103, 0.2)'}
+          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(195, 153, 103, 0.1)'}
         >
-          <Plus className="w-4 h-4" />
+          <Plus style={{ width: '14px', height: '14px' }} />
           Adicionar Parâmetro
         </button>
       </div>
