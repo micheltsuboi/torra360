@@ -84,8 +84,7 @@ export default function RichTextEditor({ value, onChange, placeholder }: RichTex
         onInput={handleInput}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="p-3 min-h-[100px] text-sm focus:outline-none text-[--foreground] prose prose-invert max-w-none"
-        placeholder={placeholder}
+        className="p-3 min-h-[100px] text-sm focus:outline-none text-[--foreground] custom-rich-text"
       />
       {(!value || value === '<br>') && !isFocused && (
         <div className="absolute top-[45px] left-3 text-white/20 text-xs pointer-events-none">
