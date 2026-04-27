@@ -222,50 +222,64 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
       >
         {viewingRoast && (
           <div className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto pr-2 scrollbar-thin">
-            <div className="grid grid-cols-2 gap-6 bg-black/20 p-4 rounded-xl border border-white/5">
-              <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-widest text-[--secondary-text] opacity-60">Data</span>
-                <span className="text-lg font-serif text-[--primary]">{formatDate(viewingRoast.date)}</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-widest text-[--secondary-text] opacity-60">Lote de Origem</span>
-                <span className="text-lg font-serif text-[--foreground]">{viewingRoast.green_coffee?.name || viewingRoast.green_coffee_name}</span>
+            <div className="flex flex-col gap-1">
+              <label className="text-xs text-[--secondary-text]">Café Verde (Lote de Origem)</label>
+              <div className="bg-black/20 border border-white/5 rounded-lg px-4 py-3 text-sm font-serif text-[--foreground]">
+                {viewingRoast.green_coffee?.name || viewingRoast.green_coffee_name || 'N/A'}
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
-                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Entrada</span>
-                <span className="text-xl font-bold text-[--primary]">{viewingRoast.qty_before_kg}kg</span>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Data da Torra</label>
+                <div className="bg-black/20 border border-white/5 rounded-lg px-4 py-3 text-sm text-[--foreground]">
+                  {formatDate(viewingRoast.date)}
+                </div>
               </div>
-              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
-                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Saída</span>
-                <span className="text-xl font-bold text-[--success]">{viewingRoast.qty_after_kg}kg</span>
+              <div className="flex flex-col gap-1">
+                <label className="text-xs text-[--secondary-text]">Custo Operac. (R$/kg)</label>
+                <div className="bg-black/20 border border-white/5 rounded-lg px-4 py-3 text-sm text-[--foreground]">
+                  R$ {viewingRoast.operational_cost?.toFixed(2) || viewingRoast.operational_cost_per_kg?.toFixed(2)}
+                </div>
               </div>
-              <div className="bg-white/5 p-3 rounded-lg border border-white/5 flex flex-col items-center">
-                <span className="text-[9px] uppercase tracking-tighter text-[--secondary-text]">Quebra</span>
-                <span className="text-xl font-bold text-[--danger]">{(100 - (viewingRoast.qty_after_kg / viewingRoast.qty_before_kg * 100)).toFixed(1)}%</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="flex flex-col gap-1 p-3 bg-black/20 rounded-lg border border-white/5">
+                <label className="text-xs text-[--secondary-text] mb-1">Qtd Entrada (Verde kg)</label>
+                <div className="text-lg font-bold text-[--primary]">
+                  {viewingRoast.qty_before_kg} kg
+                </div>
+              </div>
+              <div className="flex flex-col gap-1 p-3 bg-white/5 rounded-lg border border-white/5">
+                <label className="text-xs text-[--secondary-text] mb-1">Qtd Saída (Torrado kg)</label>
+                <div className="text-lg font-bold text-[--success]">
+                  {viewingRoast.qty_after_kg} kg
+                </div>
               </div>
             </div>
 
             <div className="bg-[--primary]/5 p-4 rounded-xl border border-[--primary]/20">
-              <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] mb-3">Custos Processados</h3>
-              <div className="flex justify-between items-center border-b border-white/5 pb-2 mb-2">
-                <span className="text-xs text-[--secondary-text]">Custo Operacional</span>
-                <span className="text-sm font-bold">R$ {viewingRoast.operational_cost?.toFixed(2) || viewingRoast.operational_cost_per_kg?.toFixed(2)} /kg</span>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Quebra (Perda de Umidade)</span>
+                <span className="text-lg font-bold text-[--danger]">
+                  {(100 - (viewingRoast.qty_after_kg / viewingRoast.qty_before_kg * 100)).toFixed(1)}%
+                </span>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-xs text-[--secondary-text]">Custo Final Torrado</span>
-                <span className="text-lg font-bold text-[--primary]">R$ {viewingRoast.total_torra_cost?.toFixed(2) || viewingRoast.total_roast_cost?.toFixed(2)}</span>
+              <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                <span className="text-xs text-[--secondary-text] uppercase tracking-widest">Custo Final Torrado</span>
+                <span className="text-xl font-bold text-[--primary]">
+                  R$ {viewingRoast.total_torra_cost?.toFixed(2) || viewingRoast.total_roast_cost?.toFixed(2)}
+                </span>
               </div>
             </div>
 
             {viewingRoast.roast_parameters && viewingRoast.roast_parameters.length > 0 && (
-              <div className="flex flex-col gap-4">
-                <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Parâmetros de Torra</h3>
+              <div className="flex flex-col gap-4 border-t border-white/5 pt-4">
+                <label className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Parâmetros de Torra</label>
                 <div className="flex flex-col gap-3">
                   {viewingRoast.roast_parameters.map((param: any) => (
-                    <div key={param.id} className="bg-black/30 rounded-xl border border-white/10 overflow-hidden">
+                    <div key={param.id} className="bg-black/20 rounded-xl border border-white/5 overflow-hidden">
                       <div className="px-3 py-2 bg-white/5 border-b border-white/5">
                         <span className="text-xs font-bold text-[--primary]">{param.title}</span>
                       </div>
