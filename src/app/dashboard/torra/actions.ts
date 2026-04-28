@@ -279,3 +279,28 @@ export async function deleteRoastBatch(formData: FormData) {
   revalidatePath('/dashboard/estoque')
   revalidatePath('/dashboard/pacotes')
 }
+
+export async function saveRoastParameters(roastId: string, text: string) {
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+
+  if (!roastId) return { success: false, error: 'ID da torra não informado.' }
+
+  const parameters = [{ id: '1', title: 'Registro de Torra', content: text }]
+
+  const { error } = await supabase
+    .from('roast_batches')
+    .update({
+      roast_parameters: parameters
+    })
+    .eq('id', roastId)
+    .eq('tenant_id', tenantId)
+
+  if (error) {
+    console.error('Error saving roast parameters:', error)
+    return { success: false, error: 'Erro ao salvar parâmetros de torra.' }
+  }
+
+  revalidatePath('/dashboard/torra')
+  return { success: true }
+}

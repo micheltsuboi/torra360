@@ -5,14 +5,13 @@ import { Trash2, Pencil, Flame, Search } from 'lucide-react'
 import { deleteRoastBatch, updateRoastBatch } from './actions'
 import Modal from '@/components/ui/Modal'
 import { formatDate } from '@/utils/date-utils'
-import RoastParameterList from '@/components/ui/RoastParameterList'
 
 export default function RoastList({ roastBatches, greenLots }: { roastBatches: any[], greenLots: any[] }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [editingRoast, setEditingRoast] = useState<any | null>(null)
   const [viewingRoast, setViewingRoast] = useState<any | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [parameters, setParameters] = useState<any[]>([])
+  const [editParamText, setEditParamText] = useState('')
 
   const filteredBatches = roastBatches?.filter(r => 
     r.green_coffee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -103,7 +102,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                           <button 
                             onClick={(e) => {
                               e.stopPropagation()
-                              setParameters(r.roast_parameters || [])
+                              setEditParamText(r.roast_parameters?.[0]?.content || '')
                               setEditingRoast(r)
                             }}
                             className="action-icon-btn text-[--primary]"
@@ -199,12 +198,15 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
               </div>
             </div>
 
-            <div className="border-t border-white/5 pt-4">
-              <RoastParameterList 
-                initialParameters={editingRoast.roast_parameters || []} 
-                onChange={setParameters} 
+            <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
+              <label className="data-label">Parâmetros de Torra (Texto Livre)</label>
+              <textarea 
+                value={editParamText}
+                onChange={(e) => setEditParamText(e.target.value)}
+                placeholder="Ex: temperatura inicial: 185°&#10;velocidade do tambor: 42&#10;&#10;2min: 205°&#10;6min: 210°"
+                className="min-h-[150px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
               />
-              <input type="hidden" name="roast_parameters" value={JSON.stringify(parameters)} />
+              <input type="hidden" name="roast_parameters" value={JSON.stringify(editParamText ? [{ id: '1', title: 'Registro de Torra', content: editParamText }] : [])} />
             </div>
 
             <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
@@ -284,7 +286,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                         <span className="text-xs font-bold text-[--primary]">{param.title}</span>
                       </div>
                       <div 
-                        className="p-4 text-sm text-[--foreground] custom-rich-text"
+                        className="p-4 text-sm text-[--foreground] font-mono whitespace-pre-wrap custom-rich-text"
                         dangerouslySetInnerHTML={{ __html: param.content }}
                       />
                     </div>

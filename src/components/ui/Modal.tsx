@@ -28,7 +28,7 @@ export default function Modal({ isOpen, onClose, title, children }: ModalProps) 
   if (!mounted || !isOpen) return null
 
   return (
-    <div className="modal-backdrop" onClick={onClose}>
+    <div className="modal-backdrop">
       <div 
         className="modal-container p-0" 
         onClick={(e) => e.stopPropagation()}

@@ -1,27 +1,65 @@
 'use client'
 
+
+
 import { useState } from 'react'
-import { Flame } from 'lucide-react'
+import { Flame, BookOpen } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
-import { createRoastBatch } from './actions'
-import RoastParameterList from '@/components/ui/RoastParameterList'
+import { createRoastBatch, saveRoastParameters } from './actions'
+import { formatDate } from '@/utils/date-utils'
 
 interface TorraHeaderProps {
   greenLots: any[]
+  roastBatches: any[]
 }
 
-export default function TorraHeader({ greenLots }: TorraHeaderProps) {
+export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isParamModalOpen, setIsParamModalOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [parameters, setParameters] = useState<any[]>([])
+  const [paramError, setParamError] = useState<string | null>(null)
+  
+  // Estados para Nova Torra
+  const [roastParamText, setRoastParamText] = useState('')
+  
+  // Estados para Registrar Parâmetros
+  const [selectedRoastId, setSelectedRoastId] = useState('')
+  const [paramText, setParamText] = useState('')
+
+  // Filtra apenas as torras que têm parâmetros para exibir nos cards
+  const roastsWithParams = roastBatches?.filter(r => 
+    r.roast_parameters && 
+    Array.isArray(r.roast_parameters) && 
+    r.roast_parameters.length > 0 &&
+    r.roast_parameters[0].content
+  ) || []
+
+  const handleSaveParameters = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setParamError(null)
+    
+    if (!selectedRoastId) {
+      setParamError('Selecione um lote de torra.')
+      return
+    }
+
+    const result = await saveRoastParameters(selectedRoastId, paramText)
+    if (result?.success) {
+      setIsParamModalOpen(false)
+      setParamText('')
+      setSelectedRoastId('')
+    } else {
+      setParamError(result?.error || 'Erro inesperado')
+    }
+  }
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-start">
+      <div className="flex flex-col gap-3 justify-start max-w-xs">
         <button 
           onClick={() => {
             setError(null)
-            setParameters([])
+            setRoastParamText('')
             setIsModalOpen(true)
           }}
           className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
@@ -29,8 +67,22 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
           <Flame className="w-6 h-6" />
           Registrar Nova Torra
         </button>
+
+        <button 
+          onClick={() => {
+            setParamError(null)
+            setParamText('')
+            setSelectedRoastId('')
+            setIsParamModalOpen(true)
+          }}
+          className="flex items-center justify-center gap-2 px-6 py-3 text-sm rounded-xl border border-[--primary]/30 text-[--primary] hover:bg-[--primary]/10 transition-all font-serif tracking-widest uppercase shadow-[0_0_15px_rgba(195,153,103,0.05)]"
+        >
+          <BookOpen className="w-4 h-4" />
+          Registrar Parâmetros de Torra
+        </button>
       </div>
 
+      {/* Modal de Nova Torra */}
       <Modal 
         isOpen={isModalOpen} 
         onClose={() => {
@@ -41,6 +93,10 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
       >
         <form action={async (formData) => {
           setError(null)
+          // Prepara o parâmetro no formato esperado pelo banco
+          const params = roastParamText ? [{ id: '1', title: 'Registro de Torra', content: roastParamText }] : []
+          formData.set('roast_parameters', JSON.stringify(params))
+          
           const result = await createRoastBatch(formData)
           if (result?.success) {
             setIsModalOpen(false)
@@ -94,9 +150,14 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
             <span className="text-[--primary] uppercase tracking-tighter mr-1">Nota:</span> Rendimento e custos processados automaticamente com base no custo operacional informado.
           </div>
 
-          <div className="border-t border-white/5 pt-4">
-            <RoastParameterList onChange={setParameters} />
-            <input type="hidden" name="roast_parameters" value={JSON.stringify(parameters)} />
+          <div className="flex flex-col gap-1 border-t border-white/5 pt-4">
+            <label className="data-label">Parâmetros de Torra (Texto Livre)</label>
+            <textarea 
+              value={roastParamText}
+              onChange={(e) => setRoastParamText(e.target.value)}
+              placeholder="Ex: temperatura inicial: 185°&#10;velocidade do tambor: 42&#10;&#10;2min: 205°&#10;6min: 210°"
+              className="min-h-[150px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
+            />
           </div>
 
           <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
@@ -104,6 +165,92 @@ export default function TorraHeader({ greenLots }: TorraHeaderProps) {
           </button>
         </form>
       </Modal>
+
+      {/* Modal de Registrar Parâmetros */}
+      <Modal 
+        isOpen={isParamModalOpen} 
+        onClose={() => {
+          setIsParamModalOpen(false)
+          setParamError(null)
+        }} 
+        title="Registrar Parâmetros de Torra"
+      >
+        <form onSubmit={handleSaveParameters} className="flex flex-col gap-6">
+          {paramError && (
+            <div className="bg-red-500/10 border border-red-500/50 text-red-500 p-3 rounded-lg text-xs font-semibold">
+              ⚠️ {paramError}
+            </div>
+          )}
+
+          <div className="flex flex-col gap-1">
+            <label className="data-label">Selecione o Lote de Torra</label>
+            <select 
+              value={selectedRoastId} 
+              onChange={(e) => {
+                setSelectedRoastId(e.target.value)
+                // Carrega o texto existente se houver
+                const roast = roastBatches.find(r => r.id === e.target.value)
+                if (roast?.roast_parameters?.[0]?.content) {
+                  setParamText(roast.roast_parameters[0].content)
+                } else {
+                  setParamText('')
+                }
+              }} 
+              required
+            >
+              <option value="">Selecione...</option>
+              {roastBatches.map((r: any) => (
+                <option key={r.id} value={r.id}>
+                  Lote #{r.id.slice(-6).toUpperCase()} - {r.green_coffee?.name || r.green_coffee_name} ({formatDate(r.date)})
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label className="data-label">Parâmetros de Torra (Texto Livre)</label>
+            <textarea 
+              value={paramText}
+              onChange={(e) => setParamText(e.target.value)}
+              placeholder="Ex: temperatura inicial: 185°&#10;velocidade do tambor: 42&#10;&#10;2min: 205°&#10;6min: 210°"
+              className="min-h-[150px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
+            />
+          </div>
+
+          <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
+            Salvar Parâmetros
+          </button>
+        </form>
+      </Modal>
+
+      {/* Cards de Parâmetros Embaixo */}
+      {roastsWithParams.length > 0 && (
+        <div className="flex flex-col gap-3 mt-4">
+          <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Parâmetros Registrados</h3>
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-[--primary]/20">
+            {roastsWithParams.map((r: any) => (
+              <div 
+                key={r.id} 
+                onClick={() => {
+                  setSelectedRoastId(r.id)
+                  setParamText(r.roast_parameters[0].content)
+                  setIsParamModalOpen(true)
+                }}
+                className="flex-shrink-0 w-[280px] bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-[--primary]/50 transition-all cursor-pointer shadow-lg"
+              >
+                <div className="px-4 py-2 bg-white/5 border-b border-white/5 flex justify-between items-center">
+                  <span className="text-[10px] font-serif font-bold text-[--primary] uppercase tracking-wider">
+                    REGISTRO DE TORRA L: #{r.id.slice(-6).toUpperCase()}
+                  </span>
+                </div>
+                <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
+                  {r.roast_parameters[0].content}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
