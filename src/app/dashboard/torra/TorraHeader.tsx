@@ -225,8 +225,8 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
 
       {/* Cards de Parâmetros Embaixo */}
       {roastsWithParams.length > 0 && (
-        <div className="flex flex-col gap-3 mt-4">
-          <h3 className="text-xs font-serif uppercase tracking-widest text-[--primary] opacity-80">Parâmetros Registrados</h3>
+        <div className="flex flex-col gap-3 mt-6">
+          <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Parâmetros Registrados</h2>
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-[--primary]/20">
             {roastsWithParams.map((r: any) => (
               <div 
@@ -242,7 +242,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                   <span className="text-[10px] font-serif font-bold text-[--primary] uppercase tracking-wider">
                     REGISTRO DE TORRA L: #{r.id.slice(-6).toUpperCase()}
                   </span>
-                  <div className="flex items-center gap-1">
+                  <div className="flex items-center gap-2">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation()
@@ -250,10 +250,10 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                         setParamText(r.roast_parameters[0].content)
                         setIsParamModalOpen(true)
                       }}
-                      className="text-[--primary] hover:text-white p-1 transition-colors"
+                      className="action-icon-btn text-[--primary] hover:opacity-80 transition-opacity"
                       title="Editar Parâmetros"
                     >
-                      <Pencil className="w-3.5 h-3.5" />
+                      <Pencil className="action-icon w-3.5 h-3.5" />
                     </button>
                     <button 
                       onClick={async (e) => {
@@ -262,16 +262,17 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                           await deleteRoastParameters(r.id)
                         }
                       }}
-                      className="text-[--danger] hover:text-white p-1 transition-colors"
+                      className="action-icon-btn text-[--danger] hover:opacity-80 transition-opacity"
                       title="Excluir Parâmetros"
                     >
-                      <Trash2 className="w-3.5 h-3.5" />
+                      <Trash2 className="action-icon w-3.5 h-3.5" />
                     </button>
                   </div>
                 </div>
-                <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
-                  {r.roast_parameters[0].content}
-                </div>
+                <div 
+                  className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10"
+                  dangerouslySetInnerHTML={{ __html: r.roast_parameters[0].content }}
+                />
               </div>
             ))}
           </div>
