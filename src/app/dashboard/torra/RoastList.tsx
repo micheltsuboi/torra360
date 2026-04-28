@@ -295,10 +295,9 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                       <div className="px-3 py-2 bg-white/5 border-b border-white/5">
                         <span className="text-xs font-bold text-[--primary]">{param.title}</span>
                       </div>
-                      <div 
-                        className="p-4 text-sm text-[--foreground] font-mono whitespace-pre-wrap custom-rich-text"
-                        dangerouslySetInnerHTML={{ __html: param.content }}
-                      />
+                      <div className="p-4 text-sm text-[--foreground] font-mono whitespace-pre-wrap leading-relaxed">
+                        {param.content}
+                      </div>
                     </div>
                   ))}
                 </div>

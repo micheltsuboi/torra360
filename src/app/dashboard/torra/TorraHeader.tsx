@@ -236,9 +236,9 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                   setParamText(r.roast_parameters[0].content)
                   setIsParamModalOpen(true)
                 }}
-                className="flex-shrink-0 w-[280px] bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-[--primary]/50 transition-all cursor-pointer shadow-lg"
+                className="flex-shrink-0 w-[280px] glass-panel overflow-hidden hover:border-[--primary]/50 transition-all cursor-pointer"
               >
-                <div className="px-4 py-2 bg-white/5 border-b border-white/5 flex justify-between items-center">
+                <div className="px-4 py-2 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
                   <span className="text-[10px] font-serif font-bold text-[--primary] uppercase tracking-wider">
                     REGISTRO DE TORRA L: #{r.id.slice(-6).toUpperCase()}
                   </span>
@@ -269,10 +269,9 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                     </button>
                   </div>
                 </div>
-                <div 
-                  className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10"
-                  dangerouslySetInnerHTML={{ __html: r.roast_parameters[0].content }}
-                />
+                <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
+                  {r.roast_parameters[0].content}
+                </div>
               </div>
             ))}
           </div>
