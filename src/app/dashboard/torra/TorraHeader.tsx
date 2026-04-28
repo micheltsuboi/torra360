@@ -28,6 +28,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
   const [selectedRoastId, setSelectedRoastId] = useState('')
   const [paramText, setParamText] = useState('')
   const [selectedParamId, setSelectedParamId] = useState<string | undefined>(undefined)
+  const [isSavingParams, setIsSavingParams] = useState(false)
 
   // Cria um card para cada parâmetro registrado em cada torra
   const allParamCards = roastBatches?.flatMap((r: any) => {
@@ -49,15 +50,22 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
       return
     }
 
-    const result = await saveRoastParameters(selectedRoastId, paramText, selectedParamId)
-    if (result?.success) {
-      setIsParamModalOpen(false)
-      setParamText('')
-      setSelectedRoastId('')
-      setSelectedParamId(undefined)
-      router.refresh()
-    } else {
-      setParamError(result?.error || 'Erro inesperado')
+    setIsSavingParams(true)
+    try {
+      const result = await saveRoastParameters(selectedRoastId, paramText, selectedParamId)
+      if (result?.success) {
+        setIsParamModalOpen(false)
+        setParamText('')
+        setSelectedRoastId('')
+        setSelectedParamId(undefined)
+        router.refresh()
+      } else {
+        setParamError(result?.error || 'Erro inesperado')
+      }
+    } catch (err) {
+      setParamError('Ocorreu um erro ao processar sua solicitação.')
+    } finally {
+      setIsSavingParams(false)
     }
   }
 
@@ -226,8 +234,22 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
             />
           </div>
 
-          <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">
-            Salvar Parâmetros
+          <button 
+            type="submit" 
+            disabled={isSavingParams} 
+            className={`golden-btn py-4 text-lg mt-2 w-full flex justify-center items-center gap-2 ${isSavingParams ? 'opacity-70 cursor-not-allowed' : ''}`}
+          >
+            {isSavingParams ? (
+              <>
+                <svg className="animate-spin h-5 w-5 text-[--background]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Salvando...
+              </>
+            ) : (
+              'Salvar Parâmetros'
+            )}
           </button>
         </form>
       </Modal>
