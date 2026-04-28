@@ -3,9 +3,9 @@
 
 
 import { useState } from 'react'
-import { Flame, BookOpen } from 'lucide-react'
+import { Flame, BookOpen, Pencil, Trash2 } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
-import { createRoastBatch, saveRoastParameters } from './actions'
+import { createRoastBatch, saveRoastParameters, deleteRoastParameters } from './actions'
 import { formatDate } from '@/utils/date-utils'
 
 interface TorraHeaderProps {
@@ -55,16 +55,16 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-3 justify-start max-w-xs">
+      <div className="flex justify-end items-center gap-4 w-full">
         <button 
           onClick={() => {
             setError(null)
             setRoastParamText('')
             setIsModalOpen(true)
           }}
-          className="golden-btn flex items-center gap-2 px-8 py-4 text-lg"
+          className="golden-btn flex items-center gap-2 px-6 py-3 text-base"
         >
-          <Flame className="w-6 h-6" />
+          <Flame className="w-5 h-5" />
           Registrar Nova Torra
         </button>
 
@@ -75,10 +75,10 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
             setSelectedRoastId('')
             setIsParamModalOpen(true)
           }}
-          className="flex items-center justify-center gap-2 px-6 py-3 text-sm rounded-xl border border-[--primary]/30 text-[--primary] hover:bg-[--primary]/10 transition-all font-serif tracking-widest uppercase shadow-[0_0_15px_rgba(195,153,103,0.05)]"
+          className="golden-btn flex items-center gap-2 px-6 py-3 text-base"
         >
-          <BookOpen className="w-4 h-4" />
-          Registrar Parâmetros de Torra
+          <BookOpen className="w-5 h-5" />
+          Registrar Parâmetros
         </button>
       </div>
 
@@ -242,6 +242,32 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                   <span className="text-[10px] font-serif font-bold text-[--primary] uppercase tracking-wider">
                     REGISTRO DE TORRA L: #{r.id.slice(-6).toUpperCase()}
                   </span>
+                  <div className="flex items-center gap-1">
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setSelectedRoastId(r.id)
+                        setParamText(r.roast_parameters[0].content)
+                        setIsParamModalOpen(true)
+                      }}
+                      className="text-[--primary] hover:text-white p-1 transition-colors"
+                      title="Editar Parâmetros"
+                    >
+                      <Pencil className="w-3.5 h-3.5" />
+                    </button>
+                    <button 
+                      onClick={async (e) => {
+                        e.stopPropagation()
+                        if (confirm('Deseja realmente excluir estes parâmetros de torra?')) {
+                          await deleteRoastParameters(r.id)
+                        }
+                      }}
+                      className="text-[--danger] hover:text-white p-1 transition-colors"
+                      title="Excluir Parâmetros"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
                 <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
                   {r.roast_parameters[0].content}

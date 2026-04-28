@@ -304,3 +304,26 @@ export async function saveRoastParameters(roastId: string, text: string) {
   revalidatePath('/dashboard/torra')
   return { success: true }
 }
+
+export async function deleteRoastParameters(roastId: string) {
+  const supabase = await createClient()
+  const tenantId = await getCachedTenantId()
+
+  if (!roastId) return { success: false, error: 'ID da torra não informado.' }
+
+  const { error } = await supabase
+    .from('roast_batches')
+    .update({
+      roast_parameters: []
+    })
+    .eq('id', roastId)
+    .eq('tenant_id', tenantId)
+
+  if (error) {
+    console.error('Error deleting roast parameters:', error)
+    return { success: false, error: 'Erro ao excluir parâmetros de torra.' }
+  }
+
+  revalidatePath('/dashboard/torra')
+  return { success: true }
+}
