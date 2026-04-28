@@ -168,11 +168,21 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
               <label className="text-xs text-[--secondary-text]">Café Verde (Lote de Origem)</label>
               <select name="green_coffee_id" defaultValue={editingRoast.green_coffee_id} required className="text-sm">
                 <option value="">Selecione um café...</option>
-                {greenLots.map((lot: any) => (
-                  <option key={lot.id} value={lot.id}>
-                    {lot.name} ({lot.available_qty_kg.toFixed(2)}kg disponíveis)
-                  </option>
-                ))}
+                {(() => {
+                  const allOptions = [...greenLots];
+                  if (editingRoast && !greenLots.some((l: any) => l.id === editingRoast.green_coffee_id)) {
+                    allOptions.push({
+                      id: editingRoast.green_coffee_id,
+                      name: editingRoast.green_coffee?.name || editingRoast.green_coffee_name || 'Lote Utilizado',
+                      available_qty_kg: 0
+                    });
+                  }
+                  return allOptions.map((lot: any) => (
+                    <option key={lot.id} value={lot.id}>
+                      {lot.name} ({lot.available_qty_kg.toFixed(2)}kg disponíveis)
+                    </option>
+                  ));
+                })()}
               </select>
             </div>
 
