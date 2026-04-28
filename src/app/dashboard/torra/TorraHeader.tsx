@@ -3,6 +3,7 @@
 
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Flame, BookOpen, Pencil, Trash2 } from 'lucide-react'
 import Modal from '@/components/ui/Modal'
 import { createRoastBatch, saveRoastParameters, deleteRoastParameters } from './actions'
@@ -18,6 +19,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
   const [isParamModalOpen, setIsParamModalOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [paramError, setParamError] = useState<string | null>(null)
+  const router = useRouter()
   
   // Estados para Nova Torra
   const [roastParamText, setRoastParamText] = useState('')
@@ -53,6 +55,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
       setParamText('')
       setSelectedRoastId('')
       setSelectedParamId(undefined)
+      router.refresh()
     } else {
       setParamError(result?.error || 'Erro inesperado')
     }
@@ -267,7 +270,12 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                       onClick={async (e) => {
                         e.stopPropagation()
                         if (confirm('Deseja realmente excluir estes parâmetros de torra?')) {
-                          await deleteRoastParameters(c.roastId, c.paramId)
+                          const res = await deleteRoastParameters(c.roastId, c.paramId)
+                          if (res?.success) {
+                            router.refresh()
+                          } else {
+                            alert(res?.error || 'Erro ao excluir')
+                          }
                         }
                       }}
                       className="action-icon-btn text-[--danger] hover:opacity-80 transition-opacity"
