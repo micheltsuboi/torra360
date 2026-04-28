@@ -214,7 +214,7 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                 value={editParamText}
                 onChange={(e) => setEditParamText(e.target.value)}
                 placeholder="Ex: temperatura inicial: 185°&#10;velocidade do tambor: 42&#10;&#10;2min: 205°&#10;6min: 210°"
-                className="min-h-[150px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
+                className="min-h-[350px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
               />
               <input type="hidden" name="roast_parameters" value={JSON.stringify(editParamText ? [{ id: '1', title: 'Registro de Torra', content: editParamText }] : [])} />
             </div>
@@ -296,7 +296,12 @@ export default function RoastList({ roastBatches, greenLots }: { roastBatches: a
                         <span className="text-xs font-bold text-[--primary]">{param.title}</span>
                       </div>
                       <div className="p-4 text-sm text-[--foreground] font-mono whitespace-pre-wrap leading-relaxed">
-                        {param.content}
+                        {param.content?.split('\n').map((line: string, i: number) => (
+                          <span key={i}>
+                            {line}
+                            <br />
+                          </span>
+                        ))}
                       </div>
                     </div>
                   ))}

@@ -213,7 +213,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
               value={paramText}
               onChange={(e) => setParamText(e.target.value)}
               placeholder="Ex: temperatura inicial: 185°&#10;velocidade do tambor: 42&#10;&#10;2min: 205°&#10;6min: 210°"
-              className="min-h-[150px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
+              className="min-h-[350px] text-sm font-mono bg-black/40 border border-white/10 rounded-xl p-3 focus:border-[--primary]/50 outline-none resize-none text-[--foreground]"
             />
           </div>
 
@@ -270,7 +270,12 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                   </div>
                 </div>
                 <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
-                  {r.roast_parameters[0].content}
+                  {r.roast_parameters[0].content?.split('\n').map((line: string, i: number) => (
+                    <span key={i}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
                 </div>
               </div>
             ))}
