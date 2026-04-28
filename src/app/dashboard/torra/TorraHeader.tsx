@@ -25,14 +25,18 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
   // Estados para Registrar Parâmetros
   const [selectedRoastId, setSelectedRoastId] = useState('')
   const [paramText, setParamText] = useState('')
+  const [selectedParamId, setSelectedParamId] = useState<string | undefined>(undefined)
 
-  // Filtra apenas as torras que têm parâmetros para exibir nos cards
-  const roastsWithParams = roastBatches?.filter(r => 
-    r.roast_parameters && 
-    Array.isArray(r.roast_parameters) && 
-    r.roast_parameters.length > 0 &&
-    r.roast_parameters[0].content
-  ) || []
+  // Cria um card para cada parâmetro registrado em cada torra
+  const allParamCards = roastBatches?.flatMap((r: any) => {
+    if (!r.roast_parameters || !Array.isArray(r.roast_parameters)) return []
+    return r.roast_parameters.map((param: any) => ({
+      roastId: r.id,
+      paramId: param.id,
+      content: param.content,
+      title: param.title
+    }))
+  }) || []
 
   const handleSaveParameters = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,11 +47,12 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
       return
     }
 
-    const result = await saveRoastParameters(selectedRoastId, paramText)
+    const result = await saveRoastParameters(selectedRoastId, paramText, selectedParamId)
     if (result?.success) {
       setIsParamModalOpen(false)
       setParamText('')
       setSelectedRoastId('')
+      setSelectedParamId(undefined)
     } else {
       setParamError(result?.error || 'Erro inesperado')
     }
@@ -73,6 +78,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
             setParamError(null)
             setParamText('')
             setSelectedRoastId('')
+            setSelectedParamId(undefined)
             setIsParamModalOpen(true)
           }}
           className="golden-btn flex items-center gap-2 px-6 py-3 text-base"
@@ -224,30 +230,32 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
       </Modal>
 
       {/* Cards de Parâmetros Embaixo */}
-      {roastsWithParams.length > 0 && (
+      {allParamCards.length > 0 && (
         <div className="flex flex-col gap-3 mt-6">
           <h2 className="font-serif text-[--primary] text-base tracking-widest uppercase">Parâmetros Registrados</h2>
           <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-thin scrollbar-thumb-[--primary]/20">
-            {roastsWithParams.map((r: any) => (
+            {allParamCards.map((c: any, index: number) => (
               <div 
-                key={r.id} 
+                key={`${c.roastId}-${c.paramId}-${index}`} 
                 onClick={() => {
-                  setSelectedRoastId(r.id)
-                  setParamText(r.roast_parameters[0].content)
+                  setSelectedRoastId(c.roastId)
+                  setParamText(c.content)
+                  setSelectedParamId(c.paramId)
                   setIsParamModalOpen(true)
                 }}
                 className="flex-shrink-0 w-[280px] glass-panel overflow-hidden hover:border-[--primary]/50 transition-all cursor-pointer"
               >
                 <div className="px-4 py-2 border-b border-[--card-border] wood-texture bg-black/40 flex justify-between items-center">
                   <span className="text-[10px] font-serif font-bold text-[--primary] uppercase tracking-wider">
-                    REGISTRO DE TORRA L: #{r.id.slice(-6).toUpperCase()}
+                    REGISTRO DE TORRA L: #{c.roastId.slice(-6).toUpperCase()}
                   </span>
                   <div className="flex items-center gap-2">
                     <button 
                       onClick={(e) => {
                         e.stopPropagation()
-                        setSelectedRoastId(r.id)
-                        setParamText(r.roast_parameters[0].content)
+                        setSelectedRoastId(c.roastId)
+                        setParamText(c.content)
+                        setSelectedParamId(c.paramId)
                         setIsParamModalOpen(true)
                       }}
                       className="action-icon-btn text-[--primary] hover:opacity-80 transition-opacity"
@@ -259,7 +267,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                       onClick={async (e) => {
                         e.stopPropagation()
                         if (confirm('Deseja realmente excluir estes parâmetros de torra?')) {
-                          await deleteRoastParameters(r.id)
+                          await deleteRoastParameters(c.roastId, c.paramId)
                         }
                       }}
                       className="action-icon-btn text-[--danger] hover:opacity-80 transition-opacity"
@@ -270,7 +278,7 @@ export default function TorraHeader({ greenLots, roastBatches }: TorraHeaderProp
                   </div>
                 </div>
                 <div className="p-4 text-xs text-[--secondary-text] font-mono h-[120px] overflow-y-auto whitespace-pre-wrap leading-relaxed scrollbar-thin scrollbar-thumb-white/10">
-                  {r.roast_parameters[0].content?.split('\n').map((line: string, i: number) => (
+                  {c.content?.split('\n').map((line: string, i: number) => (
                     <span key={i}>
                       {line}
                       <br />

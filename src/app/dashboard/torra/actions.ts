@@ -280,18 +280,40 @@ export async function deleteRoastBatch(formData: FormData) {
   revalidatePath('/dashboard/pacotes')
 }
 
-export async function saveRoastParameters(roastId: string, text: string) {
+export async function saveRoastParameters(roastId: string, text: string, paramId?: string) {
   const supabase = await createClient()
   const tenantId = await getCachedTenantId()
 
   if (!roastId) return { success: false, error: 'ID da torra não informado.' }
 
-  const parameters = [{ id: '1', title: 'Registro de Torra', content: text }]
+  const { data: roast, error: fetchError } = await supabase
+    .from('roast_batches')
+    .select('roast_parameters')
+    .eq('id', roastId)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (fetchError || !roast) {
+    return { success: false, error: 'Torra não encontrada.' }
+  }
+
+  let existingParams = Array.isArray(roast.roast_parameters) ? roast.roast_parameters : []
+
+  if (paramId) {
+    existingParams = existingParams.map((p: any) => 
+      p.id === paramId ? { ...p, content: text } : p
+    )
+  } else {
+    const nextId = existingParams.length > 0 
+      ? (Math.max(...existingParams.map((p: any) => parseInt(p.id) || 0)) + 1).toString() 
+      : '1'
+    existingParams.push({ id: nextId, title: 'Registro de Torra', content: text })
+  }
 
   const { error } = await supabase
     .from('roast_batches')
     .update({
-      roast_parameters: parameters
+      roast_parameters: existingParams
     })
     .eq('id', roastId)
     .eq('tenant_id', tenantId)
@@ -305,23 +327,37 @@ export async function saveRoastParameters(roastId: string, text: string) {
   return { success: true }
 }
 
-export async function deleteRoastParameters(roastId: string) {
+export async function deleteRoastParameters(roastId: string, paramId: string) {
   const supabase = await createClient()
   const tenantId = await getCachedTenantId()
 
-  if (!roastId) return { success: false, error: 'ID da torra não informado.' }
+  if (!roastId || !paramId) return { success: false, error: 'Dados incompletos.' }
+
+  const { data: roast, error: fetchError } = await supabase
+    .from('roast_batches')
+    .select('roast_parameters')
+    .eq('id', roastId)
+    .eq('tenant_id', tenantId)
+    .single()
+
+  if (fetchError || !roast) {
+    return { success: false, error: 'Torra não encontrada.' }
+  }
+
+  const existingParams = Array.isArray(roast.roast_parameters) ? roast.roast_parameters : []
+  const updatedParams = existingParams.filter((p: any) => p.id !== paramId)
 
   const { error } = await supabase
     .from('roast_batches')
     .update({
-      roast_parameters: []
+      roast_parameters: updatedParams
     })
     .eq('id', roastId)
     .eq('tenant_id', tenantId)
 
   if (error) {
     console.error('Error deleting roast parameters:', error)
-    return { success: false, error: 'Erro ao excluir parâmetros de torra.' }
+    return { success: false, error: 'Erro ao excluir parâmetro de torra.' }
   }
 
   revalidatePath('/dashboard/torra')
