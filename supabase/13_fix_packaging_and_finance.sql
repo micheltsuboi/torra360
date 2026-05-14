@@ -42,3 +42,20 @@ BEGIN
     CREATE POLICY "PackagingBatchMaterials All" ON public.packaging_batch_materials FOR ALL USING (tenant_id = public.get_tenant_id());
   END IF;
 END $$;
+
+-- Script de Retroalimentação (Backfill): Criar despesas para lotes de café verde já existentes
+INSERT INTO public.expenses (tenant_id, date, category, description, amount, notes)
+SELECT 
+    tenant_id, 
+    COALESCE(purchase_date, created_at::date), 
+    'Compra de Café Verde', 
+    'Entrada de Lote: ' || name || ' (' || total_qty_kg || 'kg)', 
+    total_cost, 
+    'Fornecedor: ' || COALESCE(provider, 'Não informado')
+FROM public.green_coffee
+WHERE total_cost > 0
+AND NOT EXISTS (
+    SELECT 1 FROM public.expenses e 
+    WHERE e.tenant_id = public.green_coffee.tenant_id 
+    AND e.description = 'Entrada de Lote: ' || public.green_coffee.name || ' (' || public.green_coffee.total_qty_kg || 'kg)'
+);
