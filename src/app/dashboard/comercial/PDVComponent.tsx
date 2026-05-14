@@ -121,7 +121,7 @@ export default function PDVComponent({ clients, products }: { clients: any[], pr
             ))}
             {products.length === 0 && (
               <div className="col-span-3 text-center text-[--secondary-text] py-10 text-sm">
-                Nenhum pacote disponível em estoque. Vá em "Embalamento" para gerar pacotes.
+                Nenhum pacote disponível em estoque. Vá em "Empacotamento" para gerar pacotes.
               </div>
             )}
           </div>

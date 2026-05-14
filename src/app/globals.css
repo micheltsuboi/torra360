@@ -93,8 +93,9 @@ a {
 }
 
 /* Form Elements */
-input, select {
-  background: rgba(0,0,0,0.2) !important;
+input, select, textarea {
+  background: rgba(10, 7, 5, 0.85) !important;
+  background-color: rgba(10, 7, 5, 0.85) !important;
   border: 1px solid var(--card-border) !important;
   color: var(--foreground) !important;
   border-radius: 6px;
@@ -102,10 +103,39 @@ input, select {
   font-family: var(--font-sans);
   transition: all 0.2s ease;
   width: 100%;
-  color-scheme: dark;
+  color-scheme: dark only;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-input:focus, select:focus {
+/* Garantir que select mantenha a seta nativa */
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23C39967' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+  background-size: 12px !important;
+  padding-right: 36px !important;
+}
+
+/* Força fundo escuro nas opções do select (suporte cross-browser) */
+select option {
+  background-color: #1a120e !important;
+  background: #1a120e !important;
+  color: #F3EAE0 !important;
+}
+
+select option:disabled {
+  color: #6b5c52 !important;
+}
+
+select option:checked,
+select option:focus,
+select option:hover {
+  background-color: #2d1e16 !important;
+  color: #C39967 !important;
+}
+
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--primary) !important;
   box-shadow: 0 0 0 2px rgba(195, 153, 103, 0.2);

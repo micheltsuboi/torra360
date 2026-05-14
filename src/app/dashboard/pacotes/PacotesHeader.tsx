@@ -53,7 +53,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
           className="golden-btn flex items-center gap-2 px-4 py-2 text-sm"
         >
           <ShoppingBag className="w-4 h-4" />
-          Registrar Novo Embalamento
+          Registrar Novo Empacotamento
         </button>
       </div>
 

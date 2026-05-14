@@ -173,13 +173,11 @@ export async function createPackages(formData: FormData) {
       }
     }
   } else {
-    // Validar Blend
-    const totalBlendWeight = blendComponents.reduce((acc: number, curr: any) => acc + (curr.qty || 0), 0)
-    if (Math.abs(totalBlendWeight - newBatchKg) > 0.01) {
-      return { success: false, error: `A soma dos componentes (${totalBlendWeight.toFixed(2)}kg) deve ser igual ao peso total do lote (${newBatchKg.toFixed(2)}kg).` }
-    }
-
+    // Validar Blend: verifica apenas se cada lote tem estoque suficiente
+    // O peso total do lote é determinado pela soma dos componentes
     for (const comp of blendComponents) {
+      if (!comp.roastId || comp.qty <= 0) continue
+
       const { data: roast } = await supabase.from('roast_batches').select('qty_after_kg').eq('id', comp.roastId).single()
       if (!roast) return { success: false, error: `Lote torrado ${comp.roastId} não encontrado.` }
       
@@ -191,7 +189,7 @@ export async function createPackages(formData: FormData) {
       
       const available = roast.qty_after_kg - packagedKg
       if (comp.qty > (available + 0.001)) {
-        return { success: false, error: `Estoque insuficiente no componente selecionado. Disponível: ${available.toFixed(2)}kg.` }
+        return { success: false, error: `Estoque insuficiente no lote torrado selecionado. Disponível: ${available.toFixed(2)}kg.` }
       }
     }
   }
@@ -213,7 +211,7 @@ export async function createPackages(formData: FormData) {
     }
   }
 
-  // 3. Inserir o Lote de Embalamento
+  // 3. Inserir o Lote de Empacotamento
   const insertData: any = {
     tenant_id: tenantId,
     date,
@@ -234,7 +232,7 @@ export async function createPackages(formData: FormData) {
 
   if (error) {
     console.error('Error packaging:', error)
-    return { success: false, error: 'Erro ao registrar o embalamento.' }
+    return { success: false, error: 'Erro ao registrar o empacotamento.' }
   }
 
   // 4. Se for Blend, registrar composição
@@ -308,14 +306,14 @@ export async function updatePackage(formData: FormData) {
 
   const newTotalKg = (package_size_g * quantity_units) / 1000
 
-  // 1. Buscar embalamento atual e materiais atuais
+  // 1. Buscar empacotamento atual e materiais atuais
   const { data: currentPackage } = await supabase
     .from('packaging_batches')
     .select('roast_batch_id')
     .eq('id', id)
     .single()
 
-  if (!currentPackage) return { success: false, error: 'Embalamento não encontrado.' }
+  if (!currentPackage) return { success: false, error: 'Empacotamento não encontrado.' }
 
   const { data: currentMaterials } = await supabase
     .from('packaging_batch_materials')
@@ -382,7 +380,7 @@ export async function updatePackage(formData: FormData) {
 
   if (error) {
     console.error('Error updating package:', error)
-    return { success: false, error: 'Erro ao atualizar o embalamento.' }
+    return { success: false, error: 'Erro ao atualizar o empacotamento.' }
   }
 
   // 5. Atualizar Materiais Vinculados

@@ -17,7 +17,7 @@ export default async function PacotesPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h1 className="text-3xl font-serif text-[--foreground]">Embalamento de Café</h1>
+          <h1 className="text-3xl font-serif text-[--foreground]">Empacotamento de Café</h1>
           <p className="text-[--secondary-text] mt-1 italic opacity-60">Geração de pacotes a partir de lotes torrados e integração de custos.</p>
         </div>
       </div>

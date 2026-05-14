@@ -101,7 +101,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                             <span className="font-bold text-[--primary] block text-[12px] leading-tight mb-0.5">{roast?.green_coffee?.name || 'N/A'}</span>
                             <div className="flex flex-col text-[9px] leading-tight text-[--secondary-text] opacity-60 tracking-tighter">
                                <div className="flex items-center gap-1">
-                                  <span className="opacity-80">Embalamento:</span> {formatDate(p.date)}
+                                  <span className="opacity-80">Empacotamento:</span> {formatDate(p.date)}
                                </div>
                                <div className="flex items-center gap-1">
                                   <span className="opacity-80">Lote torrado:</span> {formatDate(roast?.date)}
@@ -118,7 +118,7 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                               <span className=" font-bold text-[--foreground]">Blend Comercial</span>
                             </div>
                             <div className="text-[9px] text-[--secondary-text] opacity-50 font-bold mb-1">
-                               EMBALAMENTO: {formatDate(p.date)}
+                               EMPACOTAMENTO: {formatDate(p.date)}
                             </div>
                             <div className="flex flex-wrap gap-1 mt-0.5">
                               {p.blend_composition?.map((comp: any, i: number) => (
