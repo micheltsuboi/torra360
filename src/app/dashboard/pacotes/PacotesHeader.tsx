@@ -101,7 +101,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
               </div>
               <div className="flex items-end pb-1.5 col-span-1">
                 <div 
-                  className="flex items-center gap-2 bg-black/40 px-2 py-1.5 rounded-lg border border-white/5 cursor-pointer hover:bg-black/60 transition-all" 
+                  className="flex items-center gap-2 px-2 py-1.5 cursor-pointer transition-all" 
                   onClick={() => setIsBlend(!isBlend)}
                 >
                    <input 
@@ -109,9 +109,9 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                      id="is_blend" 
                      checked={isBlend} 
                      onChange={(e) => setIsBlend(e.target.checked)}
-                     className="w-3 h-3 accent-[--primary] cursor-pointer"
+                     className="w-4 h-4 accent-[--primary] cursor-pointer"
                    />
-                   <label htmlFor="is_blend" className="text-[8px] capitalize font-bold text-[--primary] cursor-pointer tracking-wider whitespace-nowrap opacity-80">Modo Blend</label>
+                   <label htmlFor="is_blend" className="text-[10px] uppercase font-bold text-[--primary] cursor-pointer tracking-wider whitespace-nowrap opacity-80">Modo Blend</label>
                 </div>
               </div>
             </div>
