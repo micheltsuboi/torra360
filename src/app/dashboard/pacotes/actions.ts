@@ -237,8 +237,9 @@ export async function createPackages(formData: FormData) {
 
   // 4. Se for Blend, registrar composição
   if (isBlend) {
+    const totalInputWeight = blendComponents.reduce((acc: number, c: any) => acc + (c.qty || 0), 0)
     for (const comp of blendComponents) {
-      const percentage = (comp.qty / newBatchKg) * 100
+      const percentage = totalInputWeight > 0 ? (comp.qty / totalInputWeight) * 100 : 0
       await supabase.from('packaging_batch_blend_composition').insert({
         tenant_id: tenantId,
         packaging_batch_id: newBatch.id,

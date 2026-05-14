@@ -61,8 +61,21 @@ export async function createGreenCoffeeLot(formData: FormData) {
     return
   }
 
+  // Integração Financeira: Gerar despesa automaticamente
+  if (total_cost > 0) {
+    await supabase.from('expenses').insert({
+      tenant_id: tenantId,
+      amount: total_cost,
+      date: new Date().toISOString().split('T')[0],
+      category: 'Compra de Café Verde',
+      description: `Entrada de Lote: ${name} (${total_qty_kg}kg)`,
+      notes: `Fornecedor: ${provider}`
+    })
+  }
+
   revalidatePath('/dashboard/estoque')
   revalidatePath('/dashboard/torra')
+  revalidatePath('/dashboard/financeiro')
 }
 
 export async function updateGreenCoffeeLot(formData: FormData) {
