@@ -310,7 +310,7 @@ export async function updatePackage(formData: FormData) {
   // 1. Buscar empacotamento atual e materiais atuais
   const { data: currentPackage } = await supabase
     .from('packaging_batches')
-    .select('roast_batch_id')
+    .select('roast_batch_id, is_blend, package_size_g, quantity_units')
     .eq('id', id)
     .single()
 
@@ -322,25 +322,31 @@ export async function updatePackage(formData: FormData) {
     .eq('packaging_batch_id', id)
 
   // 2. Verificar disponibilidade na torra (excluindo o peso atual deste registro)
-  const { data: roast } = await supabase
-    .from('roast_batches')
-    .select('qty_after_kg')
-    .eq('id', currentPackage.roast_batch_id)
-    .single()
+  if (!currentPackage.is_blend) {
+    const hasWeightChanged = (package_size_g !== currentPackage.package_size_g) || (quantity_units !== currentPackage.quantity_units)
+    
+    if (hasWeightChanged) {
+      const { data: roast } = await supabase
+        .from('roast_batches')
+        .select('qty_after_kg')
+        .eq('id', currentPackage.roast_batch_id)
+        .single()
 
-  const { data: otherPackages } = await supabase
-    .from('packaging_batches')
-    .select('package_size_g, quantity_units')
-    .eq('roast_batch_id', currentPackage.roast_batch_id)
-    .neq('id', id)
+      const { data: otherPackages } = await supabase
+        .from('packaging_batches')
+        .select('package_size_g, quantity_units')
+        .eq('roast_batch_id', currentPackage.roast_batch_id)
+        .neq('id', id)
 
-  const sumOthersKg = otherPackages?.reduce((acc: number, curr: any) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
-  const availableKg = (roast?.qty_after_kg || 0) - sumOthersKg
+      const sumOthersKg = otherPackages?.reduce((acc: number, curr: any) => acc + (curr.package_size_g * curr.quantity_units / 1000), 0) || 0
+      const availableKg = (roast?.qty_after_kg || 0) - sumOthersKg
 
-  if (newTotalKg > (availableKg + 0.001)) {
-    return { 
-      success: false, 
-      error: `Quantidade insuficiente na torra. Disponível para este ajuste: ${availableKg.toFixed(2)}kg.` 
+      if (newTotalKg > (availableKg + 0.001)) {
+        return { 
+          success: false, 
+          error: `Quantidade insuficiente na torra. Disponível para este ajuste: ${availableKg.toFixed(2)}kg.` 
+        }
+      }
     }
   }
 
