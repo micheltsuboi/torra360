@@ -124,7 +124,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                     <option value="">Selecione o lote de torra...</option>
                     {roasts.map((r: any) => (
                       <option key={r.id} value={r.id}>
-                        {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.qty_after_kg.toFixed(2)}kg disponível)
+                        {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.available_kg?.toFixed(2) ?? r.qty_after_kg.toFixed(2)}kg disponível)
                       </option>
                     ))}
                   </select>
@@ -155,7 +155,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                               <option value="">Selecionar Lote...</option>
                               {roasts.map((r: any) => (
                                 <option key={r.id} value={r.id}>
-                                  {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.qty_after_kg.toFixed(2)}kg)
+                                  {r.green_coffee?.name} - #{r.id?.slice(-6).toUpperCase()} ({r.available_kg?.toFixed(2) ?? r.qty_after_kg.toFixed(2)}kg)
                                 </option>
                               ))}
                             </select>
@@ -242,7 +242,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-1">
-              <label className="data-label">Qtd Pacotes</label>
+              <label className="data-label">Quantidade de Pacotes</label>
               <input 
                 name="quantity_units" 
                 type="number" 
@@ -259,7 +259,7 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label className="data-label font-serif text-[--primary] tracking-wider">Venda (R$)</label>
+              <label className="data-label font-serif text-[--primary] tracking-wider">Valor de Venda (R$)</label>
               <input name="retail_price" type="number" step="0.01" min="0" placeholder="Ex: 45.90" required className="text-sm" />
             </div>
           </div>
@@ -304,17 +304,14 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
                          </select>
                       </div>
                       <div className="flex items-center gap-2 shrink-0">
-                        <div className="relative">
-                           <input 
-                             type="number"
-                             value={sm.quantity || ''}
-                             placeholder="0"
-                             required
-                             onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
-                             className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none"
-                           />
-                           <span className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold opacity-30">UN</span>
-                        </div>
+                        <input 
+                          type="number"
+                          value={sm.quantity || ''}
+                          placeholder="Qtd"
+                          required
+                          onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
+                          className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none rounded-md"
+                        />
                         <button 
                           type="button"
                           onClick={() => removeMaterial(index)}
@@ -345,13 +342,8 @@ export default function PacotesHeader({ roasts, expensePackages, inventory }: Pa
           </div>
 
 
-          <div className="px-3 py-2 bg-[--success]/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight flex items-start gap-2 border border-[--success]/20">
-             <Package className="w-4 h-4 text-[--success] shrink-0" />
-             <p>
-                <span className="text-[--success] uppercase font-bold mr-1">Regra de Estoque:</span> 
-                Ao criar este lote, o sistema verificará se há café torrado e embalagens suficientes. 
-                Embalagens e rótulos selecionados serão **dados baixa automaticamente** do seu estoque.
-             </p>
+          <div className="px-3 py-2 bg-white/5 rounded-lg text-[9px] text-[--secondary-text] leading-tight opacity-70">
+            <span className="text-[--primary] uppercase tracking-tighter mr-1">Nota:</span> Rendimento, custos e baixa de estoque de café torrado e embalagens processados automaticamente.
           </div>
 
           <button type="submit" className="golden-btn py-4 text-lg mt-2 w-full">

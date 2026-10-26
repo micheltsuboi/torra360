@@ -1,0 +1,30 @@
+name: Keep Supabase Alive
+
+on:
+  schedule:
+    # Executa a cada 3 dias às 07:00 UTC (04:00 Horário de Brasília)
+    - cron: '0 7 */3 * *'
+  workflow_dispatch: # Permite acionamento manual a qualquer momento via aba Actions do GitHub
+
+jobs:
+  ping-supabase:
+    name: Ping Supabase REST API
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase Database
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://mbtmizhqcbfrfyrhuuwg.supabase.co' }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1idG1pemhxY2JmcmZ5cmh1dXdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODMzODYsImV4cCI6MjA5MDQ1OTM4Nn0.aCQH0fjvvftFJtJoeb1I0VLaY1LTvZmBLcvvX6VWPnM' }}
+        run: |
+          echo "Disparando ping no banco Supabase para manter o projeto ativo..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
+            "$SUPABASE_URL/rest/v1/green_coffee?select=id&limit=1")
+
+          echo "Código HTTP retornado: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "✅ Banco de dados ativo e respondendo com sucesso!"
+          else
+            echo "ℹ️ Requisição enviada com código $HTTP_STATUS (servidor ativo)."
+          fi

@@ -9,19 +9,46 @@ export async function getRoastBatchesAvailable() {
   const supabase = await createClient()
   const tenantId = await getCachedTenantId()
   
-  const { data, error } = await supabase
+  const { data: roastData, error } = await supabase
     .from('roast_batches')
     .select('id, date, qty_after_kg, green_coffee(name)')
     .eq('tenant_id', tenantId)
     .order('date', { ascending: false })
     .limit(50)
 
-  if (error) {
+  if (error || !roastData) {
     console.error('Error fetching roast batches for packaging:', error)
     return []
   }
 
-  return data || []
+  const roastIds = roastData.map(r => r.id)
+
+  const { data: directPackages } = await supabase
+    .from('packaging_batches')
+    .select('roast_batch_id, package_size_g, quantity_units')
+    .in('roast_batch_id', roastIds)
+    
+  const { data: blendCompositions } = await supabase
+    .from('packaging_batch_blend_composition')
+    .select('roast_batch_id, quantity_kg')
+    .in('roast_batch_id', roastIds)
+
+  return roastData.map(roast => {
+    let packagedKg = 0;
+    
+    directPackages?.filter(p => p.roast_batch_id === roast.id).forEach(p => {
+      packagedKg += (p.package_size_g * p.quantity_units) / 1000
+    })
+    
+    blendCompositions?.filter(c => c.roast_batch_id === roast.id).forEach(c => {
+      packagedKg += c.quantity_kg || 0
+    })
+    
+    return {
+      ...roast,
+      available_kg: Math.max(0, roast.qty_after_kg - packagedKg)
+    }
+  })
 }
 
 export async function getPackages() {

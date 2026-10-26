@@ -378,17 +378,14 @@ export default function PackageList({ packages, roasts, expensePackages, invento
                              </select>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
-                            <div className="relative">
-                               <input 
-                                 type="number"
-                                 value={sm.quantity || ''}
-                                 placeholder="0"
-                                 required
-                                 onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
-                                 className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none"
-                               />
-                               <span className="absolute right-2 top-1/2 -translate-y-1/2  font-bold opacity-30">UN</span>
-                            </div>
+                            <input 
+                              type="number"
+                              value={sm.quantity || ''}
+                              placeholder="Qtd"
+                              required
+                              onChange={(e) => updateMaterial(index, 'quantity', parseInt(e.target.value) || 0)}
+                              className="text-[12px] p-2 bg-black/40 font-mono w-20 border-none rounded-md"
+                            />
                             <button 
                               type="button"
                               onClick={() => removeMaterial(index)}
