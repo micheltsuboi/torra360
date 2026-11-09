@@ -2,29 +2,48 @@ name: Keep Supabase Alive
 
 on:
   schedule:
-    # Executa a cada 3 dias às 07:00 UTC (04:00 Horário de Brasília)
-    - cron: '0 7 */3 * *'
+    # Executa todos os dias às 06:00 UTC (03:00 Horário de Brasília)
+    - cron: '0 6 * * *'
   workflow_dispatch: # Permite acionamento manual a qualquer momento via aba Actions do GitHub
 
 jobs:
-  ping-supabase:
-    name: Ping Supabase REST API
+  keep-alive:
+    name: Supabase Insert and Delete Keep Alive
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase Database
+      - name: Insert and Delete Keep Alive Record
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL || 'https://mbtmizhqcbfrfyrhuuwg.supabase.co' }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1idG1pemhxY2JmcmZ5cmh1dXdnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4ODMzODYsImV4cCI6MjA5MDQ1OTM4Nn0.aCQH0fjvvftFJtJoeb1I0VLaY1LTvZmBLcvvX6VWPnM' }}
         run: |
-          echo "Disparando ping no banco Supabase para manter o projeto ativo..."
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+          echo "Disparando operação de inserção para manter o Supabase ativo..."
+          
+          INSERT_RESPONSE=$(curl -s -f -X POST "$SUPABASE_URL/rest/v1/supabase_keep_alive" \
             -H "apikey: $SUPABASE_ANON_KEY" \
             -H "Authorization: Bearer $SUPABASE_ANON_KEY" \
-            "$SUPABASE_URL/rest/v1/green_coffee?select=id&limit=1")
+            -H "Content-Type: application/json" \
+            -H "Prefer: return=representation" \
+            -d '{"dummy_data": "github-actions-keep-alive"}')
 
-          echo "Código HTTP retornado: $HTTP_STATUS"
-          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
-            echo "✅ Banco de dados ativo e respondendo com sucesso!"
+          echo "Resposta da inserção: $INSERT_RESPONSE"
+          RECORD_ID=$(echo "$INSERT_RESPONSE" | jq -r '.[0].id // empty')
+
+          if [ -z "$RECORD_ID" ]; then
+            echo "❌ Falha ao obter o ID do registro inserido."
+            exit 1
+          fi
+
+          echo "✅ Registro inserido com sucesso! ID: $RECORD_ID"
+
+          echo "Excluindo o registro gerado..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X DELETE "$SUPABASE_URL/rest/v1/supabase_keep_alive?id=eq.$RECORD_ID" \
+            -H "apikey: $SUPABASE_ANON_KEY" \
+            -H "Authorization: Bearer $SUPABASE_ANON_KEY")
+
+          echo "Código HTTP da exclusão: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 300 ]; then
+            echo "✅ Registro deletado com sucesso. Banco de dados Supabase mantido 100% ativo!"
           else
-            echo "ℹ️ Requisição enviada com código $HTTP_STATUS (servidor ativo)."
+            echo "❌ Erro ao deletar o registro temporário. Código HTTP: $HTTP_STATUS"
+            exit 1
           fi
